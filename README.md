@@ -9,30 +9,26 @@ This script also prints the response massege based on [No-IP DDNS Update API Res
 $ python setup.py install
 ```
 
-## Configuration
-Simply put your auth information and domain name in a `properties` file:
-
-	username=<your username>
-	password=<your password>
-	hostname=<your hostname on no-ip>
-
-Check out the [noipy.properties](noipy.properties) sample file if there is still any doubts.
-
 ## Usage
 
-Type the follow to see the tool command line syntax:
+Basic usage of **noipy** command line tool:
 ```sh
-$ python noipy.py --file <properties file path>
-```
-or
-```sh
-$ python noipy.py -u <username> -p <password> -n <hostname>
+$ noipy --file <properties file path>
 ```
 
 For details:
 ```sh
-$ python noipy.py --help
+$ noipy --help
 ```
+
+## Properties File Configuration
+Put the auth information and hostname in a `properties` file:
+
+	username=<your username>
+	password=<your password>
+	hostname=<your hostname on no-ip.com>
+
+Check out the [noipy.properties](noipy.properties) sample file if there is still any doubts.
 
 ## Troubleshooting
 
