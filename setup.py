@@ -14,5 +14,10 @@ setup(
         url="https://github.com/povieira/noipy",
         packages=find_packages(),
         keywords="no-ip ddns update api",
+        entry_points={
+            'console_scripts': [
+                    'noipy = noipy.dnsupdater:main',
+            ],
+        },
         zip_safe=True
 )

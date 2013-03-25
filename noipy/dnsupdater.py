@@ -114,7 +114,7 @@ def parse_args():
 
     return login_info
 
-if __name__ == '__main__':
+def main():
     # parse command line args
     login_info = parse_args()
 
@@ -126,3 +126,6 @@ if __name__ == '__main__':
     response = call_api(login_info, ip)
 
     print_status(response)
+
+if __name__ == '__main__':
+    main()
