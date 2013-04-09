@@ -32,7 +32,7 @@ The settings file is a simple key/value pair file containing login information a
 	password=<your password>
 	hostname=<your hostname on no-ip.com>
 
-With `--store` option it is possible to store login and hostname information in `HOME` directory (`~/.noipy/settings`):
+With `--store` option it is possible to store login and hostname information in `HOME` directory (`~/.noipy`):
 ```sh
 $ noipy --store
 ```

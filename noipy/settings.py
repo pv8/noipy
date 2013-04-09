@@ -7,9 +7,7 @@
 
 import os
 
-# contants
-SETTINGS_DIR = os.path.join(os.path.expanduser("~"), '.noipy')
-SETTINGS_FILE_NAME = 'settings' 
+DEFAULT_FILE_PATH = os.path.join(os.path.expanduser('~'), '.noipy') 
 
 def load(filename):
     """(str) -> dict of {str: str}
@@ -18,10 +16,10 @@ def load(filename):
     as a dictionary with keys "username", "password" and "hostname"
     """
 
-    d = {}
+    info = {}
     try:
         with open(filename) as f:
-            d = dict([line.strip().split('=', 1) for line in f if not line.startswith('#')])
+            info = dict([line.strip().split('=', 1) for line in f if not line.startswith('#')])
             #for line in f:
             #    tokens = line.strip().split('=', 1)
             #    d[tokens[0]] = '='.join(tokens[1:])
@@ -29,30 +27,25 @@ def load(filename):
         print '{0}: "{1}"'.format(e.strerror, filename)
         raise e
 
-    return d
+    return info
 
-def store(info):
-    """(dict of {str: str}) -> None
+def store(info, settings_file = DEFAULT_FILE_PATH):
+    """(dict of {str: str}, str) -> None
     
-    Generate settings file with basic information: "username", 
-    "password" and "hostname"
+    Generate settings_file with basic info: "username", "password" 
+    and "hostname" on given path.
     """
 
     try:
-        # create dir if it does not exist
-        if not os.path.exists(SETTINGS_DIR):
-            os.makedirs(SETTINGS_DIR)
+        print 'Creating settings file: %s' % settings_file
 
-        settingsfile = os.path.join(SETTINGS_DIR, SETTINGS_FILE_NAME)
-        print 'Creating settings file: %s' % settingsfile
-
-        with open(settingsfile, 'w') as f:
+        with open(settings_file, 'w') as f:
             f.write('username=%s\n' % info['username'])
             f.write('password=%s\n' % info['password'])
             f.write('hostname=%s\n' % info['hostname'])
 
     except IOError as e:
-        print '{0}: "{1}"'.format(e.strerror, settingsfile)
+        print '{0}: "{1}"'.format(e.strerror, settings_file)
         raise e
 
     print 'Settings file created.'
