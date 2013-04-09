@@ -11,15 +11,6 @@ from noipy import dnsupdater
 
 class Test(unittest.TestCase):
 
-
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
-
     def test_get_ip(self):
         ip = dnsupdater.get_ip()
         valid_ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
@@ -27,5 +18,4 @@ class Test(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
