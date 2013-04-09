@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # noipy
 # Copyright (c) 2013 Pablo O Vieira (povieira)
