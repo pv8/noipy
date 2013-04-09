@@ -52,5 +52,4 @@ class NoipyTest(unittest.TestCase):
         self.assertTrue(info == self.info, 'Load settings function failed.')
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
