@@ -13,7 +13,11 @@ $ python setup.py install
 
 Basic usage of **noipy** command line tool:
 ```sh
-$ noipy --file <properties file path>
+$ noipy --username <your username> --password <your password> --hostname <your hostname on no-ip.com>
+```
+Or you can just call **noipy** if you have previously stored login information and hostname with `--store` option.
+```sh
+$ noipy
 ```
 
 For details:
@@ -21,12 +25,18 @@ For details:
 $ noipy --help
 ```
 
-## Properties File Configuration
-Put the auth information and hostname in a `properties` file:
+## Settings File Configuration
+The settings file is a simple key/value pair file containing login information and hostname:
 
 	username=<your username>
 	password=<your password>
 	hostname=<your hostname on no-ip.com>
+
+With `--store` option it is possible to store login and hostname information in `HOME` directory (`~/.noipy/settings`):
+```sh
+$ noipy --store
+```
+**Note:** password will be stored in file as plain text.
 
 Check out the [noipy.properties](noipy.properties) sample file if there is still any doubts.
 
