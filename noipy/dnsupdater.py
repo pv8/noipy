@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# dnsupdater
+# noipy.dnsupdater
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.md and LICENSE.md for details.
 
@@ -9,6 +9,8 @@ import urllib
 import argparse
 import re
 import sys
+import settings 
+import getpass
 
 def get_ip():
     """
@@ -23,26 +25,6 @@ def get_ip():
     r = re.compile(r'.*\<body>Current IP Address:\s(.*)\</body>.*')
 
     return r.match(content).group(1)
-
-def load_properties(filename):
-    """(str) -> dict of {str: str}
-    
-    Load update information from properties file and return them
-    as a dictionary with keys "username", "password" and "hostname"
-    """
-
-    d = {}
-    try:
-        with open(filename) as f:
-            d = dict([line.strip().split('=', 1) for line in f if not line.startswith('#')])
-            #for line in f:
-            #    tokens = line.strip().split('=', 1)
-            #    d[tokens[0]] = '='.join(tokens[1:])
-    except IOError as e:
-        print '{0}: "{1}"'.format(e.strerror, filename)
-        raise e
-
-    return d
 
 def call_api(update_info, ip):
     """(dict of {str: str}, str) -> str
@@ -96,20 +78,32 @@ def parse_args():
     parser.add_argument('-u', '--username', help='NO-IP username')
     parser.add_argument('-p', '--password', help='NO-IP password')
     parser.add_argument('-n', '--hostname', help='NO-IP hostname to be updated')
-    parser.add_argument('-f', '--file', help='properties file with login & domain information')
+    parser.add_argument('-f', '--file', help='settings file with login & hostname information')
+    parser.add_argument('-s', '--store', help='store login & hostname information in a settings file',
+                        action='store_true')
 
     args = parser.parse_args()
 
     # load login information
     login_info = {}
-    if args.file:
-        login_info = load_properties(args.file)
-    elif args.hostname:
+    if args.store:
+        if args.username and args.password and args.hostname:
+            login_info['username'] = args.username
+            login_info['password'] = args.password
+            login_info['hostname'] = args.hostname
+        else:
+            login_info['username'] = raw_input('Type your username: ')
+            login_info['password'] = getpass.getpass('Type your password: ')
+            login_info['hostname'] = raw_input('Type the hostname: ')
+        settings.store(login_info)
+    elif args.file:
+        login_info = settings.load(args.file)
+    elif args.username and args.password and args.hostname:
         login_info['username'] = args.username
         login_info['password'] = args.password
         login_info['hostname'] = args.hostname
     else:
-        print 'Either properties file with login information or domain argument must be provided.'
+        print 'Either settings file with login information or domain argument must be provided.'
         print parser.format_usage()
         sys.exit(1)
 
