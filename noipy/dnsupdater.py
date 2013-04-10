@@ -86,7 +86,7 @@ def parse_args():
 
     # load login information
     login_info = {}
-    if args.store:
+    if args.store: # --store argument
         if args.username and args.password and args.hostname:
             login_info['username'] = args.username
             login_info['password'] = args.password
@@ -96,16 +96,20 @@ def parse_args():
             login_info['password'] = getpass.getpass('Type your password: ')
             login_info['hostname'] = raw_input('Type the hostname: ')
         settings.store(login_info)
-    elif args.file:
+    elif args.file: # --file argument
         login_info = settings.load(args.file)
-    elif args.username and args.password and args.hostname:
+    elif args.username and args.password and args.hostname: # informations arguments
         login_info['username'] = args.username
         login_info['password'] = args.password
         login_info['hostname'] = args.hostname
-    else:
-        print 'Either settings file with login information or domain argument must be provided.'
-        print parser.format_usage()
-        sys.exit(1)
+    else: # no arguments
+        if settings.file_exists():
+            login_info = settings.load()
+        else:
+            print 'Either settings file with login information or username/password/domain \
+                arguments must be provided.'
+            print parser.format_usage()
+            sys.exit(1)
 
     return login_info
 

@@ -9,7 +9,7 @@ import os
 
 DEFAULT_FILE_PATH = os.path.join(os.path.expanduser('~'), '.noipy') 
 
-def load(filename):
+def load(filename = DEFAULT_FILE_PATH):
     """(str) -> dict of {str: str}
     
     Load update information from settings file and return them
@@ -50,3 +50,5 @@ def store(info, settings_file = DEFAULT_FILE_PATH):
 
     print 'Settings file created.'
 
+def file_exists():
+    return os.path.exists(DEFAULT_FILE_PATH)
