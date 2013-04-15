@@ -28,8 +28,8 @@ class NoipyTest(unittest.TestCase):
 
     def testGetIP(self):
         ip = dnsupdater.get_ip()
-        valid_ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
-        self.assertTrue(re.match(valid_ip_regex, ip), 'get_ip() failed.')
+        VALID_IP_REGEX = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
     def testStoreSettings(self):
 

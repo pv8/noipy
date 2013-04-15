@@ -14,7 +14,7 @@ import getpass
 
 def get_ip():
     """
-    (NoneType) -> NoneType
+    (NoneType) -> str
     
     Return the machine external IP.
     """
@@ -22,9 +22,7 @@ def get_ip():
     page = urllib.urlopen('http://checkip.dyndns.org')
     content = page.read()
 
-    r = re.compile(r'.*\<body>Current IP Address:\s(.*)\</body>.*')
-
-    return r.match(content).group(1)
+    return re.search(r'(\d{1,3}\.?){4}', content).group()
 
 def call_api(update_info, ip):
     """(dict of {str: str}, str) -> str
@@ -51,7 +49,7 @@ def print_status(status_code):
 
     if 'good' in status_code:
         print 'SUCCESS: DNS hostname update successful. Followed by a space and the IP address it was updated to.'
-    elif 'nochg'  in status_code:
+    elif 'nochg' in status_code:
         print 'SUCCESS: IP address is current, no update performed. Followed by a space and the IP address that it is currently set to.'
     elif status_code == 'nohost':
         print 'ERROR: Hostname supplied does not exist under specified account, client exit and require user to enter new login credentials before performing and additional request.'
