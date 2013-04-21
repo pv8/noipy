@@ -17,7 +17,7 @@ Basic usage of **noipy** command line tool:
 ```sh
 $ noipy --username <your username> --password <your password> --hostname <your hostname on no-ip.com>
 ```
-Or you can just call **noipy** if you have previously stored login information and hostname with `--store` option.
+Or you can just call **noipy** if you have previously stored login information and hostname with `--store` [option](#store).
 ```sh
 $ noipy
 ```
@@ -46,9 +46,8 @@ Check out the [noipy.properties](noipy.properties) sample file if there is still
 
 If you find any errors, please feel free to report them using this project's [issue tracker](https://github.com/povieira/noipy/issues).
 
-## License & Copyright
+## Copyright & License
 
 Copyright (c) 2013 Pablo O Vieira (povieira).  
-This software is licensed under the [Eclipse Public License (EPL)](LICENSE.md).
-
+This software is licensed under the [Eclipse Public License (EPL) - v1.0](LICENSE.md).
 
