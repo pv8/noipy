@@ -42,9 +42,9 @@ $ noipy --store
 
 Check out the [noipy.properties](noipy.properties) sample file if there is still any doubts.
 
-## Troubleshooting
+## Improvements & Troubleshooting
 
-If you find any errors, please feel free to report them using this project's [issue tracker](https://github.com/povieira/noipy/issues).
+If you have suggestions or find any bug, please feel free to report them using this project's [issue tracker](https://github.com/povieira/noipy/issues).
 
 ## Copyright & License
 
