@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# tests
+# tests_noipy
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.md and LICENSE.md for details.
 
@@ -18,7 +18,6 @@ class NoipyTest(unittest.TestCase):
         self.info = {}
         self.info['username'] = 'username'
         self.info['password'] = 'password'
-        self.info['hostname'] = 'hostname.no-ip.info'
 
         self.test_file = 'noipy.test'
         
@@ -49,7 +48,6 @@ class NoipyTest(unittest.TestCase):
             with open(self.test_file, 'w') as f:
                 f.write('username=%s\n' % self.info['username'])
                 f.write('password=%s\n' % self.info['password'])
-                f.write('hostname=%s\n' % self.info['hostname'])
     
         except IOError as e:
             self.fail('Load settings function failed. {0}: "{1}"'.format(e.strerror, self.test_file))
