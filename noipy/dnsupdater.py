@@ -32,7 +32,7 @@ def call_api(update_info, ip):
 
     base_url = 'https://{0}:{1}@dynupdate.no-ip.com/nic/update?hostname={2}&myip={3}' 
 
-    api_call_url = base_url.format(update_info['username'], update_info['password'], 
+    api_call_url = base_url.format(update_info['username'], update_info['password'],
                                           update_info['hostname'], ip) 
 
     # call update url
@@ -76,51 +76,55 @@ def parse_args():
     parser.add_argument('-u', '--username', help='NO-IP username')
     parser.add_argument('-p', '--password', help='NO-IP password')
     parser.add_argument('-n', '--hostname', help='NO-IP hostname to be updated')
-    parser.add_argument('-f', '--file', help='settings file with login & hostname information')
-    parser.add_argument('-s', '--store', help='store login & hostname information in a settings file',
+
+    # with store, this option is no longer necessary
+    # parser.add_argument('-f', '--file', help='settings file with login & hostname information')
+
+    parser.add_argument('-s', '--store', help='store login information and update the hostname if it is provided',
                         action='store_true')
 
     args = parser.parse_args()
 
     # load login information
-    login_info = {}
-    if args.store: # --store argument
-        if args.username and args.password and args.hostname:
-            login_info['username'] = args.username
-            login_info['password'] = args.password
-            login_info['hostname'] = args.hostname
+    api_params = {}
+    if args.store:  # --store argument
+        if args.username and args.password:
+            api_params['username'] = args.username
+            api_params['password'] = args.password
         else:
-            login_info['username'] = raw_input('Type your username: ')
-            login_info['password'] = getpass.getpass('Type your password: ')
-            login_info['hostname'] = raw_input('Type the hostname: ')
-        settings.store(login_info)
-    elif args.file: # --file argument
-        login_info = settings.load(args.file)
-    elif args.username and args.password and args.hostname: # informations arguments
-        login_info['username'] = args.username
-        login_info['password'] = args.password
-        login_info['hostname'] = args.hostname
-    else: # no arguments
-        if settings.file_exists():
-            login_info = settings.load()
-        else:
-            print 'Either settings file with login information or username/password/domain \
-                arguments must be provided.'
-            print parser.format_usage()
-            sys.exit(1)
+            api_params['username'] = raw_input('Type your username: ')
+            api_params['password'] = getpass.getpass('Type your password: ')
+        settings.store(api_params)
+        if args.hostname:
+            api_params['hostname'] = args.hostname
+    # elif args.file: # --file argument
+    #    api_params = settings.load(args.file)
+    elif args.username and args.password and args.hostname:  # informations arguments
+        api_params['username'] = args.username
+        api_params['password'] = args.password
+        api_params['hostname'] = args.hostname
+    elif args.hostname and settings.file_exists():
+        api_params = settings.load()
+        api_params['hostname'] = args.hostname
+    else:  # no arguments 
+        print 'Atention: The hostname to be updated must be provided.\nUsername and ' \
+            'password can be either provided via command line or stored with --store ' \
+            'option.\nExecute noipy --help for detailed information.'
+        print parser.format_usage()
+        sys.exit(1)
 
-    return login_info
+    return api_params
 
 def main():
     # parse command line args
-    login_info = parse_args()
+    api_params = parse_args()
 
     # obtain wan ip from checkip.dyndns.org
     ip = get_ip()
 
     # call No-IP API
-    print 'Updating hostname "%s" with IP %s ...' % (login_info['hostname'], ip) 
-    response = call_api(login_info, ip)
+    print 'Updating hostname "%s" with IP %s ...' % (api_params['hostname'], ip) 
+    response = call_api(api_params, ip)
 
     print_status(response)
 
