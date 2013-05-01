@@ -17,9 +17,9 @@ Basic usage of **noipy** command line tool:
 ```sh
 $ noipy --username <your username> --password <your password> --hostname <your hostname on no-ip.com>
 ```
-Or you can just call **noipy** if you have previously stored login information and hostname with `--store` [option](#store).
+Or you can just call **noipy** with `--hostname` argument if you have previously stored login information with `--store`.
 ```sh
-$ noipy
+$ noipy --hotname <your hostname on no-ip.com>
 ```
 
 For details:
@@ -28,19 +28,17 @@ $ noipy --help
 ```
 
 ## Settings File Configuration
-The settings file is a simple key/value pair file containing login information and hostname:
-
-	username=<your username>
-	password=<your password>
-	hostname=<your hostname on no-ip.com>
-
 With `--store` option it is possible to store login and hostname information in `HOME` directory (`~/.noipy`):
+```sh
+$ noipy --store --username <your username> --password <your password>
+```
+Or simply:
 ```sh
 $ noipy --store
 ```
-**Note:** password will be stored in settings file as plain text.
+And type username and password when required.
 
-Check out the [noipy.properties](noipy.properties) sample file if there is still any doubts.
+**Note:** password will be stored in settings file as plain text.
 
 ## Improvements & Troubleshooting
 
