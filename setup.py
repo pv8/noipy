@@ -33,7 +33,7 @@ setup(
         ],
         entry_points={
             'console_scripts': [
-                    'noipy = noipy.dnsupdater:main',
+                    'noipy = noipy.noipy:main',
             ],
         },
         zip_safe=True,

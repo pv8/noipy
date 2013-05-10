@@ -10,7 +10,7 @@ import os
 import re
 
 from noipy import settings
-from noipy import dnsupdater
+from noipy import noipy
 
 class NoipyTest(unittest.TestCase):
 
@@ -26,7 +26,7 @@ class NoipyTest(unittest.TestCase):
             os.remove(self.test_file)
 
     def testGetIP(self):
-        ip = dnsupdater.get_ip()
+        ip = noipy.get_ip()
         VALID_IP_REGEX = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
         self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
