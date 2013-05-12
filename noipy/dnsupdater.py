@@ -10,18 +10,17 @@ import re
 import abc
 
 class DnsUpdaterPlugin():
-    """ Base class for any DNS updater
+    """ Base class for any DDNS updater
     """
 
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, auth, hostname, new_ip):
+    def __init__(self, auth, hostname):
         """Init plugin with auth information, hostname and IP address.
         """
 
         self.auth = auth
         self.hostname = hostname
-        self.ip = new_ip
         self.last_status_code = ''
 
     @abc.abstractmethod
@@ -35,15 +34,15 @@ class DnsUpdaterPlugin():
 
         return NotImplemented 
 
-    def update_dns(self):
-        """(dict of {str: str}, str) -> str
+    def update_dns(self, new_ip):
+        """(str) -> None
         
         Call No-IP API based on dict login_info and return the status code. 
         """
 
         api_call_url = self._get_base_url().format(auth_str=str(self.auth),
                                                    hostname=self.hostname, 
-                                                   ip=self.ip) 
+                                                   ip=new_ip) 
 
         # call update url
         response = urllib.urlopen(api_call_url)
@@ -87,7 +86,7 @@ class DnsUpdaterPlugin():
         print msg
 
     def __str__(self):
-        return '%s(ip=%s, host=%s)' % (type(self).__name__, self.ip, self.hostname)
+        return '%s(host=%s)' % (type(self).__name__, self.hostname)
 
 class NoIpDnsUpdater(DnsUpdaterPlugin):
 

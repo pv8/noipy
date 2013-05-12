@@ -11,23 +11,7 @@ import urllib
 import getpass
 
 import dnsupdater
-import settings 
-
-class ApiAuth:
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
-    @property
-    def username(self):
-        return self.username
-
-    @property
-    def password(self):
-        return self.password
-
-    def __str__(self):
-        return '%s:%s' % (self.username, self.password)
+import authinfo
 
 def get_ip():
     """(NoneType) -> str
@@ -50,56 +34,57 @@ def parse_args():
     parser.add_argument('-u', '--username', help='NO-IP username')
     parser.add_argument('-p', '--password', help='NO-IP password')
     parser.add_argument('-n', '--hostname', help='NO-IP hostname to be updated')
-
-    # with store, this option is no longer necessary
-    # parser.add_argument('-f', '--file', help='settings file with login & hostname information')
-
-    parser.add_argument('-s', '--store', help='store login information and update the hostname if it is provided',
+    parser.add_argument('--store', 
+                        help='store DDNS authentication information and update the hostname if it is provided',
                         action='store_true')
+    parser.add_argument('ip', metavar='IP_ADDRESS', nargs='?', 
+                        help='New host IP address. If not provided, current external IP address will be used.')
 
     args = parser.parse_args()
 
-    # load login information
+    # load auth information
     api_params = {}
     if args.store:  # --store argument
+        auth = None
         if args.username and args.password:
-            api_params['username'] = args.username
-            api_params['password'] = args.password
+            auth = authinfo.ApiAuth(args.username, args.password)
+            api_params['auth'] = auth
         else:
-            api_params['username'] = raw_input('Type your username: ')
-            api_params['password'] = getpass.getpass('Type your password: ')
-        settings.store(api_params)
+            username = raw_input('Type your username: ')
+            password = getpass.getpass('Type your password: ')
+            auth = authinfo.ApiAuth(username, password)
+            api_params['auth'] = auth
+
+        authinfo.store(auth)
         if args.hostname:
             api_params['hostname'] = args.hostname
-    # elif args.file: # --file argument
-    #    api_params = settings.load(args.file)
+        else:
+            sys.exit(1)
     elif args.username and args.password and args.hostname:  # informations arguments
-        api_params['username'] = args.username
-        api_params['password'] = args.password
+        api_params['auth'] = authinfo.ApiAuth(args.username, args.password)
         api_params['hostname'] = args.hostname
-    elif args.hostname and settings.file_exists():
-        api_params = settings.load()
+    elif args.hostname and authinfo.exists():
+        api_params['auth'] = authinfo.load()
         api_params['hostname'] = args.hostname
     else:  # no arguments 
         print 'Atention: The hostname to be updated must be provided.\nUsername and ' \
             'password can be either provided via command line or stored with --store ' \
-            'option.\nExecute noipy --help for detailed information.'
+            'option.\nExecute noipy --help for more details.'
         print parser.format_usage()
         sys.exit(1)
+
+    api_params['ip'] = args.ip if args.ip else get_ip()
 
     return api_params
 
 def main():
     # parse command line args
     api_params = parse_args()
+    
+    updater = dnsupdater.NoIpDnsUpdater(api_params['auth'], api_params['hostname'])
 
-    auth = ApiAuth(api_params['username'], api_params['password'])
-    ip = get_ip()
-
-    updater = dnsupdater.NoIpDnsUpdater(auth, api_params['hostname'], ip)
-
-    print 'Updating hostname "%s" with IP address %s ...' % (api_params['hostname'], ip)
-    updater.update_dns()
+    print 'Updating hostname "{hostname}" with IP address {ip} ...'.format(**api_params)
+    updater.update_dns(api_params['ip'])
     updater.print_status_message()
 
 if __name__ == '__main__':
