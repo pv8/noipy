@@ -2,35 +2,39 @@
 
 [![Build Status](https://travis-ci.org/povieira/noipy.png?branch=master)](https://travis-ci.org/povieira/noipy)
 
-A simple command line tool to update No-IP.com hosts IP via [No-IP DDNS Update API](http://www.noip.com/integrate/request).
-This script also prints the response massege based on [No-IP DDNS Update API Response Codes](http://www.noip.com/integrate/response/).
+Command line tool to update DDNS hosts IP address via update API. Initially, the tool was designed to update IP address only on No-IP DDNS provider. But now **noipy** has support for the two most popular DDNS providers: [No-IP](http://www.noip.com/integrate/request) and [DynDNS](http://dyn.com/support/developers/api/perform-update/).
 
 ## Installation
-
+Installation can be done via `setup.py`:
 ```sh
 $ python setup.py install
+```
+Or `pip`:
+```sh
+$ pip install noipy
 ```
 
 ## Usage
 
 Basic usage of **noipy** command line tool:
 ```sh
-$ noipy --username <your username> --password <your password> --hostname <your hostname on no-ip.com>
+$ noipy --username <your username> --password <your password> --hostname <your hostname on no-ip.com> --provider {noip|dyn}
 ```
-Or you can just call **noipy** with `--hostname` argument if you have previously stored login information with `--store`.
+Or you can just use `--hostname` and `--provider` arguments if you have previously stored login information with `--store` option.
 ```sh
-$ noipy --hotname <your hostname on no-ip.com>
+$ noipy --hotname <your hostname on no-ip.com> --provider {noip|dyn}
 ```
+If `--provider` option is not informed, `noip` will be used as provider.
 
 For details:
 ```sh
 $ noipy --help
 ```
 
-## Settings File Configuration
-With `--store` option it is possible to store login and hostname information in `HOME` directory (`~/.noipy`):
+## Storing auth information
+With `--store` option it is possible to store login information. The information is sotred in `{HOME}/.noipy/` directory:
 ```sh
-$ noipy --store --username <your username> --password <your password>
+$ noipy --store --username <your username> --password <your password> --provider
 ```
 Or simply:
 ```sh
@@ -38,7 +42,7 @@ $ noipy --store
 ```
 And type username and password when required.
 
-**Note:** password will be stored in settings file as plain text.
+**Note:** password is stored simply encoded with [Base64](https://en.wikipedia.org/wiki/Base64) method and is not actually *encrypted*!
 
 ## Improvements & Troubleshooting
 

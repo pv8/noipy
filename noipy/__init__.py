@@ -9,9 +9,9 @@
 A simple script to update IP on No-IP DNS service. 
 """
 __title__ = 'noipy'
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 __author__ = 'Pablo O Vieira'
 __email__ = 'email@povieira.com'
-__license__ = 'EPL'
+__license__ = 'Eclipse Public License (EPL) - v1.0'
 
 import dnsupdater
