@@ -9,22 +9,24 @@ Installation can be done via `setup.py`:
 ```sh
 $ python setup.py install
 ```
-Or `pip`:
-```sh
-$ pip install noipy
-```
 
 ## Usage
 
 Basic usage of **noipy** command line tool:
 ```sh
-$ noipy --username <your username> --password <your password> --hostname <your hostname on no-ip.com> --provider {noip|dyn}
+$ noipy --username <your username> --password <your password> --hostname <your hostname on DDNS provider> --provider {noip|dyn}
 ```
 Or you can just use `--hostname` and `--provider` arguments if you have previously stored login information with `--store` option.
 ```sh
-$ noipy --hotname <your hostname on no-ip.com> --provider {noip|dyn}
+$ noipy --hostname <your hostname on DDNS provider> --provider {noip|dyn}
 ```
+
 If `--provider` option is not informed, `noip` will be used as provider.
+
+It is also possible to inform an IP address other than the machine's current:
+```sh
+$ noipy --hostname <your hostname on DDNS provider> 127.0.0.1
+```
 
 For details:
 ```sh
