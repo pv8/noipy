@@ -1,8 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # noipy.noipy
 # Copyright (c) 2013 Pablo O Vieira (povieira)
-# See README.md for details.
+# See README.md and LICENSE.md for details.
 
 import argparse
 import sys
