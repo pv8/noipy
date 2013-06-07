@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# test_noipy
+# tests
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.md and LICENSE.md for details.
 
