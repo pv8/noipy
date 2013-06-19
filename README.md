@@ -34,7 +34,7 @@ $ noipy --help
 ```
 
 ## Storing auth information
-With `--store` option it is possible to store login information. The information is sotred in `{HOME}/.noipy/` directory:
+With `--store` option it is possible to store login information. The information is sotred in `$HOME/.noipy/` directory:
 ```sh
 $ noipy --store --username <your username> --password <your password> --provider
 ```
