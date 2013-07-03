@@ -11,14 +11,14 @@ from noipy import __version__, __author__, __email__, __license__
 setup(
         name='noipy',
         version=__version__,
-        description='Command line update for No-IP DDNS Update API',
-        long_description=open('README.md').read(),
+        description='Command line update for No-IP and Dyn DDNS Update API',
+        long_description=open('doc/index.rst').read(),
         license=__license__,
         author=__author__,
         author_email=__email__,
         url='https://github.com/povieira/noipy',
         packages=find_packages(),
-        keywords=['no-ip', 'ddns', 'api'],
+        keywords=['no-ip', 'dyndns', 'ddns', 'api'],
         platforms='Python 2.6 and later',
         classifiers = [
             'Development Status :: 5 - Production/Stable',

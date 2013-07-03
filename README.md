@@ -5,9 +5,9 @@
 Command line tool to update DDNS hosts IP address via update API. Initially, the tool was designed to update IP address only on No-IP DDNS provider. But now **noipy** has support for the two most popular DDNS providers: [No-IP](http://www.noip.com/integrate/request) and [DynDNS](http://dyn.com/support/developers/api/perform-update/).
 
 ## Installation
-Installation can be done via `setup.py`:
+To install **noipy**, simply:
 ```sh
-$ python setup.py install
+$ pip install noipy
 ```
 
 ## Usage
