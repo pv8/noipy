@@ -14,4 +14,3 @@ __author__ = 'Pablo O Vieira'
 __email__ = 'email@povieira.com'
 __license__ = 'Eclipse Public License (EPL) - v1.0'
 
-import dnsupdater
