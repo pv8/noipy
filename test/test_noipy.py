@@ -16,7 +16,6 @@ from noipy import noipy
 class NoipyTest(unittest.TestCase):
 
     def setUp(self):
-        self.auth = authinfo.ApiAuth('username', 'password')
         self.test_dir = os.path.join(os.path.expanduser('~'), 'noipy_test')
 
     def tearDown(self):
@@ -26,41 +25,43 @@ class NoipyTest(unittest.TestCase):
 
     def testGetIP(self):
         ip = noipy.get_ip()
-        VALID_IP_REGEX = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+        VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
 
         self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
     def testGetAuthInstance(self):
         auth1 = authinfo.ApiAuth('username', 'password')
-        auth2 = authinfo.ApiAuth.get_instance('dXNlcm5hbWU6cGFzc3dvcmQ=')
+        auth2 = authinfo.ApiAuth.get_instance(b'dXNlcm5hbWU6cGFzc3dvcmQ=')
 
         self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail.')
 
     def testStoreAuthInfo(self):
-        authinfo.store(self.auth, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
-        auth = None
+        auth1 = authinfo.ApiAuth('username', 'password')
+        authinfo.store(auth1, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
+        auth2 = None
         try:
             auth_file = os.path.join(self.test_dir, dnsupdater.DEFAULT_PLUGIN)
             with open(auth_file) as f:
                 auth_key = f.read()
-                auth = authinfo.ApiAuth.get_instance(auth_key)
+                auth2 = authinfo.ApiAuth.get_instance(auth_key.encode('utf-8'))
         except IOError as e:
             self.fail('Store settings function failed. {0}: "{1}"'.format(e.strerror, self.test_dir))
 
-        self.assertTrue(auth == self.auth, 'Auth information storing failed.')
+        self.assertTrue(auth1 == auth2, 'Auth information storing failed.')
 
     def testLoadAuthInfo(self):
+        auth1 = authinfo.ApiAuth('username', 'password')
         try:
             os.mkdir(self.test_dir)
             auth_file = os.path.join(self.test_dir, dnsupdater.DEFAULT_PLUGIN)
             with open(auth_file, 'w') as f:
-                f.write(self.auth.get_base64_key())
+                f.write(auth1.base64key.decode('utf-8'))
         except IOError as e:
             self.fail('Load settings function failed. {0}: "{1}"'.format(e.strerror, self.test_dir))
 
-        auth = authinfo.load(dnsupdater.DEFAULT_PLUGIN, self.test_dir)
+        auth2 = authinfo.load(dnsupdater.DEFAULT_PLUGIN, self.test_dir)
 
-        self.assertTrue(auth == self.auth, 'Auth information loading failed.')
+        self.assertTrue(auth1 == auth2, 'Auth information loading failed.')
 
 if __name__ == "__main__":
     unittest.main()

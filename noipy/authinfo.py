@@ -8,19 +8,16 @@
 import os
 import base64
 
-class ApiAuth:
+class ApiAuth(object):
 
     def __init__(self, username, password):
-        self.username = username
-        self.password = password
+        self._username = username
+        self._password = password
 
     @property
-    def username(self):
-        return self.username
-
-    @property
-    def password(self):
-        return self.password
+    def base64key(self):
+        auth_str = '%s:%s' % (self._username, self._password)
+        return base64.b64encode(auth_str.encode('utf-8'))
 
     @classmethod
     def get_instance(cls, encoded_key):
@@ -28,20 +25,24 @@ class ApiAuth:
         
         Return an ApiAuth instance from an encoded key
         """
-        login_str = base64.b64decode(encoded_key)
+        login_str = base64.b64decode(encoded_key).decode('utf-8')
         username, password = login_str.strip().split(':', 1)
 
-        return cls(username, password)
+        instance = cls(username, password)
+
+        return instance
 
     def get_base64_key(self):
-        return base64.b64encode('%s:%s' % (self.username, self.password))
+        auth_str = '%s:%s' % (self._username, self._password)
+
+        return base64.b64encode(auth_str.encode('utf-8'))
 
     def __str__(self):
-        return '%s:%s' % (self.username, self.password)
+        return self.base64key.decode('utf-8')
 
     def __eq__(self, other):
         return str(self) == str(other)
-
+    
 
 AUTHFILE_DIR = os.path.join(os.path.expanduser('~'), '.noipy')
 
@@ -53,23 +54,24 @@ def store(auth, provider, auth_dir=AUTHFILE_DIR):
 
     try:
         if not os.path.exists(auth_dir):
-            print 'Creating directory: %s' % auth_dir
+            print('Creating directory: %s' % auth_dir)
             os.mkdir(auth_dir)
         elif not os.path.isdir(auth_dir):
             os.remove(auth_dir)
-            print 'Creating directory: %s' % auth_dir
+            print('Creating directory: %s' % auth_dir)
             os.mkdir(auth_dir)
 
         auth_file = os.path.join(auth_dir, provider)
-        print 'Creating auth info file: %s' % auth_file
+        print('Creating auth info file: %s' % auth_file)
         with open(auth_file, 'w') as f:
-            f.write(auth.get_base64_key())
+            buff = auth.base64key.decode('utf-8')
+            f.write(buff)
 
     except IOError as e:
-        print '{0}: "{1}"'.format(e.strerror, auth_file)
+        print('{0}: "{1}"'.format(e.strerror, auth_file))
         raise e
 
-    print 'Auth info stored'
+    print('Auth info stored')
 
 def load(provider, auth_dir=AUTHFILE_DIR):
     """(str, str) -> ApiAuth
@@ -77,15 +79,15 @@ def load(provider, auth_dir=AUTHFILE_DIR):
     Load provider specific auth info from file
     """
 
-    print 'Loading stored auth info...'
+    print('Loading stored auth info...')
     auth = None
     try:
         auth_file = os.path.join(auth_dir, provider)
         with open(auth_file) as f:
             auth_key = f.read()
-            auth = ApiAuth.get_instance(auth_key)
+            auth = ApiAuth.get_instance(auth_key.encode('utf-8'))
     except IOError as e:
-        print '{0}: "{1}"'.format(e.strerror, auth_file)
+        print('{0}: "{1}"'.format(e.strerror, auth_file))
         raise e
 
     return auth

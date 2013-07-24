@@ -5,7 +5,13 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.md and LICENSE.md for details.
 
-import urllib2
+from __future__ import print_function
+
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
+
 import re
 import abc
 
@@ -13,7 +19,7 @@ AVAILABLE_PLUGINS = {'noip': 'NoipDnsUpdater',
                      'dyn': 'DynDnsUpdater'}
 DEFAULT_PLUGIN = 'noip'
 
-class DnsUpdaterPlugin():
+class DnsUpdaterPlugin(object):
     """ Base class for any DDNS updater
     """
 
@@ -23,9 +29,17 @@ class DnsUpdaterPlugin():
         """Init plugin with auth information, hostname and IP address.
         """
 
-        self.auth = auth
-        self.hostname = hostname
+        self._auth = auth
+        self._hostname = hostname
         self.last_status_code = ''
+
+    @property
+    def auth(self):
+        return self._auth
+
+    @property
+    def hostname(self):
+        return self._hostname
 
     @abc.abstractmethod
     def _get_base_url(self):
@@ -44,19 +58,19 @@ class DnsUpdaterPlugin():
         Call No-IP API based on dict login_info and return the status code. 
         """
 
-        api_call_url = self._get_base_url().format(auth_str=str(self.auth),
+        api_call_url = self._get_base_url().format(auth_str=str(self._auth),
                                                    hostname=self.hostname, 
                                                    ip=new_ip) 
         
+        
         # call update url
-        #response = urllib.urlopen(api_call_url)
         request = urllib2.Request(api_call_url)
-        request.get_method = lambda: 'GET'
-        request.add_header('Authorization', 'Basic %s' % self.auth.get_base64_key())
+        #request.get_method = lambda: 'GET'
+        request.add_header('Authorization', 'Basic %s' % self.auth.base64key.decode('utf-8'))
 
         response = urllib2.urlopen(request)
 
-        self.last_status_code = response.read()
+        self.last_status_code = response.read().decode('utf-8')
 
     def print_status_message(self):
         """(str) -> NoneType
@@ -92,7 +106,7 @@ class DnsUpdaterPlugin():
         else:
             msg = 'WARNING: Ooops! Something went wrong !!!'
 
-        print msg
+        print(msg)
 
     def __str__(self):
         return '%s(host=%s)' % (type(self).__name__, self.hostname)

@@ -5,14 +5,25 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.md and LICENSE.md for details.
 
+from __future__ import print_function
+
+try:
+    import urllib.request as urllib
+except ImportError:
+    import urllib
+
 import argparse
 import sys
 import re
-import urllib
 import getpass
 
-import dnsupdater
-import authinfo
+from . import dnsupdater
+from . import authinfo
+
+try: 
+    input = raw_input
+except NameError: 
+    pass
 
 def get_ip():
     """(NoneType) -> str
@@ -21,7 +32,7 @@ def get_ip():
     """
 
     page = urllib.urlopen('http://checkip.dyndns.org')
-    content = page.read()
+    content = page.read().decode('utf-8')
 
     return re.search(r'(\d{1,3}\.?){4}', content).group()
 
@@ -45,7 +56,7 @@ def main():
         if args.username and args.password:
             auth = authinfo.ApiAuth(args.username, args.password)
         else:
-            username = raw_input('Type your username: ')
+            username = input('Type your username: ')
             password = getpass.getpass('Type your password: ')
             auth = authinfo.ApiAuth(username, password)
 
@@ -58,14 +69,14 @@ def main():
         if authinfo.exists(args.provider):
             auth = authinfo.load(args.provider)
         else:
-            print 'No stored auth information found for provider: "%s"' % args.provider
-            print parser.format_usage()
+            print('No stored auth information found for provider: "%s"' % args.provider)
+            print(parser.format_usage())
             sys.exit(1)
     else:  # no arguments 
-        print 'Atention: The hostname to be updated must be provided.\nUsername and ' \
+        print('Atention: The hostname to be updated must be provided.\nUsername and ' \
             'password can be either provided via command line or stored with --store ' \
-            'option.\nExecute noipy --help for more details.'
-        print parser.format_usage()
+            'option.\nExecute noipy --help for more details.')
+        print(parser.format_usage())
         sys.exit(1)
 
     updater_class = getattr(dnsupdater, dnsupdater.AVAILABLE_PLUGINS.get(args.provider))
@@ -73,7 +84,7 @@ def main():
 
     ip_address = args.ip if args.ip else get_ip()
 
-    print 'Updating hostname "%s" with IP address %s ...' % (args.hostname, ip_address)
+    print('Updating hostname "%s" with IP address %s ...' % (args.hostname, ip_address))
 
     updater.update_dns(ip_address)
     updater.print_status_message()
