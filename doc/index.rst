@@ -1,8 +1,14 @@
 noipy: DDNS update tool
 =======================
 
+.. image:: https://badge.fury.io/py/noipy.png
+        :target: http://badge.fury.io/py/noipy
+
 .. image:: https://travis-ci.org/povieira/noipy.png?branch=master
         :target: https://travis-ci.org/povieira/noipy
+
+.. image:: https://pypip.in/d/noipy/badge.png?version=latest
+        :target: https://crate.io/packages/noipy
 
 
 Command line tool to update DDNS hosts IP address via update API. Initially, 
