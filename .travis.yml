@@ -2,4 +2,12 @@ language: python
 python:
   - 2.7
   - 3.3
-script: python setup.py test
+
+install:
+  - pip install coveralls
+
+script: 
+  - coverage run --source=noipy setup.py test
+
+after_success:
+  - coveralls
