@@ -32,11 +32,6 @@ class ApiAuth(object):
 
         return instance
 
-    def get_base64_key(self):
-        auth_str = '%s:%s' % (self._username, self._password)
-
-        return base64.b64encode(auth_str.encode('utf-8'))
-
     def __str__(self):
         return self.base64key.decode('utf-8')
 
