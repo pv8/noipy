@@ -8,10 +8,6 @@
 import unittest
 import os
 import re
-try:
-    import urllib.request as urllib2
-except ImportError:
-    import urllib2
 
 from noipy import authinfo
 from noipy import dnsupdater
@@ -104,7 +100,7 @@ class NoipyTest(unittest.TestCase):
         auth1 = authinfo.ApiAuth('username', 'password')
         authinfo.store(auth1, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
         
-        if not authinfo.exists(dnsupdater.DEFAULT_PLUGIN, self.test_dir):
+        if not authinfo.exists(dnsupdater.DEFAULT_PLUGIN):
             self.fail('Settings file should be avaliable.')
 
         if authinfo.exists('fake_provider'):
@@ -130,4 +126,3 @@ class NoipyTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
