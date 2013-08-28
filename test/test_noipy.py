@@ -113,7 +113,7 @@ class NoipyTest(unittest.TestCase):
         plugin = dnsupdater.NoipDnsUpdater(auth, hotsname)
         plugin.update_dns('1.1.1.1')
 
-        self.assertTrue(plugin.last_status_code in ['badauth', '401', '404'], 'Status code should be "badauth"')
+        self.assertTrue(plugin.status_message.startswith('ERROR: Invalid username or password'), 'Status message should be "Invalid username or password"')
 
     def testDynDnsPlugin(self):
         auth = authinfo.ApiAuth('username', 'password')
@@ -122,7 +122,7 @@ class NoipyTest(unittest.TestCase):
         plugin = dnsupdater.NoipDnsUpdater(auth, hotsname)
         plugin.update_dns('1.1.1.1')
 
-        self.assertTrue(plugin.last_status_code in ['badauth', '401', '404'], 'Status code should be "badauth"')
+        self.assertTrue(plugin.status_message.startswith('ERROR: Invalid username or password'), 'Status message should be "Invalid username or password"')
 
 if __name__ == "__main__":
     unittest.main()

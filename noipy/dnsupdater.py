@@ -82,14 +82,14 @@ class DnsUpdaterPlugin(object):
         """
 
         msg = '' 
-        if 'good' in self.last_status_code or 'nochg' in self.last_status_code:
+        if self.last_status_code in ['badauth', 'nochg', '401', '404']:
+            msg = 'ERROR: Invalid username or password (%s).' % self.last_status_code
+        elif 'good' in self.last_status_code or 'nochg' in self.last_status_code:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code).group()
             if 'good' in self.last_status_code:
                 msg = 'SUCCESS: DNS hostname IP (%s) successfully updated.' % ip
             else:
                 msg = 'SUCCESS: IP address (%s) is up to date, nothing was changed. Additional "nochg" updates may be considered abusive.' % ip
-        elif self.last_status_code in ['badauth', '401', '404']:
-            msg = 'ERROR: Invalid username or password (%s).' % self.last_status_code
         elif self.last_status_code == '!donator':
             msg = 'ERROR: Update request include a feature that is not available to informed user.'
         elif self.last_status_code == 'notfqdn':
