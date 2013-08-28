@@ -87,6 +87,6 @@ def load(provider, auth_dir=AUTHFILE_DIR):
 
     return auth
 
-def exists(provider):
-    auth_file = os.path.join(AUTHFILE_DIR, provider)
+def exists(provider, auth_dir=AUTHFILE_DIR):
+    auth_file = os.path.join(auth_dir, provider)
     return os.path.exists(auth_file)
