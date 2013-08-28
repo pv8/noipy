@@ -27,7 +27,7 @@ class NoipyTest(unittest.TestCase):
                 os.rmdir(self.test_dir)
 
 
-    def XXX_testGetIP(self):
+    def testGetIP(self):
         ip = noipy.get_ip()
         VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
 
@@ -100,7 +100,7 @@ class NoipyTest(unittest.TestCase):
         auth1 = authinfo.ApiAuth('username', 'password')
         authinfo.store(auth1, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
         
-        if not authinfo.exists(dnsupdater.DEFAULT_PLUGIN):
+        if not authinfo.exists(dnsupdater.DEFAULT_PLUGIN, self.test_dir):
             self.fail('Settings file should be avaliable.')
 
         if authinfo.exists('fake_provider'):
