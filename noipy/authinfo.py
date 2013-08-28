@@ -32,11 +32,6 @@ class ApiAuth(object):
 
         return instance
 
-    def get_base64_key(self):
-        auth_str = '%s:%s' % (self._username, self._password)
-
-        return base64.b64encode(auth_str.encode('utf-8'))
-
     def __str__(self):
         return self.base64key.decode('utf-8')
 
@@ -92,6 +87,6 @@ def load(provider, auth_dir=AUTHFILE_DIR):
 
     return auth
 
-def exists(provider):
-    auth_file = os.path.join(AUTHFILE_DIR, provider)
+def exists(provider, auth_dir=AUTHFILE_DIR):
+    auth_file = os.path.join(auth_dir, provider)
     return os.path.exists(auth_file)

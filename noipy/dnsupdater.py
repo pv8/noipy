@@ -68,14 +68,17 @@ class DnsUpdaterPlugin(object):
         #request.get_method = lambda: 'GET'
         request.add_header('Authorization', 'Basic %s' % self.auth.base64key.decode('utf-8'))
 
-        response = urllib2.urlopen(request)
+        try:
+            response = urllib2.urlopen(request)
+            self.last_status_code = response.read().decode('utf-8')
+        except urllib2.HTTPError as e:
+            self.last_status_code = str(e.code)
 
-        self.last_status_code = response.read().decode('utf-8')
-
-    def print_status_message(self):
+    @property
+    def status_message(self):
         """(str) -> NoneType
         
-        Print friendly response from API based on response code.   
+        Return friendly response from API based on response code.   
         """
 
         msg = '' 
@@ -85,8 +88,8 @@ class DnsUpdaterPlugin(object):
                 msg = 'SUCCESS: DNS hostname IP (%s) successfully updated.' % ip
             else:
                 msg = 'SUCCESS: IP address (%s) is up to date, nothing was changed. Additional "nochg" updates may be considered abusive.' % ip
-        elif self.last_status_code == 'badauth':
-            msg = 'ERROR: Invalid username or password.'
+        elif self.last_status_code in ['badauth', '401', '404']:
+            msg = 'ERROR: Invalid username or password (%s).' % self.last_status_code
         elif self.last_status_code == '!donator':
             msg = 'ERROR: Update request include a feature that is not available to informed user.'
         elif self.last_status_code == 'notfqdn':
@@ -106,7 +109,7 @@ class DnsUpdaterPlugin(object):
         else:
             msg = 'WARNING: Ooops! Something went wrong !!!'
 
-        print(msg)
+        return msg
 
     def __str__(self):
         return '%s(host=%s)' % (type(self).__name__, self.hostname)

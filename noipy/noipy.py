@@ -87,7 +87,7 @@ def main():
     print('Updating hostname "%s" with IP address %s ...' % (args.hostname, ip_address))
 
     updater.update_dns(ip_address)
-    updater.print_status_message()
+    print(updater.status_message)
 
 if __name__ == '__main__':
     main()

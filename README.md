@@ -1,6 +1,6 @@
 # noipy - README
 
-[![PyPI version](https://badge.fury.io/py/noipy.png)](http://badge.fury.io/py/noipy) [![Build Status](https://travis-ci.org/povieira/noipy.png?branch=master)](https://travis-ci.org/povieira/noipy)  [![Downloads](https://pypip.in/d/noipy/badge.png?version=latest)](https://crate.io/packages/noipy)
+[![PyPI version](https://badge.fury.io/py/noipy.png)](http://badge.fury.io/py/noipy) [![Build Status](https://travis-ci.org/povieira/noipy.png?branch=master)](https://travis-ci.org/povieira/noipy)  [![Downloads](https://pypip.in/d/noipy/badge.png)](https://crate.io/packages/noipy) [![Coverage Status](https://coveralls.io/repos/povieira/noipy/badge.png?branch=master)](https://coveralls.io/r/povieira/noipy?branch=master)
 
 Command line tool to update DDNS hosts IP address via update API. Initially, the tool was designed to update IP address only on No-IP DDNS provider. But now **noipy** has support for the two most popular DDNS providers: [No-IP](http://www.noip.com/integrate/request) and [DynDNS](http://dyn.com/support/developers/api/perform-update/).
 
@@ -14,9 +14,10 @@ $ pip install noipy
 
 Basic usage of **noipy** command line tool:
 ```sh
-$ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider> --provider {noip|dyn}
+$ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider> 
+        --provider {noip|dyn}
 ```
-Or you can just use `--hostname` and `--provider` arguments if you have previously stored login information with `--store` option.
+Or you can just use `--hostname` (`-n`) and `--provider` arguments if you have previously stored login information with `--store` option.
 ```sh
 $ noipy --hostname <your hostname on DDNS provider> --provider {noip|dyn}
 ```
