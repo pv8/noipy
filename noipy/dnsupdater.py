@@ -82,7 +82,7 @@ class DnsUpdaterPlugin(object):
         """
 
         msg = '' 
-        if self.last_status_code in ['badauth', 'nochg', '401', '404']:
+        if self.last_status_code in ['badauth', 'nochg', '401', '403']:
             msg = 'ERROR: Invalid username or password (%s).' % self.last_status_code
         elif 'good' in self.last_status_code or 'nochg' in self.last_status_code:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code).group()
