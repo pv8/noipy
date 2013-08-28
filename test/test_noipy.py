@@ -119,7 +119,7 @@ class NoipyTest(unittest.TestCase):
         auth = authinfo.ApiAuth('username', 'password')
         hotsname = 'noipy.homelinux.com'
 
-        plugin = dnsupdater.NoipDnsUpdater(auth, hotsname)
+        plugin = dnsupdater.DynDnsUpdater(auth, hotsname)
         plugin.update_dns('1.1.1.1')
 
         self.assertTrue(plugin.status_message.startswith('ERROR: Invalid username or password'), 'Status message should be "Invalid username or password"')
