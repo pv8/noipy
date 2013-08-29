@@ -3,7 +3,7 @@
 
 # noipy.dnsupdater
 # Copyright (c) 2013 Pablo O Vieira (povieira)
-# See README.md and LICENSE.md for details.
+# See README.rst and epl-v10.html for details.
 
 from __future__ import print_function
 

@@ -7,9 +7,11 @@ noipy: DDNS update tool
 .. image:: https://travis-ci.org/povieira/noipy.png?branch=master
         :target: https://travis-ci.org/povieira/noipy
 
-.. image:: https://pypip.in/d/noipy/badge.png?version=latest
+.. image:: https://pypip.in/d/noipy/badge.png
         :target: https://crate.io/packages/noipy
 
+.. image:: https://coveralls.io/repos/povieira/noipy/badge.png?branch=master
+        :target: https://coveralls.io/r/povieira/noipy?branch=master
 
 Command line tool to update DDNS hosts IP address via update API. Initially, 
 the tool was designed to update IP address only on No-IP DDNS provider. But 
@@ -20,6 +22,8 @@ and `DynDNS <http://dyn.com/support/developers/api/perform-update/>`_.
 
 Installation
 ------------
+
+To install **noipy**, simply:
 
 .. code-block:: bash
 
@@ -36,7 +40,7 @@ Basic usage of **noipy** command line tool:
     $ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider> 
             --provider {noip|dyn}
 
-Or you can just use ``--hostname`` and ``--provider`` arguments if you have 
+Or you can just use ``--hostname`` (`-n`) and ``--provider`` arguments if you have 
 previously  stored login information with ``--store`` option.
 
 .. code-block:: bash
