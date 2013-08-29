@@ -40,7 +40,7 @@ Basic usage of **noipy** command line tool:
     $ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider> 
             --provider {noip|dyn}
 
-Or you can just use ``--hostname`` (`-n`) and ``--provider`` arguments if you have 
+Or you can just use ``--hostname`` (``-n``) and ``--provider`` arguments if you have 
 previously  stored login information with ``--store`` option.
 
 .. code-block:: bash
