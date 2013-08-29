@@ -1,13 +1,13 @@
 .. :changelog:
 
-History
--------
+Changelog
+---------
 
 1.1.4 (2013-08-29)
 ++++++++++++++++++
 
 - Test case improvements
-- `Coveralls.io<http://coveralls.io/>`_  support
+- `Coveralls.io <http://coveralls.io/>`_  support
 
 
 1.1.3 (2013-07-24)

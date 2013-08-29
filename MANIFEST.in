@@ -1,3 +1,4 @@
 include *.py
 include README.rst
+include CHANGELOG.rst
 include epl-v10.html
