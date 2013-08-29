@@ -113,4 +113,3 @@ Copyright & License
 Copyright (c) 2013 Pablo O Vieira (povieira). 
 This software is licensed under the 
 `Eclipse Public License (EPL) - v1.0 <http://www.eclipse.org/legal/epl-v10.html>`_.
-
