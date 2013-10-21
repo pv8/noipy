@@ -13,7 +13,6 @@ except ImportError:
     import urllib2
 
 import re
-import abc
 
 AVAILABLE_PLUGINS = {'noip': 'NoipDnsUpdater',
                      'dyn': 'DynDnsUpdater'}
@@ -22,8 +21,6 @@ DEFAULT_PLUGIN = 'noip'
 class DnsUpdaterPlugin(object):
     """ Base class for any DDNS updater
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, auth, hostname):
         """Init plugin with auth information, hostname and IP address.
@@ -41,13 +38,14 @@ class DnsUpdaterPlugin(object):
     def hostname(self):
         return self._hostname
 
-    @abc.abstractmethod
     def _get_base_url(self):
         """ (None) -> str
         
         Get the base URL for DDNS Update API. URL must contain these 3 variables: 
         'auth_str' (auth string <usename:password>), 'hostname' and 'ip' 
         Example: https://{auth_str}@ddnsprovider.com/update?hostname={hostname}&ip={ip}  
+
+        This method must be implemented by plugin subclasses
         """
 
         return NotImplemented 
