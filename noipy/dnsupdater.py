@@ -81,31 +81,31 @@ class DnsUpdaterPlugin(object):
 
         msg = '' 
         if self.last_status_code in ['badauth', 'nochg', '401', '403']:
-            msg = 'ERROR: Invalid username or password (%s).' % self.last_status_code
+            msg = "ERROR: Invalid username or password (%s)." % self.last_status_code
         elif 'good' in self.last_status_code or 'nochg' in self.last_status_code:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code).group()
             if 'good' in self.last_status_code:
-                msg = 'SUCCESS: DNS hostname IP (%s) successfully updated.' % ip
+                msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % ip
             else:
-                msg = 'SUCCESS: IP address (%s) is up to date, nothing was changed. Additional "nochg" updates may be considered abusive.' % ip
+                msg = "SUCCESS: IP address (%s) is up to date, nothing was changed. Additional 'nochg' updates may be considered abusive." % ip
         elif self.last_status_code == '!donator':
-            msg = 'ERROR: Update request include a feature that is not available to informed user.'
+            msg = "ERROR: Update request include a feature that is not available to informed user."
         elif self.last_status_code == 'notfqdn':
-            msg = 'ERROR: The hostname specified is not a fully-qualified domain name (not in the form hostname.dyndns.org or domain.com).'
+            msg = "ERROR: The hostname specified is not a fully-qualified domain name (not in the form hostname.dyndns.org or domain.com)."
         elif self.last_status_code == 'nohost':
-            msg = 'ERROR: Hostname specified does not exist in this user account.'
+            msg = "ERROR: Hostname specified does not exist in this user account."
         elif self.last_status_code == 'numhost':
-            msg = 'ERROR: Too many hosts (more than 20) specified in an update. Also returned if trying to update a round robin (which is not allowed).'
+            msg = "ERROR: Too many hosts (more than 20) specified in an update. Also returned if trying to update a round robin (which is not allowed)."
         elif self.last_status_code == 'abuse':
-            msg = 'ERROR: Username/hostname is blocked due to update abuse. '
+            msg = "ERROR: Username/hostname is blocked due to update abuse."
         elif self.last_status_code == 'badagent':
-            msg = 'ERROR: User agent not sent or HTTP method not permitted.'
+            msg = "ERROR: User agent not sent or HTTP method not permitted."
         elif self.last_status_code == 'dnserr':
-            msg = 'ERROR: DNS error encountered'
+            msg = "ERROR: DNS error encountered."
         elif self.last_status_code == '911':
-            msg = 'ERROR: Problem on server side. Retry update in a few minutes.'
+            msg = "ERROR: Problem on server side. Retry update in a few minutes."
         else:
-            msg = 'WARNING: Ooops! Something went wrong !!!'
+            msg = "WARNING: Ooops! Something went wrong !!!"
 
         return msg
 
@@ -117,12 +117,12 @@ class NoipDnsUpdater(DnsUpdaterPlugin):
     """
 
     def _get_base_url(self):
-        return 'https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}'
+        return "https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}"
 
 class DynDnsUpdater(DnsUpdaterPlugin):
     """DynDNS DDNS provider plugin
     """
 
     def _get_base_url(self):
-        return 'http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG'
+        return "http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG"
 
