@@ -13,6 +13,10 @@ noipy: DDNS update tool
 .. image:: https://coveralls.io/repos/povieira/noipy/badge.png?branch=master
         :target: https://coveralls.io/r/povieira/noipy?branch=master
 
+.. image:: https://badge.waffle.io/povieira/noipy.png?label=ready
+        :target: http://waffle.io/povieira/noipy
+
+
 Command line tool to update DDNS hosts IP address via update API. Initially, 
 the tool was designed to update IP address only on No-IP DDNS provider. But 
 now **noipy** has support for the two most popular DDNS providers: 
