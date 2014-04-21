@@ -6,7 +6,7 @@ Changelog
 1.2.0 (2014-04-21)
 ------------------
 
-- Support for `DuckDNS <https://www.duckdns.org>`_
+- Support for `DuckDNS domains update <https://www.duckdns.org/install.jsp>`_
 
 1.1.4 (2013-08-29)
 ------------------

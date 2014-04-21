@@ -8,12 +8,16 @@
 from setuptools import setup, find_packages
 from noipy import __version__, __author__, __email__, __license__
 
+with open('README.rst') as f:
+    readme = f.read()
+with open('CHANGELOG.rst') as f:
+    changelog = f.read()
+
 setup(
         name='noipy',
         version=__version__,
         description='Command line update for No-IP and Dyn DDNS Update API',
-        long_description=open('README.rst').read() + '\n\n' +
-                         open('CHANGELOG.rst').read(),
+        long_description=readme + '\n\n' + changelog,
         license=__license__,
         author=__author__,
         author_email=__email__,
