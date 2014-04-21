@@ -20,7 +20,8 @@ noipy: DDNS update tool
 Command line tool to update DDNS hosts IP address via update API. Initially, 
 the tool was designed to update IP address only on No-IP DDNS provider. But 
 now **noipy** has support for the two most popular DDNS providers: 
-`No-IP <http://www.noip.com/integrate/request>`_ 
+`No-IP <http://www.noip.com/integrate/request>`_,
+`DuckDNS <https://www.duckdns.org/install.jsp>`_
 and `DynDNS <http://dyn.com/support/developers/api/perform-update/>`_.
 
 
@@ -41,15 +42,22 @@ Basic usage of **noipy** command line tool:
 
 .. code-block:: bash
 
-    $ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider> 
-            --provider {noip|dyn}
+    $ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider>
+            --provider {noip | dyn | duck}
+
+For `DuckDNS <https://www.duckdns.org>`_ provider, the command line would look like this:
+
+.. code-block:: bash
+
+    $ noipy -u <your token> -n <your DuckDNS domain> --provider duck
+
 
 Or you can just use ``--hostname`` (``-n``) and ``--provider`` arguments if you have 
 previously  stored login information with ``--store`` option.
 
 .. code-block:: bash
 
-    $ noipy --hostname <your hostname on DDNS provider> --provider {noip|dyn}
+    $ noipy --hostname <your hostname on DDNS provider> --provider {noip | dyn | duck}
 
 If ``--provider`` option is not informed, **noip** will be used as provider.
 
