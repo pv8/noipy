@@ -100,3 +100,32 @@ And type username and password when required.
 *encrypted*!
 
 
+Contributing
+------------
+
+Source code
+~~~~~~~~~~~
+
+**noipy** source code can be found at GitHub repo: https://github.com/povieira/noipy/
+
+Running tests
+~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+    $ python setup.py test
+
+
+Improvements & Troubleshooting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you have suggestions or find any bug, please feel free to report them using this
+project's `issue tracker <https://github.com/povieira/noipy/issues>`_.
+
+
+Copyright & License
+-------------------
+
+Copyright (c) 2013 Pablo O Vieira (povieira).  
+This software is licensed under the
+`Eclipse Public License (EPL) - v1.0 <http://www.eclipse.org/legal/epl-v10.html>`_.
