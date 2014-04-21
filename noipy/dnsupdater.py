@@ -14,13 +14,19 @@ except ImportError:
 
 import re
 
-AVAILABLE_PLUGINS = {'noip': 'NoipDnsUpdater',
-                     'dyn': 'DynDnsUpdater'}
+AVAILABLE_PLUGINS = {
+    'noip': 'NoipDnsUpdater',
+    'dyn': 'DynDnsUpdater',
+    'duck': 'DuckDnsUpdater',
+}
+
 DEFAULT_PLUGIN = 'noip'
 
 class DnsUpdaterPlugin(object):
     """ Base class for any DDNS updater
     """
+
+    auth_type = ""
 
     def __init__(self, auth, hostname):
         """Init plugin with auth information, hostname and IP address.
@@ -41,8 +47,9 @@ class DnsUpdaterPlugin(object):
     def _get_base_url(self):
         """ (None) -> str
         
-        Get the base URL for DDNS Update API. URL must contain these 3 variables: 
-        'auth_str' (auth string <usename:password>), 'hostname' and 'ip' 
+        Get the base URL for DDNS Update API. URL must contain 'hostname'
+        and 'ip'. If authentication is via token string 'token' argument must
+        be provided as well.
         Example: https://{auth_str}@ddnsprovider.com/update?hostname={hostname}&ip={ip}  
 
         This method must be implemented by plugin subclasses
@@ -56,15 +63,16 @@ class DnsUpdaterPlugin(object):
         Call No-IP API based on dict login_info and return the status code. 
         """
 
-        api_call_url = self._get_base_url().format(auth_str=str(self._auth),
-                                                   hostname=self.hostname, 
-                                                   ip=new_ip) 
-        
-        
-        # call update url
-        request = urllib2.Request(api_call_url)
-        #request.get_method = lambda: 'GET'
-        request.add_header('Authorization', 'Basic %s' % self.auth.base64key.decode('utf-8'))
+        if self.auth_type == 'T':
+            api_call_url = self._get_base_url().format(hostname=self.hostname,
+                                                       token=self.auth.token,
+                                                       ip=new_ip)
+            request = urllib2.Request(api_call_url)
+        else:
+            api_call_url = self._get_base_url().format(hostname=self.hostname,
+                                                       ip=new_ip)
+            request = urllib2.Request(api_call_url)
+            request.add_header('Authorization', 'Basic %s' % self.auth.base64key.decode('utf-8'))
 
         try:
             response = urllib2.urlopen(request)
@@ -104,6 +112,10 @@ class DnsUpdaterPlugin(object):
             msg = "ERROR: DNS error encountered."
         elif self.last_status_code == '911':
             msg = "ERROR: Problem on server side. Retry update in a few minutes."
+        elif self.last_status_code == 'OK':
+            msg = "SUCCESS: DNS hostname successfully updated."
+        elif self.last_status_code == 'KO':
+            msg = "ERROR: Hostname and/or token incorrect."
         else:
             msg = "WARNING: Ooops! Something went wrong !!!"
 
@@ -116,6 +128,8 @@ class NoipDnsUpdater(DnsUpdaterPlugin):
     """No-IP DDNS provider plugin
     """
 
+    auth_type = "P"
+
     def _get_base_url(self):
         return "https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}"
 
@@ -123,6 +137,25 @@ class DynDnsUpdater(DnsUpdaterPlugin):
     """DynDNS DDNS provider plugin
     """
 
+    auth_type = "P"
+
     def _get_base_url(self):
         return "http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG"
 
+
+class DuckDnsUpdater(DnsUpdaterPlugin):
+    """DuckDNS DDNS provider plugin
+    """
+
+    auth_type = "T"
+
+    @property
+    def hostname(self):
+        hostname = self._hostname
+        found = re.search(r'(.*?)\.duckdns\.org', self._hostname)
+        if found:
+            hostname = found.group(1)
+        return hostname
+
+    def _get_base_url(self):
+        return "https://www.duckdns.org/update?domains={hostname}&token={token}&ip={ip}"

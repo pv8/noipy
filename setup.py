@@ -19,7 +19,7 @@ setup(
         author_email=__email__,
         url='https://github.com/povieira/noipy',
         packages=find_packages(),
-        keywords=['no-ip', 'dyndns', 'ddns', 'api'],
+        keywords=['no-ip', 'dyndns', 'duckdns', 'ddns', 'api'],
         platforms='Python 2.7 and later',
         classifiers = [
             'Development Status :: 5 - Production/Stable',

@@ -10,13 +10,20 @@ import base64
 
 class ApiAuth(object):
 
-    def __init__(self, username, password):
-        self._username = username
+    def __init__(self, usertoken, password=""):
+        self._usertoken = usertoken
         self._password = password
 
     @property
+    def token(self):
+        if self._password != "":
+            raise NotImplemented
+        return self._usertoken
+
+
+    @property
     def base64key(self):
-        auth_str = '%s:%s' % (self._username, self._password)
+        auth_str = '%s:%s' % (self._usertoken, self._password)
         return base64.b64encode(auth_str.encode('utf-8'))
 
     @classmethod
@@ -26,9 +33,9 @@ class ApiAuth(object):
         Return an ApiAuth instance from an encoded key
         """
         login_str = base64.b64decode(encoded_key).decode('utf-8')
-        username, password = login_str.strip().split(':', 1)
+        usertoken, password = login_str.strip().split(':', 1)
 
-        instance = cls(username, password)
+        instance = cls(usertoken, password)
 
         return instance
 
@@ -47,6 +54,7 @@ def store(auth, provider, auth_dir=AUTHFILE_DIR):
     Store auth info in file for specified provider
     """
 
+    auth_file = None
     try:
         if not os.path.exists(auth_dir):
             print('Creating directory: %s' % auth_dir)
@@ -76,6 +84,7 @@ def load(provider, auth_dir=AUTHFILE_DIR):
 
     print('Loading stored auth info...')
     auth = None
+    auth_file = None
     try:
         auth_file = os.path.join(auth_dir, provider)
         with open(auth_file) as f:

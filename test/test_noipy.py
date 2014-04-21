@@ -33,17 +33,19 @@ class NoipyTest(unittest.TestCase):
 
         self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
-    def test_auth_object(self):
+    def test_auth_user_password(self):
         auth1 = authinfo.ApiAuth('username', 'password')
         auth2 = authinfo.ApiAuth.get_instance(b'dXNlcm5hbWU6cGFzc3dvcmQ=')
 
         self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail.')
 
-    def test_get_auth_instance(self):
-        auth1 = authinfo.ApiAuth('username', 'password')
-        auth2 = authinfo.ApiAuth.get_instance(b'dXNlcm5hbWU6cGFzc3dvcmQ=')
+    def test_auth_token(self):
+        token = "1234567890ABCDEFG"
+        auth1 = authinfo.ApiAuth(usertoken=token)
+        auth2 = authinfo.ApiAuth.get_instance(b'MTIzNDU2Nzg5MEFCQ0RFRkc6')
 
-        self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail.')
+        self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail for token.')
+        self.assertEqual(auth1.token, auth2.token, 'ApiAuth.token fail.')
 
     def test_store_auth_info(self):
         auth1 = authinfo.ApiAuth('username', 'password')
@@ -131,6 +133,17 @@ class NoipyTest(unittest.TestCase):
         self.assertTrue(
             plugin.status_message.startswith("ERROR: Invalid username or password"),
             "Status message should be 'Invalid username or password'")
+
+    def test_duckdns_plugin(self):
+        auth = authinfo.ApiAuth(usertoken="1234567890ABCDEFG")
+        hotsname = 'duck.dickdns.org'
+
+        plugin = dnsupdater.DuckDnsUpdater(auth, hotsname)
+        plugin.update_dns('1.1.1.1')
+
+        self.assertEqual(plugin.status_message,
+                         "ERROR: Hostname and/or token incorrect.",
+                         "Status message should be 'ERROR: Hostname and/or token incorrect.'")
 
     def test_not_implemented(self):
         auth = authinfo.ApiAuth('username', 'password')
@@ -229,6 +242,18 @@ class NoipyTest(unittest.TestCase):
                            "few minutes."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected '911' status code.")
+
+        # OK code
+        plugin.last_status_code = 'OK'
+        expected_message = "SUCCESS: DNS hostname successfully updated."
+        self.assertTrue(plugin.status_message == expected_message,
+                        "Expected 'OK' status code.")
+
+        # KO code
+        plugin.last_status_code = 'KO'
+        expected_message = "ERROR: Hostname and/or token incorrect."
+        self.assertTrue(plugin.status_message == expected_message,
+                        "Expected 'KO' status code.")
 
         # Unknown code
         plugin.last_status_code = 'UNKNOWN_CODE'
