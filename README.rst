@@ -16,9 +16,11 @@ noipy: DDNS update tool
 .. image:: https://badge.waffle.io/povieira/noipy.png?label=ready
         :target: http://waffle.io/povieira/noipy
 
+.. image:: https://zenodo.org/badge/4128/povieira/noipy.png
+        :target: https://zenodo.org/record/10066
 
 Command line tool to update DDNS hosts IP address via update API. Initially
-the tool was designed to update IP address only on No-IP DDNS provider. But 
+the tool was designed to update IP address only on No-IP DDNS provider. But
 now **noipy** has support for the following DDNS providers:
 
 - `No-IP <http://www.noip.com/integrate/request>`_
@@ -126,6 +128,6 @@ project's `issue tracker <https://github.com/povieira/noipy/issues>`_.
 Copyright & License
 -------------------
 
-Copyright (c) 2013 Pablo O Vieira (povieira).  
+Copyright (c) 2013 Pablo O Vieira (povieira).
 This software is licensed under the
 `Eclipse Public License (EPL) - v1.0 <http://www.eclipse.org/legal/epl-v10.html>`_.

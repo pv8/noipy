@@ -22,6 +22,7 @@ AVAILABLE_PLUGINS = {
 
 DEFAULT_PLUGIN = 'noip'
 
+
 class DnsUpdaterPlugin(object):
     """ Base class for any DDNS updater
     """
@@ -46,21 +47,21 @@ class DnsUpdaterPlugin(object):
 
     def _get_base_url(self):
         """ (None) -> str
-        
+
         Get the base URL for DDNS Update API. URL must contain 'hostname'
         and 'ip'. If authentication is via token string 'token' argument must
         be provided as well.
-        Example: https://{auth_str}@ddnsprovider.com/update?hostname={hostname}&ip={ip}  
+        Example: https://{auth_str}@ddnsprovider.com/update?hostname={hostname}&ip={ip}
 
         This method must be implemented by plugin subclasses
         """
 
-        return NotImplemented 
+        return NotImplemented
 
     def update_dns(self, new_ip):
         """(str) -> None
-        
-        Call No-IP API based on dict login_info and return the status code. 
+
+        Call No-IP API based on dict login_info and return the status code.
         """
 
         if self.auth_type == 'T':
@@ -83,11 +84,11 @@ class DnsUpdaterPlugin(object):
     @property
     def status_message(self):
         """(str) -> NoneType
-        
-        Return friendly response from API based on response code.   
+
+        Return friendly response from API based on response code.
         """
 
-        msg = '' 
+        msg = ''
         if self.last_status_code in ['badauth', 'nochg', '401', '403']:
             msg = "ERROR: Invalid username or password (%s)." % self.last_status_code
         elif 'good' in self.last_status_code or 'nochg' in self.last_status_code:
@@ -124,6 +125,7 @@ class DnsUpdaterPlugin(object):
     def __str__(self):
         return '%s(host=%s)' % (type(self).__name__, self.hostname)
 
+
 class NoipDnsUpdater(DnsUpdaterPlugin):
     """No-IP DDNS provider plugin
     """
@@ -132,6 +134,7 @@ class NoipDnsUpdater(DnsUpdaterPlugin):
 
     def _get_base_url(self):
         return "https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}"
+
 
 class DynDnsUpdater(DnsUpdaterPlugin):
     """DynDNS DDNS provider plugin

@@ -8,6 +8,7 @@
 import os
 import base64
 
+
 class ApiAuth(object):
 
     def __init__(self, usertoken, password=""):
@@ -29,7 +30,7 @@ class ApiAuth(object):
     @classmethod
     def get_instance(cls, encoded_key):
         """(str) -> ApiAuth
-        
+
         Return an ApiAuth instance from an encoded key
         """
         login_str = base64.b64decode(encoded_key).decode('utf-8')
@@ -44,13 +45,13 @@ class ApiAuth(object):
 
     def __eq__(self, other):
         return str(self) == str(other)
-    
+
 
 AUTHFILE_DIR = os.path.join(os.path.expanduser('~'), '.noipy')
 
 def store(auth, provider, auth_dir=AUTHFILE_DIR):
     """(ApiAuth, str, str) -> None
-    
+
     Store auth info in file for specified provider
     """
 
@@ -78,7 +79,7 @@ def store(auth, provider, auth_dir=AUTHFILE_DIR):
 
 def load(provider, auth_dir=AUTHFILE_DIR):
     """(str, str) -> ApiAuth
-    
+
     Load provider specific auth info from file
     """
 

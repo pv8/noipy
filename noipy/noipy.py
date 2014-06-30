@@ -20,15 +20,15 @@ import getpass
 from . import dnsupdater
 from . import authinfo
 
-try: 
+try:
     input = raw_input
-except NameError: 
+except NameError:
     pass
 
 
 def get_ip():
     """(NoneType) -> str
-    
+
     Return the machine external IP.
     """
 
