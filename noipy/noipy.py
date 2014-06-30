@@ -63,7 +63,7 @@ def execute_update(parser, args):
             sys.exit(1)
     # informations arguments
     elif args.usertoken and args.password and args.hostname:
-        auth = authinfo.ApiAuth(args.username, args.password)
+        auth = authinfo.ApiAuth(args.usertoken, args.password)
     elif args.hostname:
         if authinfo.exists(args.provider):
             auth = authinfo.load(args.provider)

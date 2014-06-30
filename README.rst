@@ -87,13 +87,14 @@ information is sotred in ``$HOME/.noipy/`` directory:
 
 .. code-block:: bash
 
-    $ noipy --store --username <your username> --password <your password> --provider
+    $ noipy --store --username <your username> --password <your password> \
+        --provider {noip|dyn| duck}
 
 Or simply:
 
 .. code-block:: bash
 
-    $ noipy --store
+    $ noipy --store --provider {noip|dyn| duck}
 
 And type username and password when required.
 
