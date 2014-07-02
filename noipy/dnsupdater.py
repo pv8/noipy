@@ -46,9 +46,7 @@ class DnsUpdaterPlugin(object):
         return self._hostname
 
     def _get_base_url(self):
-        """ (None) -> str
-
-        Get the base URL for DDNS Update API. URL must contain 'hostname'
+        """Get the base URL for DDNS Update API. URL must contain 'hostname'
         and 'ip'. If authentication is via token string 'token' argument must
         be provided as well.
         Example: https://{auth_str}@ddnsprovider.com/update?hostname={hostname}&ip={ip}
@@ -59,9 +57,7 @@ class DnsUpdaterPlugin(object):
         return NotImplemented
 
     def update_dns(self, new_ip):
-        """(str) -> None
-
-        Call No-IP API based on dict login_info and return the status code.
+        """Call No-IP API based on dict login_info and return the status code.
         """
 
         if self.auth_type == 'T':
@@ -83,9 +79,7 @@ class DnsUpdaterPlugin(object):
 
     @property
     def status_message(self):
-        """(str) -> NoneType
-
-        Return friendly response from API based on response code.
+        """Return friendly response from API based on response code.
         """
 
         msg = ''

@@ -8,144 +8,160 @@
 import unittest
 import os
 import re
+import shutil
 
 from noipy import authinfo
 from noipy import dnsupdater
-from noipy import noipy
+from noipy import main
 
 
-class NoipyTest(unittest.TestCase):
+class SanityTest(unittest.TestCase):
 
     def setUp(self):
-        self.test_dir = os.path.join(os.path.expanduser('~'), 'noipy_test')
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_sanity(self):
+        self.assertTrue(True, "Oops! Sanity test failed! Did we take the"
+                              " blue pill?")
+
+
+class PluginsTest(unittest.TestCase):
+
+    def setUp(self):
+        self.parser = main.create_parser()
+
+    def tearDown(self):
+        pass
+
+    def test_noip_plugin(self):
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '-n', 'noipy.no-ip.org', '1.1.1.1']
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_OK)
+
+        self.assertTrue(status_message.startswith("ERROR:"),
+                        "Status message should be an 'ERROR'")
+
+    def test_dyndns_plugin(self):
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '-n', 'noipy.homelinux.com', '1.1.1.1']
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_OK)
+
+        self.assertTrue(status_message.startswith("ERROR:"),
+                        "Status message should be an 'ERROR'")
+
+    def test_duckdns_plugin(self):
+        cmd_args = ['-u', '1234567890ABC',
+                    '-n', 'noipy.duckdns.org', '1.1.1.1']
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_OK)
+
+        self.assertTrue(status_message.startswith("ERROR:"),
+                        "Status message should be an 'ERROR'")
+
+
+class AuthInfoTest(unittest.TestCase):
+
+    def setUp(self):
+        self.parser = main.create_parser()
+        self.test_dir = os.path.join(os.path.expanduser("~"), "noipy_test")
 
     def tearDown(self):
         if os.path.exists(self.test_dir):
-            os.remove(os.path.join(self.test_dir, dnsupdater.DEFAULT_PLUGIN))
-            if not os.path.isdir(self.test_dir):
-                os.remove(self.test_dir)
-            else:
-                os.rmdir(self.test_dir)
+            shutil.rmtree(self.test_dir)
 
-    def test_get_ip(self):
-        ip = noipy.get_ip()
-        VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+    def test_auth_get_instance_password(self):
+        auth1 = authinfo.ApiAuth("username", "password")
+        auth2 = authinfo.ApiAuth.get_instance(b"dXNlcm5hbWU6cGFzc3dvcmQ=")
 
-        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
+        self.assertEqual(auth1, auth2, "ApiAuth.get_instance fail for "
+                                       "password.")
 
-    def test_auth_user_password(self):
-        auth1 = authinfo.ApiAuth('username', 'password')
-        auth2 = authinfo.ApiAuth.get_instance(b'dXNlcm5hbWU6cGFzc3dvcmQ=')
-
-        self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail.')
-
-    def test_auth_token(self):
+    def test_auth_get_instance_token(self):
         token = "1234567890ABCDEFG"
         auth1 = authinfo.ApiAuth(usertoken=token)
-        auth2 = authinfo.ApiAuth.get_instance(b'MTIzNDU2Nzg5MEFCQ0RFRkc6')
+        auth2 = authinfo.ApiAuth.get_instance(b"MTIzNDU2Nzg5MEFCQ0RFRkc6")
 
         self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail for token.')
         self.assertEqual(auth1.token, auth2.token, 'ApiAuth.token fail.')
 
-    def test_store_auth_info(self):
-        auth1 = authinfo.ApiAuth('username', 'password')
-        authinfo.store(auth1, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
-        auth2 = None
-        try:
-            auth_file = os.path.join(self.test_dir, dnsupdater.DEFAULT_PLUGIN)
-            with open(auth_file) as f:
-                auth_key = f.read()
-                auth2 = authinfo.ApiAuth.get_instance(auth_key.encode('utf-8'))
-        except IOError as e:
-            self.fail('Store settings function failed. {0}: "{1}"'.format(
-                e.strerror, self.test_dir))
+    def test_store_and_load_auth_info(self):
+        cmd_args = ['--store', '-u', 'username', '-p', 'password',
+                    '--provider', 'noip', '-c', self.test_dir]
 
-        self.assertTrue(auth1 == auth2, 'Auth information storing failed.')
+        # store
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
 
-    def test_load_auth_info(self):
-        auth1 = authinfo.ApiAuth('username', 'password')
-        try:
-            os.mkdir(self.test_dir)
-            auth_file = os.path.join(self.test_dir, dnsupdater.DEFAULT_PLUGIN)
-            with open(auth_file, 'w') as f:
-                f.write(auth1.base64key.decode('utf-8'))
-        except IOError as e:
-            self.fail('Load settings function failed. {0}: "{1}"'.format(
-                e.strerror, self.test_dir))
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_OK)
 
-        auth2 = authinfo.load(dnsupdater.DEFAULT_PLUGIN, self.test_dir)
+        self.assertTrue(status_message == "Auth info stored.",
+                        "Status message should be an 'Auth info stored.'")
+        # load
+        cmd_args = ['--provider', 'noip', '-n', 'noipy.no-ip.org',
+                    '-c', self.test_dir]
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
 
-        self.assertTrue(auth1 == auth2, 'Auth information loading failed.')
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_OK)
 
-    def test_store_auth_info_after_upgrade_version(self):
-        auth1 = authinfo.ApiAuth('username', 'password')
-        
-        # ealier version settings file
-        try:
-            with open(self.test_dir, 'w') as f:
-                f.write('test')
-        except IOError as e:
-            self.fail('Store settings function failed. {0}: "{1}"'.format(
-                e.strerror, self.test_dir))
 
-        authinfo.store(auth1, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
+class GeneralTest(unittest.TestCase):
 
-        auth2 = None
-        try:
-            auth_file = os.path.join(self.test_dir, dnsupdater.DEFAULT_PLUGIN)
-            with open(auth_file) as f:
-                auth_key = f.read()
-                auth2 = authinfo.ApiAuth.get_instance(auth_key.encode('utf-8'))
-        except IOError as e:
-            self.fail('Store settings function failed. {0}: "{1}"'.format(
-                e.strerror, self.test_dir))
+    def setUp(self):
+        self.parser = main.create_parser()
 
-        self.assertTrue(auth1 == auth2, 'Auth information storing failed.')
+    def tearDown(self):
+        pass
 
-    def test_provider_exists(self):
-        auth1 = authinfo.ApiAuth('username', 'password')
-        authinfo.store(auth1, dnsupdater.DEFAULT_PLUGIN, self.test_dir)
-        
-        if not authinfo.exists(dnsupdater.DEFAULT_PLUGIN, self.test_dir):
-            self.fail('Settings file should be avaliable.')
+    def test_cmd_line_no_args(self):
+        cmd_args = []
 
-        if authinfo.exists('fake_provider'):
-            self.fail('Temp settings file should NOT be avaliable.')
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
 
-    def test_noip_plugin(self):
-        auth = authinfo.ApiAuth('username', 'password')
-        hotsname = 'noipy.no-ip.org'
-
-        plugin = dnsupdater.NoipDnsUpdater(auth, hotsname)
-        plugin.update_dns('1.1.1.1')
+        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_NOK)
 
         self.assertTrue(
-            plugin.status_message.startswith('ERROR: Invalid username or password'),
-            'Status message should be "Invalid username or password"')
+            status_message.startswith("Warning: The hostname to be updated "
+                                      "must be provided."),
+            "Status message should start with 'Warning: The hostname to be "
+            "updated must be provided.'")
 
-    def test_dyndns_plugin(self):
-        auth = authinfo.ApiAuth('username', 'password')
-        hotsname = 'noipy.homelinux.com'
+    def test_get_ip(self):
+        ip = main.get_ip()
+        VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25' \
+                         r'[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]' \
+                         r'[0-9]|25[0-5])$'
 
-        plugin = dnsupdater.DynDnsUpdater(auth, hotsname)
-        plugin.update_dns('1.1.1.1')
+        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
-        self.assertTrue(
-            plugin.status_message.startswith("ERROR: Invalid username or password"),
-            "Status message should be 'Invalid username or password'")
-
-    def test_duckdns_plugin(self):
-        auth = authinfo.ApiAuth(usertoken="1234567890ABCDEFG")
-        hotsname = 'duck.dickdns.org'
-
-        plugin = dnsupdater.DuckDnsUpdater(auth, hotsname)
-        plugin.update_dns('1.1.1.1')
-
-        self.assertEqual(plugin.status_message,
-                         "ERROR: Hostname and/or token incorrect.",
-                         "Status message should be 'ERROR: Hostname and/or token incorrect.'")
-
-    def test_not_implemented(self):
+    def test_not_implemented_plugin(self):
         auth = authinfo.ApiAuth('username', 'password')
         hostname = "hostname"
         plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
@@ -203,8 +219,8 @@ class NoipyTest(unittest.TestCase):
 
         # nohost code
         plugin.last_status_code = 'nohost'
-        expected_message = "ERROR: Hostname specified does not exist in this " \
-                           "user account."
+        expected_message = "ERROR: Hostname specified does not exist in this" \
+                           " user account."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'nohost' status code.")
 
@@ -238,8 +254,8 @@ class NoipyTest(unittest.TestCase):
 
         # 911 code
         plugin.last_status_code = '911'
-        expected_message = "ERROR: Problem on server side. Retry update in a " \
-                           "few minutes."
+        expected_message = "ERROR: Problem on server side. Retry update in a" \
+                           " few minutes."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected '911' status code.")
 

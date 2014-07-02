@@ -41,7 +41,7 @@ setup(
         ],
         entry_points={
             'console_scripts': [
-                    'noipy = noipy.noipy:main',
+                    'noipy = noipy.main:main',
             ],
         },
         zip_safe=True,
