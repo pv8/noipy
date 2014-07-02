@@ -14,16 +14,27 @@ from noipy import authinfo
 from noipy import dnsupdater
 from noipy import main
 
+VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25' \
+                 r'[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]' \
+                 r'[0-9]|25[0-5])$'
+
 
 class SanityTest(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.parser = main.create_parser()
+        self.test_dir = os.path.join(os.path.expanduser("~"), "noipy_test")
 
     def tearDown(self):
-        pass
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
 
     def test_sanity(self):
+        """Tests the sanity of the unit testing framework and if we can
+        import all we need to work
+
+        * From https://github.com/rbanffy/testable_appengine (thanks, @rbanffy)
+        """
         self.assertTrue(True, "Oops! Sanity test failed! Did we take the"
                               " blue pill?")
 
@@ -155,9 +166,6 @@ class GeneralTest(unittest.TestCase):
 
     def test_get_ip(self):
         ip = main.get_ip()
-        VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25' \
-                         r'[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]' \
-                         r'[0-9]|25[0-5])$'
 
         self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 

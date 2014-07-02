@@ -25,7 +25,6 @@ class ApiAuth(object):
             raise NotImplemented
         return self._usertoken
 
-
     @property
     def base64key(self):
         auth_str = '%s:%s' % (self._usertoken, self._password)

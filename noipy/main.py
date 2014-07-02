@@ -19,10 +19,10 @@ import getpass
 
 from . import dnsupdater
 from . import authinfo
-
-from . import __version__, __license__
+from . import __version__
 
 try:
+    # Python 3 capability
     input = raw_input
 except NameError:
     pass
@@ -51,8 +51,8 @@ def execute_update(args):
     with Exit Code and the processing Status Massage
     """
 
-    UpdaterProvider = getattr(dnsupdater,
-                              dnsupdater.AVAILABLE_PLUGINS.get(args.provider))
+    provider_class = getattr(dnsupdater,
+                             dnsupdater.AVAILABLE_PLUGINS.get(args.provider))
 
     process_message = None
     exec_result = EXECUTION_RESULT_NOK
@@ -66,7 +66,7 @@ def execute_update(args):
             else:
                 auth = authinfo.ApiAuth(args.usertoken)
         else:
-            if UpdaterProvider.auth_type == 'P':
+            if provider_class.auth_type == 'P':
                 username = input("Type your username: ")
                 password = getpass.getpass("Type your password: ")
                 auth = authinfo.ApiAuth(usertoken=username, password=password)
@@ -107,7 +107,7 @@ def execute_update(args):
                           "option.\nExecute noipy --help for more details."
 
     if update_ddns:
-        updater = UpdaterProvider(auth, args.hostname)
+        updater = provider_class(auth, args.hostname)
         ip_address = args.ip if args.ip else get_ip()
         print("Updating hostname '%s' with IP address %s ..."
               % (args.hostname, ip_address))
@@ -132,7 +132,8 @@ def create_parser():
                              "update the hostname if it is provided",
                         action='store_true')
     parser.add_argument('-c', '--config',
-                        help="path to noipy config location (default: %s)" % authinfo.DEFAULT_CONFIG_LOCATION,
+                        help="path to noipy config location (default: %s)" %
+                             authinfo.DEFAULT_CONFIG_LOCATION,
                         default=authinfo.DEFAULT_CONFIG_LOCATION)
     parser.add_argument('ip', metavar='IP_ADDRESS', nargs='?',
                         help="New host IP address. If not provided, current "
