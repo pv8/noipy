@@ -3,7 +3,7 @@
 
 # setup
 # Copyright (c) 2013 Pablo O Vieira (povieira)
-# See README.rst and epl-v10.html for details.
+# See README.rst and LICENSE for details.
 
 from setuptools import setup, find_packages
 from noipy import __version__, __author__, __email__, __license__
@@ -31,12 +31,13 @@ setup(
             'Intended Audience :: Developers',
             'Intended Audience :: End Users/Desktop',
             'Intended Audience :: System Administrators',
-            'License :: OSI Approved',
+            'License :: OSI Approved :: Apache Software License',
             'Operating System :: OS Independent',
             'Programming Language :: Python',
             'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
             'Programming Language :: Python :: 3.3',
+            'Programming Language :: Python :: 3.4',
             'Topic :: Internet :: Name Service (DNS)',
         ],
         entry_points={
