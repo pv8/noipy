@@ -3,4 +3,4 @@
 
 # test
 # Copyright (c) 2013 Pablo O Vieira (povieira)
-# See README.rst and epl-v10.html for details.
+# See README.rst and LICENSE for details.

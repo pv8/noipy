@@ -3,13 +3,17 @@
 
 # noipy.authinfo
 # Copyright (c) 2013 Pablo O Vieira (povieira)
-# See README.rst and epl-v10.html for details.
+# See README.rst and LICENSE for details.
 
 import os
 import base64
 
+NOIPY_CONFIG = ".noipy"
+DEFAULT_CONFIG_LOCATION = os.path.expanduser("~")
+
 
 class ApiAuth(object):
+    """ Providers auth information """
 
     def __init__(self, usertoken, password=""):
         self._usertoken = usertoken
@@ -21,7 +25,6 @@ class ApiAuth(object):
             raise NotImplemented
         return self._usertoken
 
-
     @property
     def base64key(self):
         auth_str = '%s:%s' % (self._usertoken, self._password)
@@ -29,10 +32,8 @@ class ApiAuth(object):
 
     @classmethod
     def get_instance(cls, encoded_key):
-        """(str) -> ApiAuth
+        """Return an ApiAuth instance from an encoded key """
 
-        Return an ApiAuth instance from an encoded key
-        """
         login_str = base64.b64decode(encoded_key).decode('utf-8')
         usertoken, password = login_str.strip().split(':', 1)
 
@@ -47,25 +48,26 @@ class ApiAuth(object):
         return str(self) == str(other)
 
 
-AUTHFILE_DIR = os.path.join(os.path.expanduser('~'), '.noipy')
-
-def store(auth, provider, auth_dir=AUTHFILE_DIR):
-    """(ApiAuth, str, str) -> None
-
-    Store auth info in file for specified provider
-    """
+def store(auth, provider, config_location=DEFAULT_CONFIG_LOCATION):
+    """Store auth info in file for specified provider """
 
     auth_file = None
     try:
-        if not os.path.exists(auth_dir):
-            print('Creating directory: %s' % auth_dir)
-            os.mkdir(auth_dir)
-        elif not os.path.isdir(auth_dir):
-            os.remove(auth_dir)
-            print('Creating directory: %s' % auth_dir)
-            os.mkdir(auth_dir)
+        # only for custom locations
+        if not os.path.exists(config_location):
+            print('Creating custom config directory: %s' % config_location)
+            os.mkdir(config_location)
 
-        auth_file = os.path.join(auth_dir, provider)
+        config_dir = os.path.join(config_location, NOIPY_CONFIG)
+        if not os.path.exists(config_dir):
+            print('Creating directory: %s' % config_dir)
+            os.mkdir(config_dir)
+        elif not os.path.isdir(config_dir):
+            os.remove(config_dir)
+            print('Creating directory: %s' % config_dir)
+            os.mkdir(config_dir)
+
+        auth_file = os.path.join(config_dir, provider)
         print('Creating auth info file: %s' % auth_file)
         with open(auth_file, 'w') as f:
             buff = auth.base64key.decode('utf-8')
@@ -75,19 +77,15 @@ def store(auth, provider, auth_dir=AUTHFILE_DIR):
         print('{0}: "{1}"'.format(e.strerror, auth_file))
         raise e
 
-    print('Auth info stored')
 
-def load(provider, auth_dir=AUTHFILE_DIR):
-    """(str, str) -> ApiAuth
+def load(provider, config_location=DEFAULT_CONFIG_LOCATION):
+    """Load provider specific auth info from file """
 
-    Load provider specific auth info from file
-    """
-
-    print('Loading stored auth info...')
     auth = None
     auth_file = None
     try:
-        auth_file = os.path.join(auth_dir, provider)
+        config_dir = os.path.join(config_location, NOIPY_CONFIG)
+        auth_file = os.path.join(config_dir, provider)
         with open(auth_file) as f:
             auth_key = f.read()
             auth = ApiAuth.get_instance(auth_key.encode('utf-8'))
@@ -97,6 +95,10 @@ def load(provider, auth_dir=AUTHFILE_DIR):
 
     return auth
 
-def exists(provider, auth_dir=AUTHFILE_DIR):
-    auth_file = os.path.join(auth_dir, provider)
+
+def exists(provider, config_location=DEFAULT_CONFIG_LOCATION):
+    """Check whether provider info is already stored """
+
+    config_dir = os.path.join(config_location, NOIPY_CONFIG)
+    auth_file = os.path.join(config_dir, provider)
     return os.path.exists(auth_file)

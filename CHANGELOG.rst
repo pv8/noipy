@@ -3,6 +3,14 @@
 Changelog
 =========
 
+1.2.2 (2014-07-03)
+------------------
+
+- PEP8'd code (Closes #5)
+- Switched to Apache License Version 2.0. See `LICENSE <LICENSE>`_.
+- Unit test improvement
+- Minor feature: custom config directory via ``-c`` or ``-config`` argument.
+
 1.2.1 (2014-06-30)
 ------------------
 
