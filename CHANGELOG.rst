@@ -7,7 +7,7 @@ Changelog
 ------------------
 
 - PEP8'd code (Closes #5)
-- Switched to Apache License Version 2.0. See `LICENSE <LICENSE>`_.
+- Switched to `Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_
 - Unit test improvement
 - Minor feature: custom config directory via ``-c`` or ``-config`` argument.
 
