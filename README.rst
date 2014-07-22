@@ -16,8 +16,8 @@ noipy: DDNS update tool
 .. image:: https://badge.waffle.io/povieira/noipy.png?label=ready
         :target: http://waffle.io/povieira/noipy
 
-.. image:: https://zenodo.org/badge/4128/povieira/noipy.png
-        :target: https://zenodo.org/record/10747
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.10749.png
+        :target: http://dx.doi.org/10.5281/zenodo.10749
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
