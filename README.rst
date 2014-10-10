@@ -1,19 +1,19 @@
 noipy: DDNS update tool
 =======================
 
-.. image:: https://badge.fury.io/py/noipy.png
+.. image:: https://badge.fury.io/py/noipy.svg
         :target: http://badge.fury.io/py/noipy
 
-.. image:: https://travis-ci.org/povieira/noipy.png?branch=master
+.. image:: https://travis-ci.org/povieira/noipy.svg?branch=master
         :target: https://travis-ci.org/povieira/noipy
 
-.. image:: https://pypip.in/d/noipy/badge.png
+.. image:: https://pypip.in/d/noipy/badge.svg
         :target: https://crate.io/packages/noipy
 
-.. image:: https://coveralls.io/repos/povieira/noipy/badge.png?branch=master
+.. image:: https://img.shields.io/coveralls/povieira/noipy.svg
         :target: https://coveralls.io/r/povieira/noipy?branch=master
 
-.. image:: https://badge.waffle.io/povieira/noipy.png?label=ready
+.. image:: https://badge.waffle.io/povieira/noipy.svg?label=ready
         :target: http://waffle.io/povieira/noipy
 
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.10749.png
