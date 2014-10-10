@@ -74,7 +74,7 @@ def execute_update(args):
                 token = input("Paste your auth token: ")
                 auth = authinfo.ApiAuth(usertoken=token)
 
-        authinfo.store(auth, args.provider)
+        authinfo.store(auth, args.provider, args.config)
         exec_result = EXECUTION_RESULT_OK
         if not args.hostname:
             update_ddns = False
