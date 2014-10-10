@@ -90,7 +90,7 @@ def execute_update(args):
     elif args.hostname:
         if authinfo.exists(args.provider):
             print('Loading stored auth info...')
-            auth = authinfo.load(args.provider)
+            auth = authinfo.load(args.provider, args.config)
             update_ddns = True
             exec_result = EXECUTION_RESULT_OK
         else:
