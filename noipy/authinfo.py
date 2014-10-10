@@ -5,6 +5,8 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
+from __future__ import print_function
+
 import os
 import base64
 
@@ -55,23 +57,28 @@ def store(auth, provider, config_location=DEFAULT_CONFIG_LOCATION):
     try:
         # only for custom locations
         if not os.path.exists(config_location):
-            print('Creating custom config directory: %s' % config_location)
+            print("Creating custom config directory [%s]... "
+                  % config_location, end="")
             os.mkdir(config_location)
+            print("OK.")
 
         config_dir = os.path.join(config_location, NOIPY_CONFIG)
         if not os.path.exists(config_dir):
-            print('Creating directory: %s' % config_dir)
+            print("Creating directory [%s]... " % config_dir, end="")
             os.mkdir(config_dir)
+            print("OK.")
         elif not os.path.isdir(config_dir):
             os.remove(config_dir)
-            print('Creating directory: %s' % config_dir)
+            print("Creating directory [%s]... " % config_dir, end="")
             os.mkdir(config_dir)
+            print("OK.")
 
         auth_file = os.path.join(config_dir, provider)
-        print('Creating auth info file: %s' % auth_file)
+        print("Creating auth info file [%s]... " % auth_file, end="")
         with open(auth_file, 'w') as f:
             buff = auth.base64key.decode('utf-8')
             f.write(buff)
+        print("OK.")
 
     except IOError as e:
         print('{0}: "{1}"'.format(e.strerror, auth_file))
@@ -85,10 +92,12 @@ def load(provider, config_location=DEFAULT_CONFIG_LOCATION):
     auth_file = None
     try:
         config_dir = os.path.join(config_location, NOIPY_CONFIG)
+        print("Loading stored auth info [%s]... " % config_dir, end="")
         auth_file = os.path.join(config_dir, provider)
         with open(auth_file) as f:
             auth_key = f.read()
             auth = ApiAuth.get_instance(auth_key.encode('utf-8'))
+        print("OK.")
     except IOError as e:
         print('{0}: "{1}"'.format(e.strerror, auth_file))
         raise e

@@ -57,8 +57,7 @@ class PluginsTest(unittest.TestCase):
         result, status_message = main.execute_update(args)
 
         self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Result code should be %s " %
-                        main.EXECUTION_RESULT_OK)
+                        "Update with 'No-IP' provider failed.")
 
         self.assertTrue(status_message.startswith("ERROR:"),
                         "Status message should be an 'ERROR'")
@@ -72,8 +71,7 @@ class PluginsTest(unittest.TestCase):
         result, status_message = main.execute_update(args)
 
         self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Result code should be %s " %
-                        main.EXECUTION_RESULT_OK)
+                        "Update with 'DynDNS' provider failed.")
 
         self.assertTrue(status_message.startswith("SUCCESS:"),
                         "Status message should be 'SUCCESS'")
@@ -87,8 +85,7 @@ class PluginsTest(unittest.TestCase):
         result, status_message = main.execute_update(args)
 
         self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Result code should be %s " %
-                        main.EXECUTION_RESULT_OK)
+                        "Update with 'DuckDNS' provider failed.")
 
         self.assertTrue(status_message.startswith("ERROR:"),
                         "Status message should be an 'ERROR'")
@@ -98,6 +95,7 @@ class AuthInfoTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
+        self.test_ip = "10.1.2.3"
         self.test_dir = os.path.join(os.path.expanduser("~"), "noipy_test")
 
     def tearDown(self):
@@ -121,27 +119,25 @@ class AuthInfoTest(unittest.TestCase):
 
     def test_store_and_load_auth_info(self):
         cmd_args = ['--store', '-u', 'username', '-p', 'password',
-                    '--provider', 'noip', '-c', self.test_dir]
+                    '--provider', 'noip', '-c', self.test_dir, self.test_ip]
 
         # store
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
 
         self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Result code should be %s " %
-                        main.EXECUTION_RESULT_OK)
+                        "Error storing auth info")
 
         self.assertTrue(status_message == "Auth info stored.",
                         "Status message should be an 'Auth info stored.'")
         # load
         cmd_args = ['--provider', 'noip', '-n', 'noipy.no-ip.org',
-                    '-c', self.test_dir]
+                    '-c', self.test_dir, self.test_ip]
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
 
         self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Result code should be %s " %
-                        main.EXECUTION_RESULT_OK)
+                        "Error loading auth info")
 
 
 class GeneralTest(unittest.TestCase):
@@ -159,8 +155,7 @@ class GeneralTest(unittest.TestCase):
         result, status_message = main.execute_update(args)
 
         self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "Result code should be %s " %
-                        main.EXECUTION_RESULT_NOK)
+                        "Execution without args failed.")
 
         self.assertTrue(
             status_message.startswith("Warning: The hostname to be updated "

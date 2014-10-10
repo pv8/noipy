@@ -17,9 +17,14 @@ import sys
 import re
 import getpass
 
-from . import dnsupdater
-from . import authinfo
-from . import __version__
+try:
+    from . import dnsupdater
+    from . import authinfo
+    from . import __version__
+except ValueError:
+    import dnsupdater
+    import authinfo
+    __version__ = "0.TEST"
 
 try:
     # Python 3 capability
@@ -66,13 +71,13 @@ def execute_update(args):
             else:
                 auth = authinfo.ApiAuth(args.usertoken)
         else:
-            if provider_class.auth_type == 'P':
+            if provider_class.auth_type == 'T':
+                token = input("Paste your auth token: ")
+                auth = authinfo.ApiAuth(usertoken=token)
+            else:
                 username = input("Type your username: ")
                 password = getpass.getpass("Type your password: ")
                 auth = authinfo.ApiAuth(usertoken=username, password=password)
-            else:
-                token = input("Paste your auth token: ")
-                auth = authinfo.ApiAuth(usertoken=token)
 
         authinfo.store(auth, args.provider, args.config)
         exec_result = EXECUTION_RESULT_OK
@@ -83,13 +88,15 @@ def execute_update(args):
             update_ddns = True
 
     # informations arguments
-    elif args.usertoken and args.password and args.hostname:
-        auth = authinfo.ApiAuth(args.usertoken, args.password)
+    elif args.usertoken and args.hostname:
+        if args.password:
+            auth = authinfo.ApiAuth(args.usertoken, args.password)
+        elif provider_class.auth_type == 'T':
+            auth = authinfo.ApiAuth(args.usertoken)
         update_ddns = True
         exec_result = EXECUTION_RESULT_OK
     elif args.hostname:
-        if authinfo.exists(args.provider):
-            print('Loading stored auth info...')
+        if authinfo.exists(args.provider, args.config):
             auth = authinfo.load(args.provider, args.config)
             update_ddns = True
             exec_result = EXECUTION_RESULT_OK
