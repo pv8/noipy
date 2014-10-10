@@ -43,13 +43,15 @@ class PluginsTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
+        self.test_ip = "10.1.2.3"
 
     def tearDown(self):
         pass
 
     def test_noip_plugin(self):
         cmd_args = ['-u', 'username', '-p', 'password',
-                    '-n', 'noipy.no-ip.org', '1.1.1.1']
+                    '--provider', 'noip',
+                    '-n', 'noipy.no-ip.org', self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
@@ -62,8 +64,9 @@ class PluginsTest(unittest.TestCase):
                         "Status message should be an 'ERROR'")
 
     def test_dyndns_plugin(self):
-        cmd_args = ['-u', 'username', '-p', 'password',
-                    '-n', 'noipy.homelinux.com', '1.1.1.1']
+        cmd_args = ['-u', 'test', '-p', 'test',
+                    '--provider', 'dyn',
+                    '-n', 'test.dyndns.org', self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
@@ -72,12 +75,13 @@ class PluginsTest(unittest.TestCase):
                         "Result code should be %s " %
                         main.EXECUTION_RESULT_OK)
 
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
+        self.assertTrue(status_message.startswith("SUCCESS:"),
+                        "Status message should be 'SUCCESS'")
 
     def test_duckdns_plugin(self):
         cmd_args = ['-u', '1234567890ABC',
-                    '-n', 'noipy.duckdns.org', '1.1.1.1']
+                    '--provider', 'duck',
+                    '-n', 'noipy.duckdns.org', self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
@@ -174,7 +178,7 @@ class GeneralTest(unittest.TestCase):
         hostname = "hostname"
         plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
         try:
-            plugin.update_dns("1.1.1.1")
+            plugin.update_dns("10.1.1.1")
             self.fail("_get_base_url() should return NotImplemented")
         except AttributeError as e:
             self.assertTrue(str(e).startswith("'NotImplementedType' object"),

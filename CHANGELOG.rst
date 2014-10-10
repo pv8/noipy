@@ -3,6 +3,12 @@
 Changelog
 =========
 
+1.2.3 (2014-10-10)
+------------------
+
+- Unit tests improvements and `PluginsTest` bug fixes
+- Custom config directory feature bug fix (``-config`` argument)
+
 1.2.2 (2014-07-03)
 ------------------
 

@@ -109,8 +109,8 @@ def execute_update(args):
     if update_ddns:
         updater = provider_class(auth, args.hostname)
         ip_address = args.ip if args.ip else get_ip()
-        print("Updating hostname '%s' with IP address %s ..."
-              % (args.hostname, ip_address))
+        print("Updating hostname '%s' with IP address %s [provider: '%s']..."
+              % (args.hostname, ip_address, args.provider))
         updater.update_dns(ip_address)
         process_message = updater.status_message
 
@@ -124,7 +124,8 @@ def create_parser():
     parser.add_argument('-p', '--password', help="provider password when apply")
     parser.add_argument('-n', '--hostname',
                         help="provider hostname to be updated")
-    parser.add_argument('--provider', help="DDNS provider plugin",
+    parser.add_argument('--provider', help="DDNS provider plugin (default: %s)"
+                                           % dnsupdater.DEFAULT_PLUGIN,
                         choices=dnsupdater.AVAILABLE_PLUGINS.keys(),
                         default=dnsupdater.DEFAULT_PLUGIN)
     parser.add_argument('--store',
