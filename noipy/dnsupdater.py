@@ -28,14 +28,16 @@ class DnsUpdaterPlugin(object):
     """
 
     auth_type = ""
+    default_page_url = ""
 
-    def __init__(self, auth, hostname):
+    def __init__(self, auth, hostname, page_url):
         """Init plugin with auth information, hostname and IP address.
         """
 
         self._auth = auth
         self._hostname = hostname
         self.last_status_code = ''
+        self._page_url = page_url
 
     @property
     def auth(self):
@@ -44,6 +46,10 @@ class DnsUpdaterPlugin(object):
     @property
     def hostname(self):
         return self._hostname
+
+    @property
+    def page_url(self):
+        return self._page_url if self._page_url else self.default_page_url
 
     def _get_base_url(self):
         """Get the base URL for DDNS Update API. URL must contain 'hostname'
@@ -63,11 +69,13 @@ class DnsUpdaterPlugin(object):
         if self.auth_type == 'T':
             api_call_url = self._get_base_url().format(hostname=self.hostname,
                                                        token=self.auth.token,
-                                                       ip=new_ip)
+                                                       ip=new_ip,
+                                                       page_url=self.page_url)
             request = urllib2.Request(api_call_url)
         else:
             api_call_url = self._get_base_url().format(hostname=self.hostname,
-                                                       ip=new_ip)
+                                                       ip=new_ip,
+                                                       page_url=self.page_url)
             request = urllib2.Request(api_call_url)
             request.add_header('Authorization', 'Basic %s' %
                                self.auth.base64key.decode('utf-8'))
@@ -88,7 +96,8 @@ class DnsUpdaterPlugin(object):
                   self.last_status_code
         elif 'good' in self.last_status_code \
                 or 'nochg' in self.last_status_code:
-            ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code).group()
+            ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code)
+            ip = ip.group() if ip else ''
             if 'good' in self.last_status_code:
                 msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % ip
             else:
@@ -135,19 +144,20 @@ class NoipDnsUpdater(DnsUpdaterPlugin):
     """No-IP DDNS provider plugin """
 
     auth_type = "P"
+    default_page_url = "https://dynupdate.no-ip.com/nic/update"
 
     def _get_base_url(self):
-        return "https://dynupdate.no-ip.com/nic/update?hostname={hostname}" \
-               "&myip={ip}"
+        return "{page_url}?hostname={hostname}&myip={ip}"
 
 
 class DynDnsUpdater(DnsUpdaterPlugin):
     """DynDNS DDNS provider plugin """
 
     auth_type = "P"
+    default_page_url = "http://members.dyndns.org/nic/update"
 
     def _get_base_url(self):
-        return "http://members.dyndns.org/nic/update?hostname={hostname}" \
+        return "{page_url}?hostname={hostname}" \
                "&myip={ip}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG"
 
 
@@ -155,6 +165,7 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
     """DuckDNS DDNS provider plugin """
 
     auth_type = "T"
+    default_page_url = "https://www.duckdns.org/update"
 
     @property
     def hostname(self):
@@ -165,5 +176,4 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
         return hostname
 
     def _get_base_url(self):
-        return "https://www.duckdns.org/update?domains={hostname}" \
-               "&token={token}&ip={ip}"
+        return "{page_url}?domains={hostname}&token={token}&ip={ip}"

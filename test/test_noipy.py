@@ -90,6 +90,20 @@ class PluginsTest(unittest.TestCase):
         self.assertTrue(status_message.startswith("ERROR:"),
                         "Status message should be an 'ERROR'")
 
+    def test_dyndns_plugin2(self):
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '-n', 'noipy.homelinux.com', '1.1.1.1',
+                    '--url', 'http://members.dyndns.org/nic/update']
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Result code should be %s " %
+                        main.EXECUTION_RESULT_OK)
+
+        self.assertTrue(status_message.startswith("ERROR:"),
+                        "Status message should be an 'ERROR'")
 
 class AuthInfoTest(unittest.TestCase):
 
@@ -171,7 +185,8 @@ class GeneralTest(unittest.TestCase):
     def test_not_implemented_plugin(self):
         auth = authinfo.ApiAuth('username', 'password')
         hostname = "hostname"
-        plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
+        url = ""
+        plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname, url)
         try:
             plugin.update_dns("10.1.1.1")
             self.fail("_get_base_url() should return NotImplemented")
@@ -185,7 +200,8 @@ class GeneralTest(unittest.TestCase):
     def test_dns_plugin_status_message(self):
         auth = authinfo.ApiAuth('username', 'password')
         hostname = "hostname"
-        plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
+        url = ""
+        plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname, url)
 
         # badauth code
         plugin.last_status_code = 'badauth'
@@ -200,6 +216,13 @@ class GeneralTest(unittest.TestCase):
                            "updated."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'good <1.1.1.1>' status code.")
+
+        # good code w/o IP
+        plugin.last_status_code = 'good'
+        expected_message = "SUCCESS: DNS hostname IP () successfully " \
+                           "updated."
+        self.assertTrue(plugin.status_message == expected_message,
+                        "Expected 'good' status code.")
 
         # nochg <IP> code
         plugin.last_status_code = 'nochg 1.1.1.1'

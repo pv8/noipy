@@ -114,7 +114,7 @@ def execute_update(args):
                           "option.\nExecute noipy --help for more details."
 
     if update_ddns:
-        updater = provider_class(auth, args.hostname)
+        updater = provider_class(auth, args.hostname, args.url)
         ip_address = args.ip if args.ip else get_ip()
         print("Updating hostname '%s' with IP address %s [provider: '%s']..."
               % (args.hostname, ip_address, args.provider))
@@ -146,7 +146,7 @@ def create_parser():
     parser.add_argument('ip', metavar='IP_ADDRESS', nargs='?',
                         help="New host IP address. If not provided, current "
                              "external IP address will be used.")
-
+    parser.add_argument('--url', help="url of ddns service")
     return parser
 
 
