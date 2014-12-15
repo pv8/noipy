@@ -18,9 +18,10 @@ AVAILABLE_PLUGINS = {
     'noip': 'NoipDnsUpdater',
     'dyn': 'DynDnsUpdater',
     'duck': 'DuckDnsUpdater',
+    'generic': 'GenericDnsUpdater',
 }
 
-DEFAULT_PLUGIN = 'noip'
+DEFAULT_PLUGIN = 'generic'
 
 
 class DnsUpdaterPlugin(object):
@@ -29,12 +30,13 @@ class DnsUpdaterPlugin(object):
 
     auth_type = ""
 
-    def __init__(self, auth, hostname):
+    def __init__(self, auth, hostname, options={}):
         """Init plugin with auth information, hostname and IP address.
         """
 
         self._auth = auth
         self._hostname = hostname
+        self._options = options
         self.last_status_code = ''
 
     @property
@@ -167,3 +169,13 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
     def _get_base_url(self):
         return "https://www.duckdns.org/update?domains={hostname}" \
                "&token={token}&ip={ip}"
+
+class GenericDnsUpdater(DnsUpdaterPlugin):
+    """ Generic DDNS provider plugin - accepts a custom specification for the DDNS base url """
+
+    auth_type = "P"
+
+    def _get_base_url(self):
+        return "{url}?hostname={{hostname}}" \
+               "&myip={{ip}}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG".format(url=self._options['url'])
+
