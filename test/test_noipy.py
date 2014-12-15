@@ -189,7 +189,7 @@ class GeneralTest(unittest.TestCase):
     def test_not_implemented_plugin(self):
         auth = authinfo.ApiAuth('username', 'password')
         hostname = "hostname"
-        url = "https://my.test.com/ddns"
+        # url = "https://my.test.com/ddns"
         plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
         try:
             plugin.update_dns("10.1.1.1")
