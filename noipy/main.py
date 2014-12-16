@@ -38,7 +38,8 @@ EXECUTION_RESULT_NOK = 1
 
 URL_RE = re.compile(
     r'^https?://' # http:// or https://
-    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' # domain...
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+'
+    r'(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' # domain...
     r'localhost|' # localhost...
     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|' # ...or ipv4
     r'\[?[A-F0-9]*:[A-F0-9:]+\]?)' # ...or ipv6
@@ -130,7 +131,8 @@ def execute_update(args):
             else:
                 updater_options['url'] = args.url 
         else:
-            process_message = "Must use --url if --provider is 'generic' (default)"
+            process_message = "Must use --url if --provider is 'generic' " \
+                              "(default)"
             exec_result = EXECUTION_RESULT_NOK
             update_ddns = False
 
@@ -156,7 +158,7 @@ def create_parser():
                                            % dnsupdater.DEFAULT_PLUGIN,
                         choices=dnsupdater.AVAILABLE_PLUGINS.keys(),
                         default=dnsupdater.DEFAULT_PLUGIN)
-    parser.add_argument('--url',help="custom ddns server address")
+    parser.add_argument('--url',help="custom DDNS server address")
     parser.add_argument('--store',
                         help="store DDNS authentication information and "
                              "update the hostname if it is provided",

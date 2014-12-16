@@ -170,12 +170,15 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
         return "https://www.duckdns.org/update?domains={hostname}" \
                "&token={token}&ip={ip}"
 
+
 class GenericDnsUpdater(DnsUpdaterPlugin):
-    """ Generic DDNS provider plugin - accepts a custom specification for the DDNS base url """
+    """ Generic DDNS provider plugin - accepts a custom specification for the
+    DDNS base url
+    """
 
     auth_type = "P"
 
     def _get_base_url(self):
-        return "{url}?hostname={{hostname}}" \
-               "&myip={{ip}}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG".format(url=self._options['url'])
+        return "{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG" \
+               "&mx=NOCHG&backmx=NOCHG".format(url=self._options['url'])
 

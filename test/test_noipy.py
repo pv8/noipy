@@ -95,7 +95,8 @@ class PluginsTest(unittest.TestCase):
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
         self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "An error should be flagged when --provider is 'generic' and --url is not specified")
+                        "An error should be flagged when --provider is "
+                        "'generic' and --url is not specified")
 
         cmd_args = ['-u', 'username', '-p', 'password',
                     '--url', 'https://dynupdate.no-ip.com/nic/update',
