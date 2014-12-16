@@ -90,6 +90,25 @@ class PluginsTest(unittest.TestCase):
         self.assertTrue(status_message.startswith("ERROR:"),
                         "Status message should be an 'ERROR'")
 
+    def test_generic_plugin(self):
+        cmd_args = ['--provider', 'generic']
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
+                        "An error should be flagged when --provider is "
+                        "'generic' and --url is not specified")
+
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '--url', 'https://dynupdate.no-ip.com/nic/update',
+                    '--provider', 'generic',
+                    '-n', 'noipy.no-ip.org', self.test_ip]
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Update with 'No-IP' using generic provider failed.")
+        self.assertTrue(status_message.startswith("ERROR:"),
+                        "Status message should be an 'ERROR'")
+
 
 class AuthInfoTest(unittest.TestCase):
 
