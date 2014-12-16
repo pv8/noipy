@@ -64,7 +64,8 @@ previously  stored login information with ``--store`` option.
     $ noipy --hostname <your hostname on DDNS provider> --provider {generic|noip|dyn| duck}
 
 
-You can also specify a custom DDNS URL (thanks to @jayennis22):
+You can also specify a custom DDNS URL (thanks to `@jayennis22 <https://github.com/jayennis22>`_):
+
 .. code-block:: bash
 
     $ noipy --hostname <your hostname on DDNS provider> [--provider  generic]
@@ -97,13 +98,13 @@ information is sotred in ``$HOME/.noipy/`` directory:
 .. code-block:: bash
 
     $ noipy --store --username <your username> --password <your password> \
-        --provider {noip|dyn| duck}
+        --provider {generic|noip|dyn| duck}
 
 Or simply:
 
 .. code-block:: bash
 
-    $ noipy --store --provider {noip|dyn| duck}
+    $ noipy --store --provider {generic|noip|dyn| duck}
 
 And type username and password when required.
 
