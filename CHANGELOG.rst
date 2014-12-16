@@ -3,6 +3,11 @@
 Changelog
 =========
 
+1.3.0 (2014-12-16)
+------------------
+
+- Support for custom DDNS URL via `--url` parameter 
+
 1.2.3 (2014-10-10)
 ------------------
 

@@ -46,7 +46,7 @@ Basic usage of **noipy** command line tool:
 .. code-block:: bash
 
     $ noipy -u <your username> -p <your password> -n <your hostname on DDNS provider>
-            --provider {noip|dyn|duck}
+            --provider {generic|noip|dyn|duck}
 
 
 For `DuckDNS provider <https://www.duckdns.org>`_, the command line would look like this:
@@ -61,15 +61,24 @@ previously  stored login information with ``--store`` option.
 
 .. code-block:: bash
 
-    $ noipy --hostname <your hostname on DDNS provider> --provider {noip|dyn| duck}
+    $ noipy --hostname <your hostname on DDNS provider> --provider {generic|noip|dyn| duck}
 
-If ``--provider`` option is not informed, **noip** will be used as provider.
+
+You can also specify a custom DDNS URL (thanks to @jayennis22):
+.. code-block:: bash
+
+    $ noipy --hostname <your hostname on DDNS provider> [--provider  generic]
+            --url <custom DDNS URL>
+
 
 It is also possible to inform an IP address other than the machine's current:
 
 .. code-block:: bash
 
     $ noipy --hostname <your hostname on DDNS provider> 127.0.0.1
+
+
+If ``--provider`` option is not informed, **generic** will be used as provider.
 
 
 For details:
