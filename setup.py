@@ -48,4 +48,3 @@ setup(
     zip_safe=True,
     test_suite='test.test_noipy'
 )
-

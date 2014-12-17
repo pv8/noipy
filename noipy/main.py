@@ -37,14 +37,15 @@ EXECUTION_RESULT_OK = 0
 EXECUTION_RESULT_NOK = 1
 
 URL_RE = re.compile(
-    r'^https?://' # http:// or https://
+    r'^https?://'  # http:// or https://
     r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+'
-    r'(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' # domain...
-    r'localhost|' # localhost...
-    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|' # ...or ipv4
-    r'\[?[A-F0-9]*:[A-F0-9:]+\]?)' # ...or ipv6
-    r'(?::\d+)?' # optional port
+    r'(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+    r'localhost|'  # localhost...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|'  # ...or ipv4
+    r'\[?[A-F0-9]*:[A-F0-9:]+\]?)'  # ...or ipv6
+    r'(?::\d+)?'  # optional port
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
 
 def get_ip():
     """Return the machine external IP.
@@ -129,7 +130,7 @@ def execute_update(args):
                 exec_result = EXECUTION_RESULT_NOK
                 update_ddns = False
             else:
-                updater_options['url'] = args.url 
+                updater_options['url'] = args.url
         else:
             process_message = "Must use --url if --provider is 'generic' " \
                               "(default)"
@@ -151,14 +152,15 @@ def create_parser():
     parser = argparse.ArgumentParser(
         description="Update DDNS IP address on selected provider.")
     parser.add_argument('-u', '--usertoken', help="provider username or token")
-    parser.add_argument('-p', '--password', help="provider password when apply")
+    parser.add_argument('-p', '--password',
+                        help="provider password when apply")
     parser.add_argument('-n', '--hostname',
                         help="provider hostname to be updated")
     parser.add_argument('--provider', help="DDNS provider plugin (default: %s)"
                                            % dnsupdater.DEFAULT_PLUGIN,
                         choices=dnsupdater.AVAILABLE_PLUGINS.keys(),
                         default=dnsupdater.DEFAULT_PLUGIN)
-    parser.add_argument('--url',help="custom DDNS server address")
+    parser.add_argument('--url', help="custom DDNS server address")
     parser.add_argument('--store',
                         help="store DDNS authentication information and "
                              "update the hostname if it is provided",

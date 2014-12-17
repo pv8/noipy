@@ -92,7 +92,8 @@ class DnsUpdaterPlugin(object):
                 or 'nochg' in self.last_status_code:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code).group()
             if 'good' in self.last_status_code:
-                msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % ip
+                msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % \
+                      ip
             else:
                 msg = "SUCCESS: IP address (%s) is up to date, nothing was " \
                       "changed. Additional 'nochg' updates may be considered" \
@@ -181,4 +182,3 @@ class GenericDnsUpdater(DnsUpdaterPlugin):
     def _get_base_url(self):
         return "{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG" \
                "&mx=NOCHG&backmx=NOCHG".format(url=self._options['url'])
-

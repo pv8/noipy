@@ -5,8 +5,7 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
-"""
-A simple script to update IP on No-IP DNS service. 
+"""A simple script to update IP on No-IP DNS service.
 """
 
 __title__ = "noipy"
