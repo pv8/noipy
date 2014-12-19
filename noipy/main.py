@@ -154,7 +154,6 @@ def execute_update(args):
             exec_result = EXECUTION_RESULT_NOK
         else:
             updater = provider_class(auth, args.hostname, updater_options)
-            ip_address = args.ip if args.ip else get_ip()
             print("Updating hostname '%s' with IP address %s \
                   [provider: '%s']..."
                   % (args.hostname, ip_address, args.provider))
