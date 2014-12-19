@@ -151,7 +151,6 @@ def execute_update(args):
         ip_address = args.ip if args.ip else get_ip()
         if ip_address == get_dns_ip(args.hostname):
             process_message = "No update required."
-            exec_result = EXECUTION_RESULT_NOK
         else:
             updater = provider_class(auth, args.hostname, updater_options)
             print("Updating hostname '%s' with IP address %s \
