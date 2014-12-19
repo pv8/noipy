@@ -3,6 +3,11 @@
 Changelog
 =========
 
+1.3.1 (2014-12-19)
+------------------
+
+- Send update to DDNS only if IP address has changed
+
 1.3.0 (2014-12-16)
 ------------------
 
