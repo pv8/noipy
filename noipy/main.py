@@ -16,6 +16,7 @@ import argparse
 import sys
 import re
 import getpass
+import socket
 
 try:
     from . import dnsupdater
@@ -55,6 +56,15 @@ def get_ip():
     content = page.read().decode('utf-8')
 
     return re.search(r'(\d{1,3}\.?){4}', content).group()
+
+
+def get_dns_ip(dnsname):
+    """Return the machine's current IP address in DNS.
+    """
+    try:
+        return socket.gethostbyname(dnsname)
+    except:
+        return ""
 
 
 def print_version():
@@ -138,12 +148,16 @@ def execute_update(args):
             update_ddns = False
 
     if update_ddns:
-        updater = provider_class(auth, args.hostname, updater_options)
         ip_address = args.ip if args.ip else get_ip()
-        print("Updating hostname '%s' with IP address %s [provider: '%s']..."
-              % (args.hostname, ip_address, args.provider))
-        updater.update_dns(ip_address)
-        process_message = updater.status_message
+        if ip_address == get_dns_ip(args.hostname):
+            process_message = "No update required."
+        else:
+            updater = provider_class(auth, args.hostname, updater_options)
+            print("Updating hostname '%s' with IP address %s "
+                  "[provider: '%s']..."
+                  % (args.hostname, ip_address, args.provider))
+            updater.update_dns(ip_address)
+            process_message = updater.status_message
 
     return exec_result, process_message
 
