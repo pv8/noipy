@@ -92,8 +92,10 @@ class PluginsTest(unittest.TestCase):
 
     def test_generic_plugin(self):
         cmd_args = ['--provider', 'generic']
+
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
+
         self.assertTrue(result == main.EXECUTION_RESULT_NOK,
                         "An error should be flagged when --provider is "
                         "'generic' and --url is not specified")
@@ -102,8 +104,10 @@ class PluginsTest(unittest.TestCase):
                     '--url', 'https://dynupdate.no-ip.com/nic/update',
                     '--provider', 'generic',
                     '-n', 'noipy.no-ip.org', self.test_ip]
+
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
+
         self.assertTrue(result == main.EXECUTION_RESULT_OK,
                         "Update with 'No-IP' using generic provider failed.")
         self.assertTrue(status_message.startswith("ERROR:"),
@@ -159,39 +163,6 @@ class AuthInfoTest(unittest.TestCase):
                         "Error loading auth info")
 
 
-class IpChangeTest(unittest.TestCase):
-
-    def setUp(self):
-        self.parser = main.create_parser()
-
-    def tearDown(self):
-        pass
-
-    def test_unchanged_ip(self):
-        cmd_args = ['-u', 'username', '-p', 'password',
-                    '--url', 'https://dynupdate.no-ip.com/nic/update',
-                    '--provider', 'generic',
-                    '-n', 'localhost', '127.0.0.1']
-        args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with unchanged IP failed.")
-        self.assertTrue(status_message == "No update required.",
-                        "Status message should be 'No update required'")
-
-    def test_changed_ip(self):
-        cmd_args = ['-u', 'username', '-p', 'password',
-                    '--url', 'https://dynupdate.no-ip.com/nic/update',
-                    '--provider', 'generic',
-                    '-n', 'localhost', '127.0.0.2']
-        args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with changed IP failed.")
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
-
-
 class GeneralTest(unittest.TestCase):
 
     def setUp(self):
@@ -224,6 +195,20 @@ class GeneralTest(unittest.TestCase):
         ip = main.get_dns_ip('localhost')
 
         self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
+
+    def test_unchanged_ip(self):
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '--url', 'https://dynupdate.no-ip.com/nic/update',
+                    '--provider', 'generic',
+                    '-n', 'localhost', '127.0.0.1']
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Update with unchanged IP failed.")
+        self.assertTrue(status_message == "No update required.",
+                        "Status message should be 'No update required'")
 
     def test_not_implemented_plugin(self):
         auth = authinfo.ApiAuth('username', 'password')

@@ -153,8 +153,8 @@ def execute_update(args):
             process_message = "No update required."
         else:
             updater = provider_class(auth, args.hostname, updater_options)
-            print("Updating hostname '%s' with IP address %s \
-                  [provider: '%s']..."
+            print("Updating hostname '%s' with IP address %s "
+                  "[provider: '%s']..."
                   % (args.hostname, ip_address, args.provider))
             updater.update_dns(ip_address)
             process_message = updater.status_message
