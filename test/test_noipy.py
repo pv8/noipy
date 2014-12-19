@@ -187,6 +187,11 @@ class GeneralTest(unittest.TestCase):
 
         self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
+    def test_get_dns_ip(self):
+        ip = main.get_dns_ip('localhost')
+
+        self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
+
     def test_not_implemented_plugin(self):
         auth = authinfo.ApiAuth('username', 'password')
         hostname = "hostname"
