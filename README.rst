@@ -1,14 +1,14 @@
 noipy: DDNS update tool
 =======================
 
-.. image:: https://badge.fury.io/py/noipy.svg
-        :target: http://badge.fury.io/py/noipy
+.. image:: https://pypip.in/version/noipy/badge.svg?style=flat
+        :target: https://pypi.python.org/pypi/noipy/
+
+.. image:: https://pypip.in/download/noipy/badge.svg?style=flat
+        :target: https://pypi.python.org/pypi/noipy/
 
 .. image:: https://travis-ci.org/povieira/noipy.svg?branch=master
         :target: https://travis-ci.org/povieira/noipy
-
-.. image:: https://pypip.in/d/noipy/badge.svg
-        :target: https://crate.io/packages/noipy
 
 .. image:: https://img.shields.io/coveralls/povieira/noipy.svg
         :target: https://coveralls.io/r/povieira/noipy?branch=master
@@ -16,8 +16,8 @@ noipy: DDNS update tool
 .. image:: https://badge.waffle.io/povieira/noipy.svg?label=ready
         :target: http://waffle.io/povieira/noipy
 
-.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.10749.png
-        :target: http://dx.doi.org/10.5281/zenodo.10749
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.13320.png
+        :target: http://dx.doi.org/10.5281/zenodo.13320
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
@@ -116,10 +116,15 @@ And type username and password when required.
 Contributing
 ------------
 
-Source code
-~~~~~~~~~~~
+Improvements & Troubleshooting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**noipy** source code can be found at GitHub repo: https://github.com/povieira/noipy/
+If you have any enhancement suggestions or find a bug, please:
+
+#. Open an `issue <https://github.com/povieira/noipy/issues>`_
+#. `Fork <https://github.com/povieira/noipy/fork>`_ the project
+#. Do your magic (+ `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ + test)
+#. Is everything working? Send a `pull request <https://github.com/povieira/noipy/pulls>`_
 
 Running tests
 ~~~~~~~~~~~~~
@@ -127,13 +132,6 @@ Running tests
 .. code-block:: bash
 
     $ python setup.py test
-
-
-Improvements & Troubleshooting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you have suggestions or find any bug, please feel free to report them using this
-project's `issue tracker <https://github.com/povieira/noipy/issues>`_.
 
 
 Copyright & License
