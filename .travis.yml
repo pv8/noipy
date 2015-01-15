@@ -1,8 +1,24 @@
+os:
+  - linux
+  - osx
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sudo easy_install pip; fi
+
 language: python
+
 python:
   - 2.7
   - 3.3
   - 3.4
+  - pypy
+  - pypy3
+
+matrix:
+  allow_failures:
+    - python: pypy
+    - python: pypy3
+  fast_finish: true
 
 install:
   - pip install coveralls
