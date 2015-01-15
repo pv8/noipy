@@ -24,7 +24,7 @@ class ApiAuth(object):
     @property
     def token(self):
         if self._password != "":
-            raise NotImplemented
+            raise NotImplementedError
         return self._usertoken
 
     @property

@@ -63,7 +63,7 @@ def get_dns_ip(dnsname):
     """
     try:
         return socket.gethostbyname(dnsname)
-    except:
+    except socket.error:
         return ""
 
 

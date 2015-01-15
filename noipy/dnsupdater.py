@@ -30,13 +30,13 @@ class DnsUpdaterPlugin(object):
 
     auth_type = ""
 
-    def __init__(self, auth, hostname, options={}):
+    def __init__(self, auth, hostname, options=None):
         """Init plugin with auth information, hostname and IP address.
         """
 
         self._auth = auth
         self._hostname = hostname
-        self._options = options
+        self._options = {} if options is None else options
         self.last_status_code = ''
 
     @property
