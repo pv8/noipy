@@ -10,11 +10,12 @@ noipy: DDNS update tool
 .. image:: https://travis-ci.org/povieira/noipy.svg?branch=master
         :target: https://travis-ci.org/povieira/noipy
 
-.. image:: https://img.shields.io/coveralls/povieira/noipy.svg
+.. image:: https://img.shields.io/coveralls/povieira/noipy.svg?style=flat&branch=master
         :target: https://coveralls.io/r/povieira/noipy?branch=master
 
-.. image:: https://badge.waffle.io/povieira/noipy.svg?label=ready
-        :target: http://waffle.io/povieira/noipy
+.. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg?style=flat
+        :target: https://landscape.io/github/povieira/noipy/master
+        :alt: Code Health
 
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.13320.png
         :target: http://dx.doi.org/10.5281/zenodo.13320
@@ -137,6 +138,8 @@ Running tests
 Copyright & License
 -------------------
 
+.. image:: https://pypip.in/license/noipy/badge.svg?style=flat
+        :target: https://pypi.python.org/pypi/noipy/
+        :alt: License
+
 Copyright (c) 2013 Pablo O Vieira (povieira).
-This software is licensed under the
-`Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_.
