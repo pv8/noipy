@@ -55,8 +55,7 @@ class DnsUpdaterPlugin(object):
 
         This method must be implemented by plugin subclasses
         """
-
-        return NotImplemented
+        pass
 
     def update_dns(self, new_ip):
         """Call No-IP API based on dict login_info and return the status code.

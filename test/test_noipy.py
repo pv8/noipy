@@ -216,13 +216,15 @@ class GeneralTest(unittest.TestCase):
         plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
         try:
             plugin.update_dns("10.1.1.1")
-            self.fail("_get_base_url() should return NotImplemented")
+            self.fail("Not implemented plugin should fail: "
+                      "'NoneType' object has no attribute 'format'")
         except AttributeError as e:
-            self.assertTrue(str(e).startswith("'NotImplementedType' object"),
-                            "_get_base_url() should return NotImplemented")
+            self.assertTrue(str(e) == "'NoneType' object has no attribute "
+                                      "'format'",
+                            "_get_base_url() should return 'NoneType'")
         except Exception as e:
-            self.fail("_get_base_url() should return NotImplemented. Got %s:%s"
-                      % (type(e).__name__, e))
+            self.fail("_get_base_url() should return 'AttributeError'. "
+                      "Got %s:%s" % (type(e).__name__, e))
 
     def test_dns_plugin_status_message(self):
         auth = authinfo.ApiAuth('username', 'password')
