@@ -50,8 +50,7 @@ def get_ip():
     """
     try:
         r = requests.get("http://httpbin.org/ip")
-        return r.json()['origin'] if r.status_code == requests.codes.ok \
-            else None
+        return r.json()['origin'] if r.status_code == 200 else None
     except requests.exceptions.ConnectionError as e:
         print("Error getting IP address. %s" % e)
         return None
