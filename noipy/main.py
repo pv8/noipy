@@ -7,16 +7,13 @@
 
 from __future__ import print_function
 
-try:
-    import urllib.request as urllib
-except ImportError:
-    import urllib
-
 import argparse
 import sys
 import re
 import getpass
 import socket
+
+import requests
 
 try:
     from . import dnsupdater
@@ -51,11 +48,13 @@ URL_RE = re.compile(
 def get_ip():
     """Return the machine external IP.
     """
-
-    page = urllib.urlopen('http://checkip.dyndns.org')
-    content = page.read().decode('utf-8')
-
-    return re.search(r'(\d{1,3}\.?){4}', content).group()
+    try:
+        r = requests.get("http://httpbin.org/ip")
+        return r.json()['origin'] if r.status_code == requests.codes.ok \
+            else None
+    except requests.exceptions.ConnectionError as e:
+        print("Error getting IP address. %s" % e)
+        return None
 
 
 def get_dns_ip(dnsname):
@@ -64,7 +63,7 @@ def get_dns_ip(dnsname):
     try:
         return socket.gethostbyname(dnsname)
     except socket.error:
-        return ""
+        return None
 
 
 def print_version():
@@ -136,7 +135,7 @@ def execute_update(args):
     if update_ddns and args.provider == 'generic':
         if args.url:
             if not URL_RE.match(args.url):
-                process_message = "Malformed url"
+                process_message = "Malformed URL."
                 exec_result = EXECUTION_RESULT_NOK
                 update_ddns = False
             else:

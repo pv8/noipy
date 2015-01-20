@@ -8,6 +8,10 @@
 from setuptools import setup, find_packages
 from noipy import __version__, __author__, __email__, __license__
 
+lib_dependencies = [
+    'requests>=2.0.0',
+]
+
 with open('README.rst') as f:
     readme = f.read()
 with open('CHANGELOG.rst') as f:
@@ -23,6 +27,7 @@ setup(
     author_email=__email__,
     url='https://github.com/povieira/noipy',
     packages=find_packages(),
+    install_requires=lib_dependencies,
     keywords=['no-ip', 'dyndns', 'duckdns', 'ddns', 'api'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

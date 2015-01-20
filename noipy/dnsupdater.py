@@ -7,12 +7,9 @@
 
 from __future__ import print_function
 
-try:
-    import urllib.request as urllib2
-except ImportError:
-    import urllib2
-
 import re
+
+import requests
 
 AVAILABLE_PLUGINS = {
     'noip': 'NoipDnsUpdater',
@@ -37,7 +34,7 @@ class DnsUpdaterPlugin(object):
         self._auth = auth
         self._hostname = hostname
         self._options = {} if options is None else options
-        self.last_status_code = ''
+        self.last_ddns_response = ""
 
     @property
     def auth(self):
@@ -61,68 +58,68 @@ class DnsUpdaterPlugin(object):
         """Call No-IP API based on dict login_info and return the status code.
         """
 
+        headers = None
         if self.auth_type == 'T':
             api_call_url = self._get_base_url().format(hostname=self.hostname,
                                                        token=self.auth.token,
                                                        ip=new_ip)
-            request = urllib2.Request(api_call_url)
         else:
             api_call_url = self._get_base_url().format(hostname=self.hostname,
                                                        ip=new_ip)
-            request = urllib2.Request(api_call_url)
-            request.add_header('Authorization', 'Basic %s' %
-                               self.auth.base64key.decode('utf-8'))
+            headers = {
+                'Authorization': 'Basic %s' %
+                                 self.auth.base64key.decode('utf-8'),
+            }
 
-        try:
-            response = urllib2.urlopen(request)
-            self.last_status_code = response.read().decode('utf-8')
-        except urllib2.HTTPError as e:
-            self.last_status_code = str(e.code)
+        r = requests.get(api_call_url, headers=headers)
+        self.last_ddns_response = str(r.text)
+
+        return r.status_code, r.text
 
     @property
     def status_message(self):
         """Return friendly response from API based on response code. """
 
         msg = None
-        if self.last_status_code in ['badauth', 'nochg', '401', '403']:
+        if self.last_ddns_response in ['badauth', 'nochg', '401', '403']:
             msg = "ERROR: Invalid username or password (%s)." % \
-                  self.last_status_code
-        elif 'good' in self.last_status_code \
-                or 'nochg' in self.last_status_code:
-            ip = re.search(r'(\d{1,3}\.?){4}', self.last_status_code).group()
-            if 'good' in self.last_status_code:
+                  self.last_ddns_response
+        elif 'good' in self.last_ddns_response \
+                or 'nochg' in self.last_ddns_response:
+            ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
+            if 'good' in self.last_ddns_response:
                 msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % \
                       ip
             else:
                 msg = "SUCCESS: IP address (%s) is up to date, nothing was " \
                       "changed. Additional 'nochg' updates may be considered" \
                       " abusive." % ip
-        elif self.last_status_code == '!donator':
+        elif self.last_ddns_response == '!donator':
             msg = "ERROR: Update request include a feature that is not " \
                   "available to informed user."
-        elif self.last_status_code == 'notfqdn':
+        elif self.last_ddns_response == 'notfqdn':
             msg = "ERROR: The hostname specified is not a fully-qualified " \
                   "domain name (not in the form hostname.dyndns.org or " \
                   "domain.com)."
-        elif self.last_status_code == 'nohost':
+        elif self.last_ddns_response == 'nohost':
             msg = "ERROR: Hostname specified does not exist in this user " \
                   "account."
-        elif self.last_status_code == 'numhost':
+        elif self.last_ddns_response == 'numhost':
             msg = "ERROR: Too many hosts (more than 20) specified in an " \
                   "update. Also returned if trying to update a round robin " \
                   "(which is not allowed)."
-        elif self.last_status_code == 'abuse':
+        elif self.last_ddns_response == 'abuse':
             msg = "ERROR: Username/hostname is blocked due to update abuse."
-        elif self.last_status_code == 'badagent':
+        elif self.last_ddns_response == 'badagent':
             msg = "ERROR: User agent not sent or HTTP method not permitted."
-        elif self.last_status_code == 'dnserr':
+        elif self.last_ddns_response == 'dnserr':
             msg = "ERROR: DNS error encountered."
-        elif self.last_status_code == '911':
+        elif self.last_ddns_response == '911':
             msg = "ERROR: Problem on server side. Retry update in a few " \
                   "minutes."
-        elif self.last_status_code == 'OK':
+        elif self.last_ddns_response == 'OK':
             msg = "SUCCESS: DNS hostname successfully updated."
-        elif self.last_status_code == 'KO':
+        elif self.last_ddns_response == 'KO':
             msg = "ERROR: Hostname and/or token incorrect."
         else:
             msg = "WARNING: Ooops! Something went wrong !!!"
