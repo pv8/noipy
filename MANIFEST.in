@@ -1,4 +1,2 @@
-include *.py
-include README.rst
-include CHANGELOG.rst
-include LICENSE
+include README.rst CHANGELOG.rst LICENSE
+exclude .DS_Store
