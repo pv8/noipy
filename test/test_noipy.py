@@ -21,7 +21,7 @@ VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25' \
                  r'[0-9]|25[0-5])$'
 
 
-class SanityTest():
+class SanityTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
@@ -42,7 +42,7 @@ class SanityTest():
         self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
 
 
-class PluginsTest():
+class PluginsTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
@@ -167,7 +167,7 @@ class AuthInfoTest(unittest.TestCase):
                         "Error loading auth info")
 
 
-class GeneralTest():
+class GeneralTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
@@ -318,7 +318,7 @@ class GeneralTest():
 
         # Unknown code
         plugin.last_ddns_response = 'UNKNOWN_CODE'
-        expected_message = "WARNING: Ooops! Something went wrong !!!"
+        expected_message = "ERROR: Ooops! Something went wrong !!!"
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'Ooops' warning message.")
 
