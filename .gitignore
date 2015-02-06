@@ -1,14 +1,19 @@
-*.pyc
+*.py[co]
 
+# packages
 build
 dist
 *egg-info
-*egg/
+*egg
 
+# tests/coverage
+.tox
+.coverage
+
+# IDE/SO files
 *~
 .DS_Store
 .idea
 .project
 .pydevproject
 .settings
-
