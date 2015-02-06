@@ -21,7 +21,7 @@ install:
     - pip install tox coveralls
 
 script: 
-  - coverage run --source=noipy setup.py test
+  - tox
 
 after_success:
   - coveralls
