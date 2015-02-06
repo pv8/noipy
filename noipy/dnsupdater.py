@@ -21,6 +21,27 @@ AVAILABLE_PLUGINS = {
 DEFAULT_PLUGIN = 'generic'
 
 
+error_messages = {
+    'badauth': "ERROR: Invalid username or password (badauth).",
+    'nochg': "ERROR: Invalid username or password (nochg).",
+    '401': "ERROR: Invalid username or password (401).",
+    '403': "ERROR: Invalid username or password (403).",
+    '!donator': "ERROR: Update request include a feature that is not "
+                "available to informed user.",
+    'notfqdn': "ERROR: The hostname specified is not a fully-qualified domain"
+               " name (not in the form hostname.dyndns.org or domain.com).",
+    'nohost': "ERROR: Hostname specified does not exist in this user account.",
+    'numhost': "ERROR: Too many hosts (more than 20) specified in an update. "
+               "Also returned if trying to update a round robin (which is "
+               "not allowed).",
+    'abuse': "ERROR: Username/hostname is blocked due to update abuse.",
+    'badagent': "ERROR: User agent not sent or HTTP method not permitted.",
+    'dnserr': "ERROR: DNS error encountered.",
+    '911': "ERROR: Problem on server side. Retry update in a few minutes.",
+    'KO': "ERROR: Hostname and/or token incorrect.",
+}
+
+
 class DnsUpdaterPlugin(object):
     """ Base class for any DDNS updater
     """
@@ -81,9 +102,10 @@ class DnsUpdaterPlugin(object):
         """Return friendly response from API based on response code. """
 
         msg = None
-        if self.last_ddns_response in ['badauth', 'nochg', '401', '403']:
-            msg = "ERROR: Invalid username or password (%s)." % \
-                  self.last_ddns_response
+        if self.last_ddns_response in error_messages.keys():
+            msg = error_messages.get(self.last_ddns_response)
+        elif self.last_ddns_response == 'OK':
+            msg = "SUCCESS: DNS hostname successfully updated."
         elif 'good' in self.last_ddns_response \
                 or 'nochg' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
@@ -94,35 +116,8 @@ class DnsUpdaterPlugin(object):
                 msg = "SUCCESS: IP address (%s) is up to date, nothing was " \
                       "changed. Additional 'nochg' updates may be considered" \
                       " abusive." % ip
-        elif self.last_ddns_response == '!donator':
-            msg = "ERROR: Update request include a feature that is not " \
-                  "available to informed user."
-        elif self.last_ddns_response == 'notfqdn':
-            msg = "ERROR: The hostname specified is not a fully-qualified " \
-                  "domain name (not in the form hostname.dyndns.org or " \
-                  "domain.com)."
-        elif self.last_ddns_response == 'nohost':
-            msg = "ERROR: Hostname specified does not exist in this user " \
-                  "account."
-        elif self.last_ddns_response == 'numhost':
-            msg = "ERROR: Too many hosts (more than 20) specified in an " \
-                  "update. Also returned if trying to update a round robin " \
-                  "(which is not allowed)."
-        elif self.last_ddns_response == 'abuse':
-            msg = "ERROR: Username/hostname is blocked due to update abuse."
-        elif self.last_ddns_response == 'badagent':
-            msg = "ERROR: User agent not sent or HTTP method not permitted."
-        elif self.last_ddns_response == 'dnserr':
-            msg = "ERROR: DNS error encountered."
-        elif self.last_ddns_response == '911':
-            msg = "ERROR: Problem on server side. Retry update in a few " \
-                  "minutes."
-        elif self.last_ddns_response == 'OK':
-            msg = "SUCCESS: DNS hostname successfully updated."
-        elif self.last_ddns_response == 'KO':
-            msg = "ERROR: Hostname and/or token incorrect."
         else:
-            msg = "WARNING: Ooops! Something went wrong !!!"
+            msg = "ERROR: Ooops! Something went wrong !!!"
 
         return msg
 

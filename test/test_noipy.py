@@ -13,13 +13,15 @@ import shutil
 from noipy import authinfo
 from noipy import dnsupdater
 from noipy import main
+from noipy import utils
+
 
 VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25' \
                  r'[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]' \
                  r'[0-9]|25[0-5])$'
 
 
-class SanityTest(unittest.TestCase):
+class SanityTest():
 
     def setUp(self):
         self.parser = main.create_parser()
@@ -29,17 +31,18 @@ class SanityTest(unittest.TestCase):
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)
 
-    def test_sanity(self):
-        """Tests the sanity of the unit testing framework and if we can
-        import all we need to work
+    def test_get_ip(self):
+        ip = utils.get_ip()
 
-        * From https://github.com/rbanffy/testable_appengine (thanks, @rbanffy)
-        """
-        self.assertTrue(True, "Oops! Sanity test failed! Did we take the"
-                              " blue pill?")
+        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
+
+    def test_get_dns_ip(self):
+        ip = utils.get_dns_ip('localhost')
+
+        self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
 
 
-class PluginsTest(unittest.TestCase):
+class PluginsTest():
 
     def setUp(self):
         self.parser = main.create_parser()
@@ -141,7 +144,7 @@ class AuthInfoTest(unittest.TestCase):
         self.assertEqual(auth1.token, auth2.token, 'ApiAuth.token fail.')
 
     def test_store_and_load_auth_info(self):
-        cmd_args = ['--store', '-u', 'username', '-p', 'password',
+        cmd_args = ['--store', '-u', "username", '-p', "password",
                     '--provider', 'noip', '-c', self.test_dir, self.test_ip]
 
         # store
@@ -153,6 +156,7 @@ class AuthInfoTest(unittest.TestCase):
 
         self.assertTrue(status_message == "Auth info stored.",
                         "Status message should be an 'Auth info stored.'")
+
         # load
         cmd_args = ['--provider', 'noip', '-n', 'noipy.no-ip.org',
                     '-c', self.test_dir, self.test_ip]
@@ -163,7 +167,7 @@ class AuthInfoTest(unittest.TestCase):
                         "Error loading auth info")
 
 
-class GeneralTest(unittest.TestCase):
+class GeneralTest():
 
     def setUp(self):
         self.parser = main.create_parser()
@@ -185,16 +189,6 @@ class GeneralTest(unittest.TestCase):
                                       "must be provided."),
             "Status message should start with 'Warning: The hostname to be "
             "updated must be provided.'")
-
-    def test_get_ip(self):
-        ip = main.get_ip()
-
-        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
-
-    def test_get_dns_ip(self):
-        ip = main.get_dns_ip('localhost')
-
-        self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
 
     def test_unchanged_ip(self):
         cmd_args = ['-u', 'username', '-p', 'password',

@@ -8,12 +8,12 @@
 from __future__ import print_function
 
 import argparse
-import sys
-import re
 import getpass
-import socket
+import re
+import sys
 
-import requests
+from noipy import utils
+
 
 try:
     from . import dnsupdater
@@ -23,12 +23,6 @@ except ValueError:
     import dnsupdater
     import authinfo
     __version__ = "0.TEST"
-
-try:
-    # Python 3 capability
-    input = raw_input
-except NameError:
-    pass
 
 
 EXECUTION_RESULT_OK = 0
@@ -45,30 +39,6 @@ URL_RE = re.compile(
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
-def get_ip():
-    """Return the machine external IP.
-    """
-    try:
-        r = requests.get("http://httpbin.org/ip")
-        return r.json()['origin'] if r.status_code == 200 else None
-    except requests.exceptions.ConnectionError as e:
-        print("Error getting IP address. %s" % e)
-        return None
-
-
-def get_dns_ip(dnsname):
-    """Return the machine's current IP address in DNS.
-    """
-    try:
-        return socket.gethostbyname(dnsname)
-    except socket.error:
-        return None
-
-
-def print_version():
-    print("== noipy DDNS updater tool v%s ==" % __version__)
-
-
 def execute_update(args):
     """Execute the update based on command line args and returns a tuple
     with Exit Code and the processing Status Massage
@@ -81,7 +51,6 @@ def execute_update(args):
     exec_result = EXECUTION_RESULT_NOK
     update_ddns = False
 
-    auth = None
     if args.store:  # --store argument
         if args.usertoken:
             if args.password:
@@ -90,10 +59,10 @@ def execute_update(args):
                 auth = authinfo.ApiAuth(args.usertoken)
         else:
             if provider_class.auth_type == 'T':
-                token = input("Paste your auth token: ")
+                token = utils.get_input("Paste your auth token: ")
                 auth = authinfo.ApiAuth(usertoken=token)
             else:
-                username = input("Type your username: ")
+                username = utils.get_input("Type your username: ")
                 password = getpass.getpass("Type your password: ")
                 auth = authinfo.ApiAuth(usertoken=username, password=password)
 
@@ -146,8 +115,11 @@ def execute_update(args):
             update_ddns = False
 
     if update_ddns:
-        ip_address = args.ip if args.ip else get_ip()
-        if ip_address == get_dns_ip(args.hostname):
+        ip_address = args.ip if args.ip else utils.get_ip()
+        if not ip_address:
+            process_message = "Unable to get IP address. Check connection."
+            exec_result = False
+        elif ip_address == utils.get_dns_ip(args.hostname):
             process_message = "No update required."
         else:
             updater = provider_class(auth, args.hostname, updater_options)
@@ -189,7 +161,7 @@ def create_parser():
 
 
 def main():
-    print_version()
+    print("== noipy DDNS updater tool v%s ==" % __version__)
     parser = create_parser()
     args = parser.parse_args()
 
