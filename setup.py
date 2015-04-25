@@ -6,7 +6,6 @@
 # See README.rst and LICENSE for details.
 
 from setuptools import setup
-
 import sys
 
 from noipy import __version__, __author__, __email__, __license__
@@ -28,7 +27,7 @@ with open("CHANGELOG.rst") as f:
 setup(
     name="noipy",
     version=__version__,
-    description="Command line update for No-IP and Dyn DDNS Update API",
+    description="Command line tool for DDNS IP address updating.",
     long_description=readme + "\n\n" + changelog,
     license=__license__,
     author=__author__,

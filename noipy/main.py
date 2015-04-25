@@ -150,9 +150,9 @@ def create_parser():
                              "update the hostname if it is provided",
                         action='store_true')
     parser.add_argument('-c', '--config',
-                        help="path to noipy config location (default: %s)" %
-                             authinfo.DEFAULT_CONFIG_LOCATION,
-                        default=authinfo.DEFAULT_CONFIG_LOCATION)
+                        help="noipy config directory (default: %s)" %
+                             authinfo.DEFAULT_CONFIG_DIR,
+                        default=authinfo.DEFAULT_CONFIG_DIR)
     parser.add_argument('ip', metavar='IP_ADDRESS', nargs='?',
                         help="New host IP address. If not provided, current "
                              "external IP address will be used.")

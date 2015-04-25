@@ -11,7 +11,7 @@ import os
 import base64
 
 NOIPY_CONFIG = ".noipy"
-DEFAULT_CONFIG_LOCATION = os.path.expanduser("~")
+DEFAULT_CONFIG_DIR = os.path.expanduser("~")
 
 
 class ApiAuth(object):
@@ -50,7 +50,7 @@ class ApiAuth(object):
         return str(self) == str(other)
 
 
-def store(auth, provider, config_location=DEFAULT_CONFIG_LOCATION):
+def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
     """Store auth info in file for specified provider """
 
     auth_file = None
@@ -85,7 +85,7 @@ def store(auth, provider, config_location=DEFAULT_CONFIG_LOCATION):
         raise e
 
 
-def load(provider, config_location=DEFAULT_CONFIG_LOCATION):
+def load(provider, config_location=DEFAULT_CONFIG_DIR):
     """Load provider specific auth info from file """
 
     auth = None
@@ -105,7 +105,7 @@ def load(provider, config_location=DEFAULT_CONFIG_LOCATION):
     return auth
 
 
-def exists(provider, config_location=DEFAULT_CONFIG_LOCATION):
+def exists(provider, config_location=DEFAULT_CONFIG_DIR):
     """Check whether provider info is already stored """
 
     config_dir = os.path.join(config_location, NOIPY_CONFIG)

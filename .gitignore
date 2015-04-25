@@ -3,8 +3,9 @@
 # packages
 build
 dist
-*egg-info
-*egg
+.eggs
+*.egg-info
+*.egg
 
 # tests/coverage
 .tox

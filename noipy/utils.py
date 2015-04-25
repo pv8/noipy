@@ -19,7 +19,7 @@ def get_input(message):
 
 
 def get_ip():
-    """Return machine's external IP.
+    """Return machine's origin IP address.
     """
     try:
         r = requests.get("http://httpbin.org/ip")
