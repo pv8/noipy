@@ -10,7 +10,7 @@ noipy: DDNS update tool
 .. image:: https://travis-ci.org/povieira/noipy.svg?branch=master
         :target: https://travis-ci.org/povieira/noipy
 
-.. image:: https://img.shields.io/coveralls/povieira/noipy.svg&branch=master
+.. image:: https://img.shields.io/coveralls/povieira/noipy.svg?branch=master
         :target: https://coveralls.io/r/povieira/noipy?branch=master
 
 .. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg
