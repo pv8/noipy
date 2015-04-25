@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# tests
+# test.test_noipy
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
@@ -115,6 +115,21 @@ class PluginsTest(unittest.TestCase):
                         "Update with 'No-IP' using generic provider failed.")
         self.assertTrue(status_message.startswith("ERROR:"),
                         "Status message should be an 'ERROR'")
+
+    def test_generic_plugin_malformed_url(self):
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '--url', 'abced',
+                    '--provider', 'generic',
+                    '-n', 'noipy.no-ip.org', self.test_ip]
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
+                        "An error should be flagged when --provider is "
+                        "'generic' and URL is malformed.")
+        self.assertTrue(status_message == "Malformed URL.",
+                        "Status message should be an 'Malformed URL.'")
 
 
 class AuthInfoTest(unittest.TestCase):
