@@ -38,6 +38,8 @@ To install **noipy**, simply:
 
     $ pip install noipy
 
+**Note**: **noipy** will also install the `Requests HTTP library <https://github.com/kennethreitz/requests>`_ if you haven't yet.
+
 
 Usage
 -----
@@ -124,15 +126,42 @@ If you have any enhancement suggestions or find a bug, please:
 
 #. Open an `issue <https://github.com/povieira/noipy/issues>`_
 #. `Fork <https://github.com/povieira/noipy/fork>`_ the project
-#. Do your magic (+ `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ + test)
+#. Do your magic
+#. Please, `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and test your code
 #. Is everything working? Send a `pull request <https://github.com/povieira/noipy/pulls>`_
 
 Running tests
 ~~~~~~~~~~~~~
 
+First, install tests dependencies (`tox <http://tox.readthedocs.org/en/latest/>`_
+and `flake8 <https://flake8.readthedocs.org/>`_):
+
 .. code-block:: bash
 
-    $ python setup.py test
+    $ pip install -r dev-requirements.txt
+
+
+To test against all supported Python versions (if you have them installed):
+
+.. code-block:: bash
+
+    $ tox
+
+
+Or you can to test against a specific version:
+
+.. code-block:: bash
+
+    $ tox -e {version}
+
+Where ``{version}`` can be ``py26``, ``py27``, ``py33``, ``py34``, ``pypy`` and ``pypy3``.
+
+
+Don't forget to run ``pep8``:
+
+.. code-block:: bash
+
+    $ tox -e pep8
 
 
 Copyright & License

@@ -3,6 +3,12 @@
 Changelog
 =========
 
+1.4.0 (2015-04-25)
+------------------
+
+- Using the awesome `Requests HTTP library <https://github.com/kennethreitz/requests>`_
+- Using `tox <http://tox.readthedocs.org/en/latest/>`_ in order to ease test against multiple Python versions
+
 1.3.1 (2014-12-19)
 ------------------
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# tests
+# test.test_noipy
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
@@ -13,6 +13,8 @@ import shutil
 from noipy import authinfo
 from noipy import dnsupdater
 from noipy import main
+from noipy import utils
+
 
 VALID_IP_REGEX = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25' \
                  r'[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]' \
@@ -29,14 +31,15 @@ class SanityTest(unittest.TestCase):
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)
 
-    def test_sanity(self):
-        """Tests the sanity of the unit testing framework and if we can
-        import all we need to work
+    def test_get_ip(self):
+        ip = utils.get_ip()
 
-        * From https://github.com/rbanffy/testable_appengine (thanks, @rbanffy)
-        """
-        self.assertTrue(True, "Oops! Sanity test failed! Did we take the"
-                              " blue pill?")
+        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
+
+    def test_get_dns_ip(self):
+        ip = utils.get_dns_ip('localhost')
+
+        self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
 
 
 class PluginsTest(unittest.TestCase):
@@ -113,6 +116,21 @@ class PluginsTest(unittest.TestCase):
         self.assertTrue(status_message.startswith("ERROR:"),
                         "Status message should be an 'ERROR'")
 
+    def test_generic_plugin_malformed_url(self):
+        cmd_args = ['-u', 'username', '-p', 'password',
+                    '--url', 'abced',
+                    '--provider', 'generic',
+                    '-n', 'noipy.no-ip.org', self.test_ip]
+
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
+                        "An error should be flagged when --provider is "
+                        "'generic' and URL is malformed.")
+        self.assertTrue(status_message == "Malformed URL.",
+                        "Status message should be an 'Malformed URL.'")
+
 
 class AuthInfoTest(unittest.TestCase):
 
@@ -141,7 +159,7 @@ class AuthInfoTest(unittest.TestCase):
         self.assertEqual(auth1.token, auth2.token, 'ApiAuth.token fail.')
 
     def test_store_and_load_auth_info(self):
-        cmd_args = ['--store', '-u', 'username', '-p', 'password',
+        cmd_args = ['--store', '-u', "username", '-p', "password",
                     '--provider', 'noip', '-c', self.test_dir, self.test_ip]
 
         # store
@@ -153,6 +171,7 @@ class AuthInfoTest(unittest.TestCase):
 
         self.assertTrue(status_message == "Auth info stored.",
                         "Status message should be an 'Auth info stored.'")
+
         # load
         cmd_args = ['--provider', 'noip', '-n', 'noipy.no-ip.org',
                     '-c', self.test_dir, self.test_ip]
@@ -185,16 +204,6 @@ class GeneralTest(unittest.TestCase):
                                       "must be provided."),
             "Status message should start with 'Warning: The hostname to be "
             "updated must be provided.'")
-
-    def test_get_ip(self):
-        ip = main.get_ip()
-
-        self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
-
-    def test_get_dns_ip(self):
-        ip = main.get_dns_ip('localhost')
-
-        self.assertTrue(ip == '127.0.0.1', 'get_dns_ip() failed.')
 
     def test_unchanged_ip(self):
         cmd_args = ['-u', 'username', '-p', 'password',
@@ -232,21 +241,21 @@ class GeneralTest(unittest.TestCase):
         plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
 
         # badauth code
-        plugin.last_status_code = 'badauth'
+        plugin.last_ddns_response = 'badauth'
         expected_message = "ERROR: Invalid username or password (%s)." \
-                           % plugin.last_status_code
+                           % plugin.last_ddns_response
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'badauth' status code.")
 
         # good <IP> code
-        plugin.last_status_code = 'good 1.1.1.1'
+        plugin.last_ddns_response = 'good 1.1.1.1'
         expected_message = "SUCCESS: DNS hostname IP (1.1.1.1) successfully " \
                            "updated."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'good <1.1.1.1>' status code.")
 
         # nochg <IP> code
-        plugin.last_status_code = 'nochg 1.1.1.1'
+        plugin.last_ddns_response = 'nochg 1.1.1.1'
         expected_message = "SUCCESS: IP address (1.1.1.1) is up to date, " \
                            "nothing was changed. Additional 'nochg' updates " \
                            "may be considered abusive."
@@ -254,14 +263,14 @@ class GeneralTest(unittest.TestCase):
                         "Expected 'nochg <1.1.1.1>' status code.")
 
         # !donator code
-        plugin.last_status_code = '!donator'
+        plugin.last_ddns_response = '!donator'
         expected_message = "ERROR: Update request include a feature that is " \
                            "not available to informed user."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected '!donator' status code.")
 
         # notfqdn code
-        plugin.last_status_code = 'notfqdn'
+        plugin.last_ddns_response = 'notfqdn'
         expected_message = "ERROR: The hostname specified is not a " \
                            "fully-qualified domain name (not in the form " \
                            "hostname.dyndns.org or domain.com)."
@@ -269,14 +278,14 @@ class GeneralTest(unittest.TestCase):
                         "Expected 'notfqdn' status code.")
 
         # nohost code
-        plugin.last_status_code = 'nohost'
+        plugin.last_ddns_response = 'nohost'
         expected_message = "ERROR: Hostname specified does not exist in this" \
                            " user account."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'nohost' status code.")
 
         # numhost code
-        plugin.last_status_code = 'numhost'
+        plugin.last_ddns_response = 'numhost'
         expected_message = "ERROR: Too many hosts (more than 20) specified " \
                            "in an update. Also returned if trying to update " \
                            "a round robin (which is not allowed)."
@@ -284,47 +293,47 @@ class GeneralTest(unittest.TestCase):
                         "Expected 'numhost' status code.")
 
         # abuse code
-        plugin.last_status_code = 'abuse'
+        plugin.last_ddns_response = 'abuse'
         expected_message = "ERROR: Username/hostname is blocked due to " \
                            "update abuse."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'abuse' status code.")
 
         # badagent code
-        plugin.last_status_code = 'badagent'
+        plugin.last_ddns_response = 'badagent'
         expected_message = "ERROR: User agent not sent or HTTP method not " \
                            "permitted."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'badagent' status code.")
 
         # dnserr code
-        plugin.last_status_code = 'dnserr'
+        plugin.last_ddns_response = 'dnserr'
         expected_message = "ERROR: DNS error encountered."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'dnserr' status code.")
 
         # 911 code
-        plugin.last_status_code = '911'
+        plugin.last_ddns_response = '911'
         expected_message = "ERROR: Problem on server side. Retry update in a" \
                            " few minutes."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected '911' status code.")
 
         # OK code
-        plugin.last_status_code = 'OK'
+        plugin.last_ddns_response = 'OK'
         expected_message = "SUCCESS: DNS hostname successfully updated."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'OK' status code.")
 
         # KO code
-        plugin.last_status_code = 'KO'
+        plugin.last_ddns_response = 'KO'
         expected_message = "ERROR: Hostname and/or token incorrect."
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'KO' status code.")
 
         # Unknown code
-        plugin.last_status_code = 'UNKNOWN_CODE'
-        expected_message = "WARNING: Ooops! Something went wrong !!!"
+        plugin.last_ddns_response = 'UNKNOWN_CODE'
+        expected_message = "ERROR: Ooops! Something went wrong !!!"
         self.assertTrue(plugin.status_message == expected_message,
                         "Expected 'Ooops' warning message.")
 
