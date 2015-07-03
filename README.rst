@@ -1,23 +1,23 @@
 noipy: DDNS update tool
 =======================
 
-.. image:: https://pypip.in/version/noipy/badge.svg
+.. image:: https://img.shields.io/pypi/v/noipy.svg?style=flat-square
         :target: https://pypi.python.org/pypi/noipy/
 
-.. image:: https://pypip.in/download/noipy/badge.svg
+.. image:: https://img.shields.io/pypi/dm/noipy.svg?style=flat-square
         :target: https://pypi.python.org/pypi/noipy/
 
-.. image:: https://travis-ci.org/povieira/noipy.svg?branch=master
+.. image:: https://img.shields.io/travis/povieira/noipy/master.svg?style=flat-square
         :target: https://travis-ci.org/povieira/noipy
 
-.. image:: https://img.shields.io/coveralls/povieira/noipy.svg?branch=master
+.. image:: https://img.shields.io/coveralls/povieira/noipy/master.svg?style=flat-square
         :target: https://coveralls.io/r/povieira/noipy?branch=master
 
-.. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg
+.. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg?style=flat-square
         :target: https://landscape.io/github/povieira/noipy/master
         :alt: Code Health
 
-.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.13320.png
+.. image:: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.13320-blue.svg?style=flat-square
         :target: http://dx.doi.org/10.5281/zenodo.13320
 
 Command line tool to update DDNS hosts IP address via update API. Initially
@@ -167,7 +167,7 @@ Don't forget to run ``pep8``:
 Copyright & License
 -------------------
 
-.. image:: https://pypip.in/license/noipy/badge.svg?style=flat
+.. image:: https://img.shields.io/github/license/povieira/noipy.svg?style=flat-square
         :target: https://pypi.python.org/pypi/noipy/
         :alt: License
 
