@@ -48,23 +48,17 @@ def execute_update(args):
                              dnsupdater.AVAILABLE_PLUGINS.get(args.provider))
     updater_options = {}
     process_message = None
-    exec_result = EXECUTION_RESULT_NOK
-    update_ddns = False
 
     if args.store:  # --store argument
-        if args.usertoken:
-            if args.password:
-                auth = authinfo.ApiAuth(args.usertoken, args.password)
-            else:
-                auth = authinfo.ApiAuth(args.usertoken)
+        if provider_class.auth_type == 'T':
+            user_arg = args.usertoken or utils.get_input(
+                "Paste your auth token: ")
+            auth = authinfo.ApiAuth(usertoken=user_arg)
         else:
-            if provider_class.auth_type == 'T':
-                token = utils.get_input("Paste your auth token: ")
-                auth = authinfo.ApiAuth(usertoken=token)
-            else:
-                username = utils.get_input("Type your username: ")
-                password = getpass.getpass("Type your password: ")
-                auth = authinfo.ApiAuth(usertoken=username, password=password)
+            user_arg = args.usertoken or utils.get_input(
+                "Type your username: ")
+            pass_arg = args.password or getpass.getpass("Type your password: ")
+            auth = authinfo.ApiAuth(user_arg, pass_arg)
 
         authinfo.store(auth, args.provider, args.config)
         exec_result = EXECUTION_RESULT_OK

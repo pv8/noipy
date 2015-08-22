@@ -13,9 +13,9 @@ import requests
 
 def get_input(message):
     if sys.version_info[:2] < (3, 0):
-        return input(message)
-    else:
         return raw_input(message)
+    else:
+        return input(message)
 
 
 def get_ip():

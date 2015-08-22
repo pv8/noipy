@@ -17,7 +17,7 @@ noipy: DDNS update tool
         :target: https://landscape.io/github/povieira/noipy/master
         :alt: Code Health
 
-.. image:: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.13320-blue.svg?style=flat-square
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.13320.svg?style=flat-square
         :target: http://dx.doi.org/10.5281/zenodo.13320
 
 Command line tool to update DDNS hosts IP address via update API. Initially
