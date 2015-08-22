@@ -3,6 +3,12 @@
 Changelog
 =========
 
+1.4.1 (2015-08-22)
+------------------
+
+- **Bugfix**: storing auth credentials properly from ``stdin``
+- Test case for ``--store`` option getting username/password from ``stdin``
+
 1.4.0 (2015-04-25)
 ------------------
 
@@ -17,13 +23,13 @@ Changelog
 1.3.0 (2014-12-16)
 ------------------
 
-- Support for custom DDNS URL via `--url` parameter 
+- Support for custom DDNS URL via ``--url`` parameter
 
 1.2.3 (2014-10-10)
 ------------------
 
-- Unit tests improvements and `PluginsTest` bug fixes
-- Custom config directory feature bug fix (``-config`` argument)
+- Unit tests improvements and ``PluginsTest`` bug fixes
+- Custom config directory feature bug fix (``--config`` argument)
 
 1.2.2 (2014-07-03)
 ------------------
@@ -31,7 +37,7 @@ Changelog
 - PEP8'd code (Closes #5)
 - Switched to `Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>`_
 - Unit test improvement
-- Minor feature: custom config directory via ``-c`` or ``-config`` argument.
+- Minor feature: custom config directory via ``-c`` or ``--config`` argument.
 
 1.2.1 (2014-06-30)
 ------------------

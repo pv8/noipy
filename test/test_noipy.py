@@ -9,6 +9,7 @@ import unittest
 import os
 import re
 import shutil
+import getpass
 
 from noipy import authinfo
 from noipy import dnsupdater
@@ -158,9 +159,62 @@ class AuthInfoTest(unittest.TestCase):
         self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail for token.')
         self.assertEqual(auth1.token, auth2.token, 'ApiAuth.token fail.')
 
-    def test_store_and_load_auth_info(self):
+    def test_store_from_arguments(self):
         cmd_args = ['--store', '-u', "username", '-p', "password",
                     '--provider', 'noip', '-c', self.test_dir, self.test_ip]
+
+        # store
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Error storing auth info")
+
+        self.assertTrue(status_message == "Auth info stored.",
+                        "Status message should be an 'Auth info stored.'")
+
+        # load
+        cmd_args = ['--provider', 'noip', '-n', 'noipy.no-ip.org',
+                    '-c', self.test_dir, self.test_ip]
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Error loading auth info")
+
+    def test_store_from_stdin_input(self):
+        cmd_args = ['--store', '--provider', 'noip',
+                    '-c', self.test_dir]
+
+        # monkey patch for testing
+        utils.get_input = lambda _: "username"
+        getpass.getpass = lambda _: "password"
+
+        # store
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Error storing auth info")
+
+        self.assertTrue(status_message == "Auth info stored.",
+                        "Status message should be an 'Auth info stored.'")
+
+        # load
+        cmd_args = ['--provider', 'noip', '-n', 'noipy.no-ip.org',
+                    '-c', self.test_dir, self.test_ip]
+        args = self.parser.parse_args(cmd_args)
+        result, status_message = main.execute_update(args)
+
+        self.assertTrue(result == main.EXECUTION_RESULT_OK,
+                        "Error loading auth info")
+
+    def test_store_pass_from_stdin_input(self):
+        cmd_args = ['-u', 'username', '--store', '--provider', 'noip',
+                    '-c', self.test_dir]
+
+        # monkey patch for testing
+        getpass.getpass = lambda _: "password"
 
         # store
         args = self.parser.parse_args(cmd_args)
