@@ -69,7 +69,7 @@ class PluginsTest(unittest.TestCase):
     def test_dyndns_plugin(self):
         cmd_args = ['-u', 'test', '-p', 'test',
                     '--provider', 'dyn',
-                    '-n', 'test.dyndns.org', self.test_ip]
+                    '-n', 'test.dyndns.org']
 
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
