@@ -3,7 +3,7 @@
 Changelog
 =========
 
-1.4.1 (2015-08-22)
+1.4.2 (2015-08-22)
 ------------------
 
 - **Bugfix**: storing auth credentials properly from ``stdin``

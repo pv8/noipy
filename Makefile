@@ -5,7 +5,7 @@ all: clean tests dist
 	@echo "=> All set up."
 	@echo "=> execute *make publish* to upload to PyPI repository."
 
-dist:
+dist: clean
 	@echo "=> Building packages"
 	python setup.py sdist bdist_wheel
 
@@ -26,6 +26,7 @@ clean:
 	rm -rf build/
 
 .PHONY: publish
-publish:
-	@echo "=> Publishing [noipy $(VERSION)] on PyPI repository"
-	twine upload -r pypi dist/*
+publish: dist
+	@echo "=> Publishing [noipy $(VERSION)] on PyPI test repository"
+	twine upload -r test dist/*
+	@echo "=> execute *twine upload -r test dist/* to upload to PyPI repository."
