@@ -67,11 +67,6 @@ def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
             print("Creating directory [%s]... " % config_dir, end="")
             os.mkdir(config_dir)
             print("OK.")
-        elif not os.path.isdir(config_dir):
-            os.remove(config_dir)
-            print("Creating directory [%s]... " % config_dir, end="")
-            os.mkdir(config_dir)
-            print("OK.")
 
         auth_file = os.path.join(config_dir, provider)
         print("Creating auth info file [%s]... " % auth_file, end="")
