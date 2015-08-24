@@ -294,17 +294,19 @@ class AuthInfoTest(unittest.TestCase):
                         "Error loading auth info")
 
     def test_update_without_authinfo(self):
-        cmd_args = ["--provider", "noip",
-                    "-n", "noipy.no-ip.org", self.test_ip]
+        cmd_args = ["--provider", "noip", "-n", "noipy.no-ip.org",
+                    "-c", self.test_dir, self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
         result, status_message = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with 'No-IP' provider failed.")
+        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
+                        "Update without auth info failed.")
 
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
+        self.assertTrue(status_message.startswith("No stored auth information"
+                                                  " found for provider:"),
+                        "Status message should be 'No stored auth information"
+                        " found for provider: ...'")
 
 
 class GeneralTest(unittest.TestCase):
