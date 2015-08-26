@@ -17,8 +17,8 @@ noipy: DDNS update tool
         :target: https://landscape.io/github/povieira/noipy/master
         :alt: Code Health
 
-.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.13320.svg?style=flat-square
-        :target: http://dx.doi.org/10.5281/zenodo.13320
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.29017.svg?style=flat-square
+        :target: http://dx.doi.org/10.5281/zenodo.29017
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
@@ -28,6 +28,14 @@ now **noipy** has support for the following DDNS providers:
 - `DuckDNS <https://www.duckdns.org/install.jsp>`_
 - `DynDNS <http://dyn.com/support/developers/api/perform-update/>`_
 
+Supported by
+------------
+
+.. image:: http://www.jetbrains.com/pycharm/docs/logo_pycharm.png
+        :target: http://www.jetbrains.com/pycharm/
+        :alt: Download PyCharm
+
+*"Develop with pleasure!"*
 
 Installation
 ------------
@@ -60,7 +68,7 @@ For `DuckDNS provider <https://www.duckdns.org>`_, the command line would look l
 
 
 Or you can just use ``--hostname`` (``-n``) and ``--provider`` arguments if you have
-previously  stored login information with ``--store`` option.
+previously `stored your auth information <#storing-auth-information>`_ with ``--store`` option.
 
 .. code-block:: bash
 
@@ -168,7 +176,7 @@ Copyright & License
 -------------------
 
 .. image:: https://img.shields.io/github/license/povieira/noipy.svg?style=flat-square
-        :target: https://pypi.python.org/pypi/noipy/
+        :target: LICENSE
         :alt: License
 
 Copyright (c) 2013 Pablo O Vieira (povieira).
