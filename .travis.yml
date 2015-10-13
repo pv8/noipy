@@ -1,9 +1,11 @@
+sudo: false
+
 os:
   - linux
   - osx
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sudo easy_install pip; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install python; brew install python3; fi
 
 language: python
 
@@ -13,6 +15,7 @@ env:
   - TOXENV=py32
   - TOXENV=py33
   - TOXENV=py34
+  - TOXENV=py35
   - TOXENV=pypy
   - TOXENV=pypy3
   - TOXENV=pep8
@@ -21,11 +24,14 @@ install:
     - pip install tox coveralls
 
 script:
-  - tox
+  - tox -e $TOX_ENV
 
 after_success:
   - coveralls
 
 notifications:
-  email:
-    on_success: never
+  email: false
+
+matrix:
+  allow_failures:
+    - os: osx
