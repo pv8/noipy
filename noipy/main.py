@@ -15,14 +15,9 @@ import sys
 from noipy import utils
 
 
-try:
-    from . import dnsupdater
-    from . import authinfo
-    from . import __version__
-except ValueError:
-    import dnsupdater
-    import authinfo
-    __version__ = "0.TEST"
+from . import dnsupdater
+from . import authinfo
+from . import __version__
 
 
 EXECUTION_RESULT_OK = 0

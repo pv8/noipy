@@ -11,6 +11,8 @@ import re
 
 import requests
 
+from . import __title__, __version__, __email__
+
 AVAILABLE_PLUGINS = {
     'noip': 'NoipDnsUpdater',
     'dyn': 'DynDnsUpdater',
@@ -88,8 +90,9 @@ class DnsUpdaterPlugin(object):
             api_call_url = self._get_base_url().format(hostname=self.hostname,
                                                        ip=new_ip)
             headers = {
-                'Authorization': 'Basic %s' %
+                'Authorization': "Basic %s" %
                                  self.auth.base64key.decode('utf-8'),
+                'User-Agent': "%s/%s %s" % (__title__, __version__, __email__)
             }
 
         r = requests.get(api_call_url, headers=headers)
