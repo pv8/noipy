@@ -15,6 +15,4 @@ dist
 *~
 .DS_Store
 .idea
-.project
-.pydevproject
-.settings
+.env
