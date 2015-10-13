@@ -6,8 +6,11 @@ python: 2.7
 
 addons:
   apt:
+    sources:
+      - deadsnakes
     packages:
       - python3.5
+
 cache:
   pip: true
   directories:
