@@ -16,8 +16,8 @@ env:
   - TOXENV=pep8
 
 install:
-    - pip install --user -r dev-requirements.txt
-    - pip install --user coveralls
+    - pip install -r dev-requirements.txt
+    - pip install coveralls
 
 script:
   - tox -e $TOXENV
