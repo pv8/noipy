@@ -1,13 +1,8 @@
 sudo: false
 
-os:
-  - linux
-  - osx
-
-before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install python; brew install python3; fi
-
 language: python
+
+python: 2.7
 
 env:
   - TOXENV=py26
@@ -21,7 +16,8 @@ env:
   - TOXENV=pep8
 
 install:
-    - pip install tox coveralls
+    - pip install --user -r dev-requirements.txt
+    - pip install --user coveralls
 
 script:
   - tox -e $TOXENV
@@ -31,7 +27,3 @@ after_success:
 
 notifications:
   email: false
-
-matrix:
-  allow_failures:
-    - os: osx
