@@ -12,5 +12,5 @@ __title__ = "noipy"
 __version_info__ = ('1', '4', '2')
 __version__ = ".".join(__version_info__)
 __author__ = "Pablo O Vieira"
-__email__ = "email@povieira.com"
+__email__ = "noipy@povieira.com"
 __license__ = "Apache License, Version 2.0"

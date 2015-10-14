@@ -46,7 +46,7 @@ To install **noipy**, simply:
 
     $ pip install noipy
 
-**Note**: **noipy** will also install the `Requests HTTP library <https://github.com/kennethreitz/requests>`_ if you haven't yet.
+**Note**: **noipy** will also install the `Requests HTTP library <https://github.com/kennethreitz/requests>`_.
 
 
 Usage
