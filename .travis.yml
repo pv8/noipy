@@ -29,9 +29,6 @@ env:
 
 install:
     - pip install -r dev-requirements.txt
-    # coverage 4.0 doesn't support Python 3.2
-    - if [ "$TOXENV" == "py32" ]; then travis_retry pip install coverage==3.7.1; fi
-    - if [ "$TOXENV" != "py32" ]; then travis_retry pip install coverage; fi
 
 script:
   - tox -e $TOXENV
