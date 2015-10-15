@@ -9,13 +9,15 @@ cache:
   directories:
     - .tox
 
+before_install:
+  - pip install codecov
+
 env:
   - TOXENV=py26
   - TOXENV=py27
   - TOXENV=py32
   - TOXENV=py33
   - TOXENV=py34
-  - TOXENV=py35
   - TOXENV=pypy
   - TOXENV=pypy3
   - TOXENV=pep8
@@ -27,12 +29,12 @@ script:
   - tox -e $TOXENV
 
 after_success:
-  - coveralls
+  - codecov
 
 notifications:
   email: false
 
 matrix:
   include:
-    - env: TOXENV=py32
+    - env: TOXENV=py35
       addons: {apt: {sources: deadsnakes}, {packages: python3.5}}

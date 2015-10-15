@@ -10,8 +10,11 @@ noipy: DDNS update tool
 .. image:: https://img.shields.io/travis/povieira/noipy/master.svg?style=flat-square
         :target: https://travis-ci.org/povieira/noipy
 
-.. image:: https://img.shields.io/coveralls/povieira/noipy/master.svg?style=flat-square
-        :target: https://coveralls.io/r/povieira/noipy?branch=master
+.. image:: https://img.shields.io/codecov/c/github/povieira/noipy/master.svg?style=flat-square
+        :target: http://codecov.io/github/povieira/noipy?branch=master
+
+.. image:: https://coveralls.io/repos/povieira/noipy/badge.svg?branch=master&service=github
+        :target: https://coveralls.io/github/povieira/noipy?branch=master
 
 .. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg?style=flat-square
         :target: https://landscape.io/github/povieira/noipy/master
@@ -141,7 +144,7 @@ If you have any enhancement suggestions or find a bug, please:
 Running tests
 ~~~~~~~~~~~~~
 
-First, install tests dependencies (`tox <http://tox.readthedocs.org/en/latest/>`_
+Install tests dependencies (`tox <http://tox.readthedocs.org/en/latest/>`_
 and `flake8 <https://flake8.readthedocs.org/>`_):
 
 .. code-block:: bash
@@ -149,27 +152,11 @@ and `flake8 <https://flake8.readthedocs.org/>`_):
     $ pip install -r dev-requirements.txt
 
 
-To test against all supported Python versions (if you have them installed):
+Test the code against all supported Python versions and check it against **PEP8** with ``tox``:
 
 .. code-block:: bash
 
     $ tox
-
-
-Or you can to test against a specific version:
-
-.. code-block:: bash
-
-    $ tox -e {version}
-
-Where ``{version}`` can be ``py26``, ``py27``, ``py33``, ``py34``, ``pypy`` and ``pypy3``.
-
-
-Don't forget to run ``pep8``:
-
-.. code-block:: bash
-
-    $ tox -e pep8
 
 
 Copyright & License
