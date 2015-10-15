@@ -40,7 +40,7 @@ class SanityTest(unittest.TestCase):
     def test_get_dns_ip(self):
         ip = utils.get_dns_ip("localhost")
 
-        self.assertTrue(ip == "127.0.0.1", "get_dns_ip() failed.")
+        self.assertEqual(ip, "127.0.0.1", "get_dns_ip() failed.")
 
 
 class PluginsTest(unittest.TestCase):
@@ -58,27 +58,29 @@ class PluginsTest(unittest.TestCase):
                     "-n", "noipy.no-ip.org", self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with 'No-IP' provider failed.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Update with 'No-IP' provider failed.")
 
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
+        self.assertEqual(result.get('response_code'), 200,
+                         "Invalid response code: %s. Should be 200."
+                         % result.get('response_code'))
 
     def test_dyndns_plugin(self):
         cmd_args = ["-u", "test", "-p", "test",
                     "--provider", "dyn",
-                    "-n", "test.dyndns.org"]
+                    "-n", "test.dyndns.org", self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with 'DynDNS' provider failed.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Update with 'DynDNS' provider failed.")
 
-        self.assertTrue(status_message.startswith("SUCCESS:"),
-                        "Status message should be 'SUCCESS'")
+        self.assertEqual(result.get('response_code'), 200,
+                         "Invalid response code: %s. Should be 200."
+                         % result.get('response_code'))
 
     def test_duckdns_plugin(self):
         cmd_args = ["-u", "1234567890ABC",
@@ -86,36 +88,30 @@ class PluginsTest(unittest.TestCase):
                     "-n", "noipy.duckdns.org", self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with 'DuckDNS' provider failed.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Update with 'DuckDNS' provider failed.")
 
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
+        self.assertEqual(result.get('response_code'), 200,
+                         "Invalid response code: %s. Should be 200."
+                         % result.get('response_code'))
 
     def test_generic_plugin(self):
-        cmd_args = ["--provider", "generic"]
-
-        args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
-
-        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "An error should be flagged when --provider is "
-                        "'generic' and --url is not specified")
-
         cmd_args = ["-u", "username", "-p", "password",
                     "--url", "https://dynupdate.no-ip.com/nic/update",
                     "--provider", "generic",
                     "-n", "noipy.no-ip.org", self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with 'No-IP' using generic provider failed.")
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Update with 'No-IP' using generic provider failed.")
+
+        self.assertEqual(result.get('response_code'), 200,
+                         "Invalid response code: %s. Should be 200."
+                         % result.get('response_code'))
 
     def test_generic_plugin_malformed_url(self):
         cmd_args = ["-u", "username", "-p", "password",
@@ -124,12 +120,13 @@ class PluginsTest(unittest.TestCase):
                     "-n", "noipy.no-ip.org", self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "An error should be flagged when --provider is "
-                        "'generic' and URL is malformed.")
-        self.assertTrue(status_message == "Malformed URL.",
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_NOK,
+                         "An error should be flagged when --provider is "
+                         "'generic' and URL is malformed.")
+
+        self.assertEqual(result.get('process_message'), "Malformed URL.",
                         "Status message should be an 'Malformed URL.'")
 
     def test_generic_plugin_without_url(self):
@@ -138,12 +135,14 @@ class PluginsTest(unittest.TestCase):
                     "-n", "noipy.no-ip.org", self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "An error should be flagged when --provider is "
-                        "'generic' and no URL is provided.")
-        self.assertTrue(status_message.startswith("Must use --url"),
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_NOK,
+                         "An error should be flagged when --provider is "
+                         "'generic' and no URL is provided.")
+
+        self.assertTrue(result.get('process_message')
+                        .startswith("Must use --url"),
                         "Status message should start with 'Must use --url'.")
 
 
@@ -182,22 +181,22 @@ class AuthInfoTest(unittest.TestCase):
 
         # store
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error storing auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error storing auth info")
 
-        self.assertTrue(status_message == "Auth info stored.",
-                        "Status message should be an 'Auth info stored.'")
+        self.assertEqual(result.get('process_message'), "Auth info stored.",
+                         "Status message should be an 'Auth info stored.'")
 
         # load
         cmd_args = ["--provider", "noip", "-n", "noipy.no-ip.org",
                     "-c", self.test_dir, self.test_ip]
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error loading auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error loading auth info")
 
     def test_store_and_perform_update(self):
         cmd_args = ["--store", "-u", "username", "-p", "password",
@@ -206,13 +205,14 @@ class AuthInfoTest(unittest.TestCase):
 
         # store
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error storing auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error storing auth info")
 
-        self.assertTrue(status_message.startswith("ERROR:"),
-                        "Status message should be an 'ERROR'")
+        self.assertEqual(result.get('response_code'), 200,
+                         "Invalid response code: %s. Should be 200."
+                         % result.get('response_code'))
 
     def test_store_from_stdin_input(self):
         cmd_args = ["--store", "--provider", "noip",
@@ -224,22 +224,22 @@ class AuthInfoTest(unittest.TestCase):
 
         # store
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error storing auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error storing auth info")
 
-        self.assertTrue(status_message == "Auth info stored.",
-                        "Status message should be an 'Auth info stored.'")
+        self.assertEqual(result.get('process_message'), "Auth info stored.",
+                         "Status message should be an 'Auth info stored.'")
 
         # load
         cmd_args = ["--provider", "noip", "-n", "noipy.no-ip.org",
                     "-c", self.test_dir, self.test_ip]
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error loading auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error loading auth info")
 
     def test_store_pass_from_stdin_input(self):
         cmd_args = ["-u", "username", "--store", "--provider", "noip",
@@ -250,22 +250,22 @@ class AuthInfoTest(unittest.TestCase):
 
         # store
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error storing auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error storing auth info")
 
-        self.assertTrue(status_message == "Auth info stored.",
-                        "Status message should be an 'Auth info stored.'")
+        self.assertEqual(result.get('process_message'), "Auth info stored.",
+                         "Status message should be an 'Auth info stored.'")
 
         # load
         cmd_args = ["--provider", "noip", "-n", "noipy.no-ip.org",
                     "-c", self.test_dir, self.test_ip]
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error loading auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error loading auth info")
 
     def test_store_token_from_stdin_input(self):
         cmd_args = ["--store", "--provider", "duck",
@@ -276,37 +276,37 @@ class AuthInfoTest(unittest.TestCase):
 
         # store
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error storing auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error storing auth info")
 
-        self.assertTrue(status_message == "Auth info stored.",
-                        "Status message should be an 'Auth info stored.'")
+        self.assertEqual(result.get('process_message'), "Auth info stored.",
+                         "Status message should be an 'Auth info stored.'")
 
         # load
         cmd_args = ["--provider", "duck", "-n", "noipy.duckdns.org",
                     "-c", self.test_dir, self.test_ip]
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Error loading auth info")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Error loading auth info")
 
     def test_update_without_authinfo(self):
         cmd_args = ["--provider", "noip", "-n", "noipy.no-ip.org",
                     "-c", self.test_dir, self.test_ip]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "Update without auth info failed.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_NOK,
+                         "Update without auth info failed.")
 
-        self.assertTrue(status_message.startswith("No stored auth information"
-                                                  " found for provider:"),
-                        "Status message should be 'No stored auth information"
-                        " found for provider: ...'")
+        self.assertTrue(result.get('process_message').startswith(
+            "No stored auth information found for provider:"),
+            "Status message should be 'No stored auth information found "
+            "for provider: ...'")
 
 
 class GeneralTest(unittest.TestCase):
@@ -322,16 +322,15 @@ class GeneralTest(unittest.TestCase):
         cmd_args = []
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_NOK,
-                        "Execution without args failed.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_NOK,
+                         "Execution without args failed.")
 
-        self.assertTrue(
-            status_message.startswith("Warning: The hostname to be updated "
-                                      "must be provided."),
-            "Status message should start with 'Warning: The hostname to be "
-            "updated must be provided.'")
+        self.assertTrue(result.get('process_message').startswith(
+            "Warning: The hostname to be updated must be provided."),
+            "Status message should start with 'Warning: "
+            "The hostname to be updated must be provided.'")
 
     def test_unchanged_ip(self):
         cmd_args = ["-u", "username", "-p", "password",
@@ -340,12 +339,13 @@ class GeneralTest(unittest.TestCase):
                     "-n", "localhost", "127.0.0.1"]
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update with unchanged IP failed.")
-        self.assertTrue(status_message == "No update required.",
-                        "Status message should be 'No update required'.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
+                         "Update with unchanged IP failed.")
+
+        self.assertEqual(result.get('process_message'), "No update required.",
+                         "Status message should be 'No update required'.")
 
     def test_without_ip(self):
         cmd_args = ["-u", "username", "-p", "password",
@@ -356,12 +356,13 @@ class GeneralTest(unittest.TestCase):
         utils.get_ip = lambda: None
 
         args = self.parser.parse_args(cmd_args)
-        result, status_message = main.execute_update(args)
+        result = main.execute_update(args)
 
-        self.assertTrue(result == main.EXECUTION_RESULT_OK,
-                        "Update without IP failed.")
+        self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_NOK,
+                         "Update without IP failed.")
 
-        self.assertTrue(status_message.startswith("Unable to get IP address"),
+        self.assertTrue(result.get('process_message')
+                        .startswith("Unable to get IP address"),
                         "Status message should be 'Unable to get IP address'.")
 
     def test_not_implemented_plugin(self):
@@ -373,9 +374,9 @@ class GeneralTest(unittest.TestCase):
             self.fail("Not implemented plugin should fail: "
                       "'NoneType' object has no attribute 'format'")
         except AttributeError as e:
-            self.assertTrue(str(e) == "'NoneType' object has no attribute "
-                                      "'format'",
-                            "_get_base_url() should return 'NoneType'")
+            self.assertEqual(str(e), "'NoneType' object has no attribute "
+                                     "'format'",
+                             "_get_base_url() should return 'NoneType'")
         except Exception as e:
             self.fail("_get_base_url() should return 'AttributeError'. "
                       "Got %s:%s" % (type(e).__name__, e))
@@ -389,100 +390,98 @@ class GeneralTest(unittest.TestCase):
         plugin.last_ddns_response = "badauth"
         expected_message = "ERROR: Invalid username or password (%s)." \
                            % plugin.last_ddns_response
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'badauth' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'badauth' status code.")
 
         # good <IP> code
         plugin.last_ddns_response = "good 1.1.1.1"
         expected_message = "SUCCESS: DNS hostname IP (1.1.1.1) successfully " \
                            "updated."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'good <1.1.1.1>' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'good <1.1.1.1>' status code.")
 
         # nochg <IP> code
         plugin.last_ddns_response = "nochg 1.1.1.1"
         expected_message = "SUCCESS: IP address (1.1.1.1) is up to date, " \
                            "nothing was changed. Additional 'nochg' updates " \
                            "may be considered abusive."
-        print(expected_message)
-        print(plugin.status_message)
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'nochg <1.1.1.1>' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'nochg <1.1.1.1>' status code.")
 
         # !donator code
         plugin.last_ddns_response = "!donator"
         expected_message = "ERROR: Update request include a feature that is " \
                            "not available to informed user."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected '!donator' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected '!donator' status code.")
 
         # notfqdn code
         plugin.last_ddns_response = "notfqdn"
         expected_message = "ERROR: The hostname specified is not a " \
                            "fully-qualified domain name (not in the form " \
                            "hostname.dyndns.org or domain.com)."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'notfqdn' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'notfqdn' status code.")
 
         # nohost code
         plugin.last_ddns_response = "nohost"
         expected_message = "ERROR: Hostname specified does not exist in this" \
                            " user account."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'nohost' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'nohost' status code.")
 
         # numhost code
         plugin.last_ddns_response = "numhost"
         expected_message = "ERROR: Too many hosts (more than 20) specified " \
                            "in an update. Also returned if trying to update " \
                            "a round robin (which is not allowed)."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'numhost' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'numhost' status code.")
 
         # abuse code
         plugin.last_ddns_response = "abuse"
         expected_message = "ERROR: Username/hostname is blocked due to " \
                            "update abuse."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'abuse' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'abuse' status code.")
 
         # badagent code
         plugin.last_ddns_response = "badagent"
         expected_message = "ERROR: User agent not sent or HTTP method not " \
                            "permitted."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'badagent' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'badagent' status code.")
 
         # dnserr code
         plugin.last_ddns_response = "dnserr"
         expected_message = "ERROR: DNS error encountered."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'dnserr' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'dnserr' status code.")
 
         # 911 code
         plugin.last_ddns_response = "911"
         expected_message = "ERROR: Problem on server side. Retry update in a" \
                            " few minutes."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected '911' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected '911' status code.")
 
         # OK code
         plugin.last_ddns_response = "OK"
         expected_message = "SUCCESS: DNS hostname successfully updated."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'OK' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'OK' status code.")
 
         # KO code
         plugin.last_ddns_response = "KO"
         expected_message = "ERROR: Hostname and/or token incorrect."
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'KO' status code.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'KO' status code.")
 
         # Unknown code
         plugin.last_ddns_response = "UNKNOWN_CODE"
         expected_message = "ERROR: Ooops! Something went wrong !!!"
-        self.assertTrue(plugin.status_message == expected_message,
-                        "Expected 'Ooops' warning message.")
+        self.assertEqual(plugin.status_message, expected_message,
+                         "Expected 'Ooops' warning message.")
 
 if __name__ == "__main__":
     unittest.main()

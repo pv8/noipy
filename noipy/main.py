@@ -35,14 +35,16 @@ URL_RE = re.compile(
 
 
 def execute_update(args):
-    """Execute the update based on command line args and returns a tuple
-    with Exit Code and the processing Status Massage
+    """Execute the update based on command line args and returns a dictionary
+    with 'execution result, ''response code', 'response info' and
+    'process friendly message'.
     """
 
     provider_class = getattr(dnsupdater,
                              dnsupdater.AVAILABLE_PLUGINS.get(args.provider))
     updater_options = {}
     process_message = None
+    auth = None
 
     if args.store:  # --store argument
         if provider_class.auth_type == 'T':
@@ -103,11 +105,13 @@ def execute_update(args):
             exec_result = EXECUTION_RESULT_NOK
             update_ddns = False
 
+    response_code = None
+    response_text = None
     if update_ddns:
         ip_address = args.ip if args.ip else utils.get_ip()
         if not ip_address:
             process_message = "Unable to get IP address. Check connection."
-            exec_result = False
+            exec_result = EXECUTION_RESULT_NOK
         elif ip_address == utils.get_dns_ip(args.hostname):
             process_message = "No update required."
         else:
@@ -115,10 +119,17 @@ def execute_update(args):
             print("Updating hostname '%s' with IP address %s "
                   "[provider: '%s']..."
                   % (args.hostname, ip_address, args.provider))
-            updater.update_dns(ip_address)
+            response_code, response_text = updater.update_dns(ip_address)
             process_message = updater.status_message
 
-    return exec_result, process_message
+    proc_result = {
+        'exec_result': exec_result,
+        'response_code': response_code,
+        'response_text': response_text,
+        'process_message': process_message,
+    }
+
+    return proc_result
 
 
 def create_parser():
