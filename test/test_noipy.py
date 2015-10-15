@@ -127,7 +127,7 @@ class PluginsTest(unittest.TestCase):
                          "'generic' and URL is malformed.")
 
         self.assertEqual(result.get('process_message'), "Malformed URL.",
-                        "Status message should be an 'Malformed URL.'")
+                         "Status message should be an 'Malformed URL.'")
 
     def test_generic_plugin_without_url(self):
         cmd_args = ["-u", "username", "-p", "password",

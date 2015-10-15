@@ -3,6 +3,13 @@
 Changelog
 =========
 
+1.4.3 (2015-10-15)
+------------------
+
+- Included ``User-Agent`` in request Header
+- Improvements on plugins test cases
+- Changed code coverage service from `Coveralls <https://coveralls.io>`_ to `Codecov <https://codecov.io>`_
+
 1.4.2 (2015-08-22)
 ------------------
 
