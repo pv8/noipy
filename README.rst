@@ -13,9 +13,6 @@ noipy: DDNS update tool
 .. image:: https://img.shields.io/codecov/c/github/povieira/noipy/master.svg?style=flat-square
         :target: http://codecov.io/github/povieira/noipy?branch=master
 
-.. image:: https://coveralls.io/repos/povieira/noipy/badge.svg?branch=master&service=github
-        :target: https://coveralls.io/github/povieira/noipy?branch=master
-
 .. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg?style=flat-square
         :target: https://landscape.io/github/povieira/noipy/master
         :alt: Code Health
