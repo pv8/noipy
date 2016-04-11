@@ -5,17 +5,16 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
-import unittest
+import getpass
 import os
 import re
 import shutil
-import getpass
+import unittest
 
 from noipy import authinfo
 from noipy import dnsupdater
 from noipy import main
 from noipy import utils
-
 
 VALID_IP_REGEX = r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25" \
                  r"[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]" \
