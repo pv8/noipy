@@ -15,9 +15,9 @@ import sys
 from noipy import utils
 
 
-from . import dnsupdater
-from . import authinfo
-from . import __version__
+from noipy import dnsupdater
+from noipy import authinfo
+from noipy import __version__
 
 
 EXECUTION_RESULT_OK = 0
@@ -165,12 +165,12 @@ def main():
     parser = create_parser()
     args = parser.parse_args()
 
-    result, status_message = execute_update(args)
-    print(status_message)
-    if result != EXECUTION_RESULT_OK:
+    result = execute_update(args)
+    print(result.get('process_message'))
+    if result.get('exec_result') != EXECUTION_RESULT_OK:
         parser.format_usage()
 
-    sys.exit(result)
+    sys.exit(result.get('exec_result'))
 
 if __name__ == '__main__':
     main()

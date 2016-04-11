@@ -9,7 +9,7 @@
 """
 
 __title__ = "noipy"
-__version_info__ = ('1', '4', '3')
+__version_info__ = ('1', '4', '4')
 __version__ = ".".join(__version_info__)
 __author__ = "Pablo O Vieira"
 __email__ = "noipy@povieira.com"
