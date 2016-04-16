@@ -96,7 +96,7 @@ class DnsUpdaterPlugin(object):
             }
 
         r = requests.get(api_call_url, headers=headers)
-        self.last_ddns_response = str(r.text)
+        self.last_ddns_response = str(r.text).strip()
 
         return r.status_code, r.text
 
