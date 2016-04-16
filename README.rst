@@ -7,14 +7,14 @@ noipy: DDNS update tool
 .. image:: https://img.shields.io/pypi/dm/noipy.svg?style=flat-square
         :target: https://pypi.python.org/pypi/noipy/
 
-.. image:: https://img.shields.io/travis/povieira/noipy/master.svg?style=flat-square
-        :target: https://travis-ci.org/povieira/noipy
+.. image:: https://img.shields.io/travis/pv8/noipy/master.svg?style=flat-square
+        :target: https://travis-ci.org/pv8/noipy
 
-.. image:: https://img.shields.io/codecov/c/github/povieira/noipy/master.svg?style=flat-square
-        :target: http://codecov.io/github/povieira/noipy?branch=master
+.. image:: https://img.shields.io/codecov/c/github/pv8/noipy/master.svg?style=flat-square
+        :target: http://codecov.io/github/pv8/noipy?branch=master
 
-.. image:: https://landscape.io/github/povieira/noipy/master/landscape.svg?style=flat-square
-        :target: https://landscape.io/github/povieira/noipy/master
+.. image:: https://landscape.io/github/pv8/noipy/master/landscape.svg?style=flat-square
+        :target: https://landscape.io/github/pv8/noipy/master
         :alt: Code Health
 
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.29017.svg?style=flat-square
@@ -132,11 +132,11 @@ Improvements & Troubleshooting
 
 If you have any enhancement suggestions or find a bug, please:
 
-#. Open an `issue <https://github.com/povieira/noipy/issues>`_
-#. `Fork <https://github.com/povieira/noipy/fork>`_ the project
+#. Open an `issue <https://github.com/pv8/noipy/issues>`_
+#. `Fork <https://github.com/pv8/noipy/fork>`_ the project
 #. Do your magic
 #. Please, `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and test your code
-#. Is everything working? Send a `pull request <https://github.com/povieira/noipy/pulls>`_
+#. Is everything working? Send a `pull request <https://github.com/pv8/noipy/pulls>`_
 
 Running tests
 ~~~~~~~~~~~~~
@@ -159,8 +159,8 @@ Test the code against all supported Python versions and check it against **PEP8*
 Copyright & License
 -------------------
 
-.. image:: https://img.shields.io/github/license/povieira/noipy.svg?style=flat-square
+.. image:: https://img.shields.io/github/license/pv8/noipy.svg?style=flat-square
         :target: LICENSE
         :alt: License
 
-Copyright (c) 2013 Pablo O Vieira (povieira).
+Copyright (c) 2013 Pablo O Vieira (pv8).
