@@ -23,7 +23,8 @@ AVAILABLE_PLUGINS = {
 DEFAULT_PLUGIN = 'generic'
 
 
-error_messages = {
+response_messages = {
+    'OK': "SUCCESS: DNS hostname successfully updated.",
     'badauth': "ERROR: Invalid username or password (badauth).",
     'nochg': "ERROR: Invalid username or password (nochg).",
     '401': "ERROR: Invalid username or password (401).",
@@ -105,10 +106,8 @@ class DnsUpdaterPlugin(object):
         """Return friendly response from API based on response code. """
 
         msg = None
-        if self.last_ddns_response in error_messages.keys():
-            msg = error_messages.get(self.last_ddns_response)
-        elif self.last_ddns_response == 'OK':
-            msg = "SUCCESS: DNS hostname successfully updated."
+        if self.last_ddns_response in response_messages.keys():
+            msg = response_messages.get(self.last_ddns_response)
         elif 'good' in self.last_ddns_response \
                 or 'nochg' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
