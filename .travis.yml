@@ -23,6 +23,10 @@ env:
   - TOXENV=pep8
 
 install:
+    # pip 8.0.0 and vitualenv 14.0.0 have dropped Python 3.2 support
+    - if [[ "$TOXENV" == "py32" ]]; then travis_retry pip install "pip<8.0.0"; fi
+    - if [[ "$TOXENV" == "py32" ]]; then travis_retry pip install "virtualenv<14.0.0"; fi
+
     - pip install -r dev-requirements.txt
 
 script:
