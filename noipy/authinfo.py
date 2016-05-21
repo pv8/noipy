@@ -56,6 +56,7 @@ def create_config_dir(dir_path, log_message="Creating directory [%s]..."):
         os.mkdir(dir_path)
         print("OK.")
 
+
 def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
     """Store auth info in file for specified provider """
 
