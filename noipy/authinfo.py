@@ -50,23 +50,23 @@ class ApiAuth(object):
         return str(self) == str(other)
 
 
+def create_config_dir(dir_path, log_message="Creating directory [%s]..."):
+    if not os.path.exists(dir_path):
+        print(log_message % dir_path, end="")
+        os.mkdir(dir_path)
+        print("OK.")
+
 def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
     """Store auth info in file for specified provider """
 
     auth_file = None
     try:
         # only for custom locations
-        if not os.path.exists(config_location):
-            print("Creating custom config directory [%s]... "
-                  % config_location, end="")
-            os.mkdir(config_location)
-            print("OK.")
+        create_config_dir(config_location,
+                          "Creating custom config directory [%s]... ")
 
         config_dir = os.path.join(config_location, NOIPY_CONFIG)
-        if not os.path.exists(config_dir):
-            print("Creating directory [%s]... " % config_dir, end="")
-            os.mkdir(config_dir)
-            print("OK.")
+        create_config_dir(config_dir, "Creating directory [%s]... ")
 
         auth_file = os.path.join(config_dir, provider)
         print("Creating auth info file [%s]... " % auth_file, end="")
