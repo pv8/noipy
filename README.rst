@@ -31,8 +31,11 @@ now **noipy** has support for the following DDNS providers:
 Supported by
 ------------
 
-.. image:: http://www.jetbrains.com/pycharm/docs/logo_pycharm.png
+**PyCharm**
+
+.. image:: https://confluence.jetbrains.com/download/attachments/10422155/PYH
         :target: http://www.jetbrains.com/pycharm/
+        :width: 28%
         :alt: Download PyCharm
 
 *"Develop with pleasure!"*
