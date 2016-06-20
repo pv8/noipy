@@ -67,10 +67,10 @@ def execute_update(args):
 
     # informations arguments
     elif args.usertoken and args.hostname:
-        if args.password:
-            auth = authinfo.ApiAuth(args.usertoken, args.password)
-        elif provider_class.auth_type == 'T':
+        if provider_class.auth_type == 'T':
             auth = authinfo.ApiAuth(args.usertoken)
+        else:
+            auth = authinfo.ApiAuth(args.usertoken, args.password)
         update_ddns = True
         exec_result = EXECUTION_RESULT_OK
     elif args.hostname:
