@@ -36,10 +36,20 @@ class SanityTest(unittest.TestCase):
 
         self.assertTrue(re.match(VALID_IP_REGEX, ip), "get_ip() failed.")
 
+        # monkey patch for testing (forcing ConnectionError)
+        utils.HTTPBIN_URL = "http://example.nothing"
+
+        ip = utils.get_ip()
+        self.assertTrue(ip is None, "get_ip() should return None. IP=%s" % ip)
+
     def test_get_dns_ip(self):
         ip = utils.get_dns_ip("localhost")
 
         self.assertEqual(ip, "127.0.0.1", "get_dns_ip() failed.")
+
+        ip = utils.get_dns_ip("http://example.nothing")
+        self.assertTrue(ip is None, "get_dns_ip() should return None. IP=%s"
+                        % ip)
 
 
 class PluginsTest(unittest.TestCase):
@@ -50,6 +60,11 @@ class PluginsTest(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def test_instance_str(self):
+        plugin = dnsupdater.NoipDnsUpdater(auth=None,
+                                           hostname="noipy.no-ip.org")
+        self.assertEqual(str(plugin), "NoipDnsUpdater(host=noipy.no-ip.org)")
 
     def test_noip_plugin(self):
         cmd_args = ["-u", "username", "-p", "password",
@@ -62,9 +77,11 @@ class PluginsTest(unittest.TestCase):
         self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
                          "Update with 'No-IP' provider failed.")
 
-        self.assertEqual(result.get('response_code'), 200,
-                         "Invalid response code: %s. Should be 200."
-                         % result.get('response_code'))
+        # noip.com returns either HTTP 200 or 401,
+        # depending on which way the window is blowing
+        self.assertTrue(result.get('response_code') in (200, 401),
+                        "Invalid response code: %s. Should be 200."
+                        % result.get('response_code'))
 
     def test_dyndns_plugin(self):
         cmd_args = ["-u", "test", "-p", "test",
@@ -108,9 +125,11 @@ class PluginsTest(unittest.TestCase):
         self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
                          "Update with 'No-IP' using generic provider failed.")
 
-        self.assertEqual(result.get('response_code'), 200,
-                         "Invalid response code: %s. Should be 200."
-                         % result.get('response_code'))
+        # noip.com returns either HTTP 200 or 401,
+        # depending on which way the window is blowing
+        self.assertTrue(result.get('response_code') in (200, 401),
+                        "Invalid response code: %s. Should be 200."
+                        % result.get('response_code'))
 
     def test_generic_plugin_malformed_url(self):
         cmd_args = ["-u", "username", "-p", "password",
@@ -159,14 +178,26 @@ class AuthInfoTest(unittest.TestCase):
             else:
                 os.remove(self.test_dir)
 
-    def test_auth_get_instance_password(self):
+    def test_get_instance_password(self):
         auth1 = authinfo.ApiAuth("username", "password")
         auth2 = authinfo.ApiAuth.get_instance(b"dXNlcm5hbWU6cGFzc3dvcmQ=")
 
         self.assertEqual(auth1, auth2, "ApiAuth.get_instance fail for "
                                        "password.")
 
-    def test_auth_get_instance_token(self):
+    def test_get_token_property_with_password(self):
+        auth = authinfo.ApiAuth("username", "password")
+
+        try:
+            token = auth.token
+            self.fail("A 'NotImplementedError' should be raised. Token=%s" %
+                      token)
+        except Exception as e:
+            if not isinstance(e, NotImplementedError):
+                self.fail("A 'NotImplementedError' should be raised. Got: %s"
+                          % e)
+
+    def test_get_instance_token(self):
         token = "1234567890ABCDEFG"
         auth1 = authinfo.ApiAuth(usertoken=token)
         auth2 = authinfo.ApiAuth.get_instance(b"MTIzNDU2Nzg5MEFCQ0RFRkc6")
@@ -209,9 +240,11 @@ class AuthInfoTest(unittest.TestCase):
         self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
                          "Error storing auth info")
 
-        self.assertEqual(result.get('response_code'), 200,
-                         "Invalid response code: %s. Should be 200."
-                         % result.get('response_code'))
+        # noip.com returns either HTTP 200 or 401,
+        # depending on which way the window is blowing
+        self.assertTrue(result.get('response_code') in (200, 401),
+                        "Invalid response code: %s. Should be 200."
+                        % result.get('response_code'))
 
     def test_store_from_stdin_input(self):
         cmd_args = ["--store", "--provider", "noip",
@@ -291,6 +324,15 @@ class AuthInfoTest(unittest.TestCase):
 
         self.assertEqual(result.get('exec_result'), main.EXECUTION_RESULT_OK,
                          "Error loading auth info")
+
+    def test_ioerror(self):
+        try:
+            auth = authinfo.load(provider="noip",
+                                 config_location=self.test_dir)
+            self.fail("An 'IOError' should be raised. auth=%s" + auth)
+        except Exception as e:
+            if not isinstance(e, IOError):
+                self.fail("An 'IOError' should be raised. Got: %s" % e)
 
     def test_update_without_authinfo(self):
         cmd_args = ["--provider", "noip", "-n", "noipy.no-ip.org",
