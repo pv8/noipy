@@ -30,3 +30,15 @@ after_success:
 
 notifications:
   email: false
+
+deploy:
+  provider: pypi
+  server: https://pypi.python.org/pypi
+  distributions: "sdist bdist_wheel"
+  user: "pv8"
+  password:
+    secure: "L7o85k5LaAC88lo9lfpHo4GA42kurgXXtZ2A4cgS/cQqleROjq36x9IEpAkqFwgQBcL1Aj3j11760EwYBv2j5Auf2OqwENIOLfYiW5YiKu9gCt3Xkh+UceAj/CrH3aRM/hwNwePmCY6x9iPtaY8aR0PEuVzaE2lPLIIllhPPQJg="
+  on:
+    branch: master
+    tags: true
+    condition: "$TOXENV = py27"
