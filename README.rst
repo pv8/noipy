@@ -149,7 +149,7 @@ and `flake8 <https://flake8.readthedocs.org/>`_):
 
 .. code-block:: bash
 
-    $ pip install -r dev-requirements.txt
+    $ pip install -r requirements_dev.txt
 
 
 Test the code against all supported Python versions and check it against **PEP8** with ``tox``:

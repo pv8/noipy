@@ -1,8 +1,5 @@
-sudo: false
-
 language: python
-
-python: 2.7
+python: 3.5
 
 cache:
   pip: true
@@ -15,19 +12,15 @@ before_install:
 env:
   - TOXENV=py26
   - TOXENV=py27
-  - TOXENV=py32
   - TOXENV=py33
   - TOXENV=py34
+  - TOXENV=py35
   - TOXENV=pypy
   - TOXENV=pypy3
   - TOXENV=pep8
 
 install:
-    # pip 8.0.0 and vitualenv 14.0.0 have dropped Python 3.2 support
-    - if [[ "$TOXENV" == "py32" ]]; then travis_retry pip install "pip<8.0.0"; fi
-    - if [[ "$TOXENV" == "py32" ]]; then travis_retry pip install "virtualenv<14.0.0"; fi
-
-    - pip install -r dev-requirements.txt
+    - pip install -r requirements_dev.txt
 
 script:
   - tox -e $TOXENV
@@ -37,9 +30,3 @@ after_success:
 
 notifications:
   email: false
-
-matrix:
-  include:
-    - python: 3.5
-      env:
-      - TOXENV=py35
