@@ -3,6 +3,13 @@
 Changelog
 =========
 
+1.5.0 (2016-10-30)
+------------------
+
+- Automatic deploy to `PyPI <https://pypi.python.org/pypi>`_ via `Travis CI <https://docs.travis-ci.com/user/deployment/pypi/>`_
+- Minor refactorings
+- **Dropped support for Python 3.2**
+
 1.4.4 (2016-04-11)
 ------------------
 
