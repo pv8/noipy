@@ -48,11 +48,11 @@ def execute_update(args):
 
     if args.store:  # --store argument
         if provider_class.auth_type == 'T':
-            user_arg = args.usertoken or utils.get_input(
+            user_arg = args.usertoken or utils.read_input(
                 "Paste your auth token: ")
             auth = authinfo.ApiAuth(usertoken=user_arg)
         else:
-            user_arg = args.usertoken or utils.get_input(
+            user_arg = args.usertoken or utils.read_input(
                 "Type your username: ")
             pass_arg = args.password or getpass.getpass("Type your password: ")
             auth = authinfo.ApiAuth(user_arg, pass_arg)

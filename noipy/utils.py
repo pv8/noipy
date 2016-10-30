@@ -6,18 +6,19 @@
 # See README.rst and LICENSE for details.
 
 import socket
-import sys
 
 import requests
 
 HTTPBIN_URL = "http://httpbin.org/ip"
 
+try:
+    input = raw_input
+except NameError:
+    pass
 
-def get_input(message):
-    if sys.version_info[:2] < (3, 0):
-        return raw_input(message)
-    else:
-        return input(message)
+
+def read_input(message):
+    return input(message)
 
 
 def get_ip():

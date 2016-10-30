@@ -251,7 +251,7 @@ class AuthInfoTest(unittest.TestCase):
                     "-c", self.test_dir]
 
         # monkey patch for testing
-        utils.get_input = lambda _: "username"
+        utils.read_input = lambda _: "username"
         getpass.getpass = lambda _: "password"
 
         # store
@@ -304,7 +304,7 @@ class AuthInfoTest(unittest.TestCase):
                     "-c", self.test_dir]
 
         # monkey patch for testing
-        utils.get_input = lambda _: "1234567890ABC"
+        utils.read_input = lambda _: "1234567890ABC"
 
         # store
         args = self.parser.parse_args(cmd_args)
