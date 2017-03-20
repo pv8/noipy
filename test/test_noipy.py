@@ -524,5 +524,6 @@ class GeneralTest(unittest.TestCase):
         self.assertEqual(plugin.status_message, expected_message,
                          "Expected 'Ooops' warning message.")
 
+
 if __name__ == "__main__":
     unittest.main()
