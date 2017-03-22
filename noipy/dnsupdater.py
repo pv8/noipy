@@ -68,7 +68,8 @@ class DnsUpdaterPlugin(object):
     def hostname(self):
         return self._hostname
 
-    def _get_base_url(self):
+    @property
+    def _base_url(self):
         """Get the base URL for DDNS Update API. URL must contain 'hostname'
         and 'ip'. If authentication is via token string 'token' argument must
         be provided as well. Example:
@@ -84,12 +85,12 @@ class DnsUpdaterPlugin(object):
 
         headers = None
         if self.auth_type == 'T':
-            api_call_url = self._get_base_url().format(hostname=self.hostname,
-                                                       token=self.auth.token,
-                                                       ip=new_ip)
+            api_call_url = self._base_url.format(hostname=self.hostname,
+                                                 token=self.auth.token,
+                                                 ip=new_ip)
         else:
-            api_call_url = self._get_base_url().format(hostname=self.hostname,
-                                                       ip=new_ip)
+            api_call_url = self._base_url.format(hostname=self.hostname,
+                                                 ip=new_ip)
             headers = {
                 'Authorization': "Basic %s" %
                                  self.auth.base64key.decode('utf-8'),
@@ -132,7 +133,8 @@ class NoipDnsUpdater(DnsUpdaterPlugin):
 
     auth_type = "P"
 
-    def _get_base_url(self):
+    @property
+    def _base_url(self):
         return "https://dynupdate.no-ip.com/nic/update?hostname={hostname}" \
                "&myip={ip}"
 
@@ -142,7 +144,8 @@ class DynDnsUpdater(DnsUpdaterPlugin):
 
     auth_type = "P"
 
-    def _get_base_url(self):
+    @property
+    def _base_url(self):
         return "http://members.dyndns.org/nic/update?hostname={hostname}" \
                "&myip={ip}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG"
 
@@ -160,7 +163,8 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
             hostname = found.group(1)
         return hostname
 
-    def _get_base_url(self):
+    @property
+    def _base_url(self):
         return "https://www.duckdns.org/update?domains={hostname}" \
                "&token={token}&ip={ip}"
 
@@ -172,6 +176,7 @@ class GenericDnsUpdater(DnsUpdaterPlugin):
 
     auth_type = "P"
 
-    def _get_base_url(self):
+    @property
+    def _base_url(self):
         return "{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG" \
                "&mx=NOCHG&backmx=NOCHG".format(url=self._options['url'])
