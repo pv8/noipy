@@ -17,6 +17,10 @@ noipy: DDNS update tool
         :target: https://landscape.io/github/pv8/noipy/master
         :alt: Code Health
 
+.. image:: https://img.shields.io/badge/Shipping_faster_with-ZenHub-5e60ba.svg?style=flat-square
+        :target: https://github.com/pv8/noipy#boards
+        :alt: ZenHub
+
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.29017.svg?style=flat-square
         :target: http://dx.doi.org/10.5281/zenodo.29017
 
