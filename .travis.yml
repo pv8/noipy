@@ -8,6 +8,11 @@ cache:
 
 before_install:
   - pip install codecov
+  - cd $HOME
+  - mkdir -p bin
+  - export PATH=$HOME/bin:$PATH
+  - "if [[ $TOXENV == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/pypy3.3 ~/bin/python && echo 'Setting up pip...' && pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/pypy -m ensurepip && ln -s ~/pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/pip3.3 ~/bin/pip ; fi"
+  - cd $TRAVIS_BUILD_DIR
 
 env:
   - TOXENV=py26
@@ -24,7 +29,7 @@ install:
     - pip install -r requirements_dev.txt
 
 script:
-  - tox -e $TOXENV
+  - tox --skip-missing-interpreters -e $TOXENV
 
 after_success:
   - codecov
