@@ -14,11 +14,9 @@ import sys
 
 from noipy import utils
 
-
 from noipy import dnsupdater
 from noipy import authinfo
 from noipy import __version__
-
 
 EXECUTION_RESULT_OK = 0
 EXECUTION_RESULT_NOK = 1
@@ -34,6 +32,67 @@ URL_RE = re.compile(
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
+def auth_credentials(user_token, password, provider_class):
+    if provider_class.auth_type == 'T':
+        user_arg = user_token or utils.read_input(
+            "Paste your auth token: ")
+        auth = authinfo.ApiAuth(usertoken=user_arg)
+    else:
+        user_arg = user_token or utils.read_input(
+            "Type your username: ")
+        pass_arg = password or getpass.getpass("Type your password: ")
+        auth = authinfo.ApiAuth(user_arg, pass_arg)
+
+    return auth
+
+
+def execute_ddns_update(update_ddns, ip, hostname, auth,
+                        updater_options, provider, provider_class,
+                        exec_result, process_message=None):
+    response_code = None
+    response_text = None
+    if update_ddns:
+        ip_address = ip if ip else utils.get_ip()
+        if not ip_address:
+            process_message = "Unable to get IP address. Check connection."
+            exec_result = EXECUTION_RESULT_NOK
+        elif ip_address == utils.get_dns_ip(hostname):
+            process_message = "No update required."
+        else:
+            updater = provider_class(auth, hostname, updater_options)
+            print("Updating hostname '%s' with IP address %s "
+                  "[provider: '%s']..."
+                  % (hostname, ip_address, provider))
+            response_code, response_text = updater.update_dns(ip_address)
+            process_message = updater.status_message
+
+    return {
+        'exec_result': exec_result,
+        'response_code': response_code,
+        'response_text': response_text,
+        'process_message': process_message,
+    }
+
+
+def process_generic(url, updater_options,
+                    update_ddns,
+                    exec_result, process_message):
+    if url:
+        if not URL_RE.match(url):
+            process_message = "Malformed URL."
+            exec_result = EXECUTION_RESULT_NOK
+            update_ddns = False
+        else:
+            updater_options['url'] = url
+    else:
+        process_message = "Must use --url if --provider is 'generic' " \
+                          "(default)"
+        exec_result = EXECUTION_RESULT_NOK
+        update_ddns = False
+
+    return update_ddns, exec_result, process_message, updater_options
+
+
 def execute_update(args):
     """Execute the update based on command line args and returns a dictionary
     with 'execution result, ''response code', 'response info' and
@@ -47,16 +106,7 @@ def execute_update(args):
     auth = None
 
     if args.store:  # --store argument
-        if provider_class.auth_type == 'T':
-            user_arg = args.usertoken or utils.read_input(
-                "Paste your auth token: ")
-            auth = authinfo.ApiAuth(usertoken=user_arg)
-        else:
-            user_arg = args.usertoken or utils.read_input(
-                "Type your username: ")
-            pass_arg = args.password or getpass.getpass("Type your password: ")
-            auth = authinfo.ApiAuth(user_arg, pass_arg)
-
+        auth = auth_credentials(args.usertoken, args.password, provider_class)
         authinfo.store(auth, args.provider, args.config)
         exec_result = EXECUTION_RESULT_OK
         if not args.hostname:
@@ -67,10 +117,7 @@ def execute_update(args):
 
     # informations arguments
     elif args.usertoken and args.hostname:
-        if provider_class.auth_type == 'T':
-            auth = authinfo.ApiAuth(args.usertoken)
-        else:
-            auth = authinfo.ApiAuth(args.usertoken, args.password)
+        auth = auth_credentials(args.usertoken, args.password, provider_class)
         update_ddns = True
         exec_result = EXECUTION_RESULT_OK
     elif args.hostname:
@@ -92,42 +139,19 @@ def execute_update(args):
                           "option.\nExecute noipy --help for more details."
 
     if update_ddns and args.provider == 'generic':
-        if args.url:
-            if not URL_RE.match(args.url):
-                process_message = "Malformed URL."
-                exec_result = EXECUTION_RESULT_NOK
-                update_ddns = False
-            else:
-                updater_options['url'] = args.url
-        else:
-            process_message = "Must use --url if --provider is 'generic' " \
-                              "(default)"
-            exec_result = EXECUTION_RESULT_NOK
-            update_ddns = False
+        result = process_generic(
+            args.url, updater_options, update_ddns,
+            exec_result, process_message)
 
-    response_code = None
-    response_text = None
-    if update_ddns:
-        ip_address = args.ip if args.ip else utils.get_ip()
-        if not ip_address:
-            process_message = "Unable to get IP address. Check connection."
-            exec_result = EXECUTION_RESULT_NOK
-        elif ip_address == utils.get_dns_ip(args.hostname):
-            process_message = "No update required."
-        else:
-            updater = provider_class(auth, args.hostname, updater_options)
-            print("Updating hostname '%s' with IP address %s "
-                  "[provider: '%s']..."
-                  % (args.hostname, ip_address, args.provider))
-            response_code, response_text = updater.update_dns(ip_address)
-            process_message = updater.status_message
+        update_ddns = result[0]
+        exec_result = result[1]
+        process_message = result[2]
+        updater_options = result[3]
 
-    proc_result = {
-        'exec_result': exec_result,
-        'response_code': response_code,
-        'response_text': response_text,
-        'process_message': process_message,
-    }
+    proc_result = execute_ddns_update(update_ddns, args.ip, args.hostname,
+                                      auth, updater_options, args.provider,
+                                      provider_class, exec_result,
+                                      process_message)
 
     return proc_result
 
