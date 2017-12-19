@@ -45,7 +45,6 @@ notifications:
 
 deploy:
   provider: pypi
-  server: https://pypi.python.org/pypi
   distributions: "sdist bdist_wheel"
   user: "pv8"
   password:
