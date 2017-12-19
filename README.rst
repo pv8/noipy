@@ -120,21 +120,6 @@ And type username and password when required.
 `Base64 <https://en.wikipedia.org/wiki/Base64>`_ method and is not actually
 *encrypted*!
 
-
-Contributing
-------------
-
-Improvements & Troubleshooting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you have any enhancement suggestions or find a bug, please:
-
-#. Open an `issue <https://github.com/pv8/noipy/issues>`_
-#. `Fork <https://github.com/pv8/noipy/fork>`_ the project
-#. Do your magic
-#. Please, `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and test your code
-#. Is everything working? Send a `pull request <https://github.com/pv8/noipy/pulls>`_
-
 Running tests
 ~~~~~~~~~~~~~
 
@@ -151,6 +136,12 @@ Test the code against all supported Python versions and check it against **PEP8*
 .. code-block:: bash
 
     $ tox
+
+Check **PEP8** only:
+
+.. code-block:: bash
+
+    $ tox -e pep8
 
 
 Copyright & License

@@ -8,7 +8,7 @@ Changelog
 
 - Support for Python 3.6
 - Minor refactors related to code style
-- Improved integration with [codeclimate](https://codeclimate.com/)
+- Improved integration with `codeclimate <https://codeclimate.com/>`_
 
 1.5.0 (2016-10-30)
 ------------------
