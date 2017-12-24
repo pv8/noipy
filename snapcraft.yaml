@@ -1,0 +1,23 @@
+name: noipy
+version: git
+version-script: python3 -c "import noipy; print('v%s' % noipy.__version__)"
+summary: Command line tool to update DDNS host IP - No-IP, DuckDNS, and DynDNS
+description: |
+  noipy is a command line tool to update host IP address of DDNS providers via
+  update API.
+  Currently, supported DDNS providers are: No-IP, DuckDNS, and DynDNS
+
+type: app
+confinement: strict
+grade: stable
+
+apps:
+  noipy:
+    command: noipy
+    plugs: [home, network]
+
+parts:
+  noipy:
+    plugin: python
+    source: .
+    source-type: git
