@@ -10,6 +10,7 @@ Please, follow this simple guide if you have any improvement proposal or find a 
 
 3. Do your magic
   > Recommendations
+  > - Do **not** forget: `import this`
   > - Use prefixes on branch names: `feat-` for new *features* (i.e. `feat-abc-ddns-provider`), and `fix-` *bug fixes* (i.e. `fix-ddns-updater`)
   >
   > - Follow [Karma project commit message conventions](https://karma-runner.github.io/2.0/dev/git-commit-msg.html) on your commit messages.
