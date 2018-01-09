@@ -8,6 +8,10 @@ noipy: DDNS update tool
 .. image:: https://img.shields.io/pypi/pyversions/noipy.svg
         :target: https://pypi.python.org/pypi/noipy
 
+.. image:: https://build.snapcraft.io/badge/pv8/noipy.svg
+        :target: https://build.snapcraft.io/user/pv8/noipy
+        :alt: Snap Status
+
 .. image:: https://api.travis-ci.org/pv8/noipy.svg?branch=master
         :target: https://travis-ci.org/pv8/noipy
 
@@ -42,6 +46,12 @@ Install with `pip <https://pip.pypa.io/en/stable/>`_:
 .. code-block:: bash
 
     $ pip install noipy
+
+Or with `Snappy <https://en.wikipedia.org/wiki/Snappy_(package_manager)>`_ on `supported distros <https://docs.snapcraft.io/core/install#support-overview>`_:
+
+.. code-block:: bash
+
+    $ sudo snap install noipy
 
 **Note**: **noipy** will also install the `Requests HTTP library <https://github.com/kennethreitz/requests>`_.
 
