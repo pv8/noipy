@@ -1,4 +1,4 @@
 -r requirements.txt
 flake8==3.5.0
-tox==3.5.2
+tox==3.5.3
 pytest==3.9.1
