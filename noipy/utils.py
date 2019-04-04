@@ -9,7 +9,7 @@ import socket
 
 import requests
 
-HTTPBIN_URL = "http://httpbin.org/ip"
+HTTPBIN_URL = "https://httpbin.org/ip"
 
 try:
     input = raw_input
@@ -26,7 +26,8 @@ def get_ip():
     """
     try:
         r = requests.get(HTTPBIN_URL)
-        return r.json()['origin'] if r.status_code == 200 else None
+        ip, _ = r.json()['origin'].split(',')
+        return ip if r.status_code == 200 else None
     except requests.exceptions.ConnectionError:
         return None
 
