@@ -3,11 +3,18 @@
 Changelog
 =========
 
+1.5.1 (2017-12-19)
+------------------
+
+- Support for Python 3.6
+- Minor refactor related to code style
+- Improved integration with `codeclimate <https://codeclimate.com/>`_
+
 1.5.0 (2016-10-30)
 ------------------
 
 - Automatic deploy to `PyPI <https://pypi.python.org/pypi>`_ via `Travis CI <https://docs.travis-ci.com/user/deployment/pypi/>`_
-- Minor refactorings
+- Minor refactor
 - **Dropped support for Python 3.2**
 
 1.4.4 (2016-04-11)
@@ -82,7 +89,7 @@ Changelog
 1.1.0 (2013-05-15)
 ------------------
 
-- Support for `DynDNS Update API <http://dyn.com/support/developers/api/>`_ 
+- Support for `DynDNS Update API <http://dyn.com/support/developers/api/>`_
 - DDNS auth info storage changed
 
 1.0.1 (2013-05-10)

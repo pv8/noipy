@@ -26,17 +26,14 @@ DEFAULT_PLUGIN = 'generic'
 response_messages = {
     'OK': "SUCCESS: DNS hostname successfully updated.",
     'badauth': "ERROR: Invalid username or password (badauth).",
-    'nochg': "ERROR: Invalid username or password (nochg).",
     '401': "ERROR: Invalid username or password (401).",
     '403': "ERROR: Invalid username or password (403).",
-    '!donator': "ERROR: Update request include a feature that is not "
-                "available to informed user.",
-    'notfqdn': "ERROR: The hostname specified is not a fully-qualified domain"
-               " name (not in the form hostname.dyndns.org or domain.com).",
+    '!donator': "ERROR: Update request include a feature that is not available to informed user.",
+    'notfqdn': "ERROR: The hostname specified is not a fully-qualified domain name "
+               "(not in the form hostname.dyndns.org or domain.com).",
     'nohost': "ERROR: Hostname specified does not exist in this user account.",
     'numhost': "ERROR: Too many hosts (more than 20) specified in an update. "
-               "Also returned if trying to update a round robin (which is "
-               "not allowed).",
+               "Also returned if trying to update a round robin (which is not allowed).",
     'abuse': "ERROR: Username/hostname is blocked due to update abuse.",
     'badagent': "ERROR: User agent not sent or HTTP method not permitted.",
     'dnserr': "ERROR: DNS error encountered.",
@@ -108,17 +105,15 @@ class DnsUpdaterPlugin(object):
 
         msg = None
         if self.last_ddns_response in response_messages.keys():
-            msg = response_messages.get(self.last_ddns_response)
-        elif 'good' in self.last_ddns_response \
-                or 'nochg' in self.last_ddns_response:
+            return response_messages.get(self.last_ddns_response)
+
+        if 'good' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
-            if 'good' in self.last_ddns_response:
-                msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % \
-                      ip
-            else:
-                msg = "SUCCESS: IP address (%s) is up to date, nothing was " \
-                      "changed. Additional 'nochg' updates may be considered" \
-                      " abusive." % ip
+            msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % ip
+        elif 'nochg' in self.last_ddns_response:
+            ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
+            msg = "SUCCESS: IP address (%s) is up to date, nothing was changed. " \
+                  "Additional 'nochg' updates may be considered abusive." % ip
         else:
             msg = "ERROR: Ooops! Something went wrong !!!"
 

@@ -1,25 +1,30 @@
 noipy: DDNS update tool
 =======================
 
-.. image:: https://img.shields.io/pypi/v/noipy.svg?style=flat-square
+
+.. image:: https://img.shields.io/pypi/v/noipy.svg
         :target: https://pypi.python.org/pypi/noipy/
 
-.. image:: https://img.shields.io/pypi/dm/noipy.svg?style=flat-square
-        :target: https://pypi.python.org/pypi/noipy/
+.. image:: https://img.shields.io/pypi/pyversions/noipy.svg
+        :target: https://pypi.python.org/pypi/noipy
 
-.. image:: https://img.shields.io/travis/pv8/noipy/master.svg?style=flat-square
+.. image:: https://build.snapcraft.io/badge/pv8/noipy.svg
+        :target: https://build.snapcraft.io/user/pv8/noipy
+        :alt: Snap Status
+
+.. image:: https://api.travis-ci.org/pv8/noipy.svg?branch=master
         :target: https://travis-ci.org/pv8/noipy
 
-.. image:: https://img.shields.io/codecov/c/github/pv8/noipy/master.svg?style=flat-square
-        :target: http://codecov.io/github/pv8/noipy?branch=master
+.. image:: https://codecov.io/gh/pv8/noipy/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/pv8/noipy
 
-.. image:: https://landscape.io/github/pv8/noipy/master/landscape.svg?style=flat-square
+.. image:: https://landscape.io/github/pv8/noipy/master/landscape.svg
         :target: https://landscape.io/github/pv8/noipy/master
         :alt: Code Health
 
-.. image:: https://img.shields.io/badge/Shipping_faster_with-ZenHub-5e60ba.svg?style=flat-square
-        :target: https://github.com/pv8/noipy#boards
-        :alt: ZenHub
+.. image:: https://api.codeclimate.com/v1/badges/1f700be0ea796c8a49e9/maintainability
+        :target: https://codeclimate.com/github/pv8/noipy/maintainability
+        :alt: Maintainability
 
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.29017.svg?style=flat-square
         :target: http://dx.doi.org/10.5281/zenodo.29017
@@ -32,26 +37,21 @@ now **noipy** has support for the following DDNS providers:
 - `DuckDNS <https://www.duckdns.org/install.jsp>`_
 - `DynDNS <http://dyn.com/support/developers/api/perform-update/>`_
 
-Supported by
-------------
-
-**PyCharm**
-
-.. image:: https://confluence.jetbrains.com/download/attachments/10422155/PYH
-        :target: http://www.jetbrains.com/pycharm/
-        :width: 28%
-        :alt: Download PyCharm
-
-*"Develop with pleasure!"*
 
 Installation
 ------------
 
-To install **noipy**, simply:
+Install with `pip <https://pip.pypa.io/en/stable/>`_:
 
 .. code-block:: bash
 
     $ pip install noipy
+
+Or with `Snappy <https://en.wikipedia.org/wiki/Snappy_(package_manager)>`_ on `supported distros <https://docs.snapcraft.io/core/install#support-overview>`_:
+
+.. code-block:: bash
+
+    $ sudo snap install noipy
 
 **Note**: **noipy** will also install the `Requests HTTP library <https://github.com/kennethreitz/requests>`_.
 
@@ -130,21 +130,6 @@ And type username and password when required.
 `Base64 <https://en.wikipedia.org/wiki/Base64>`_ method and is not actually
 *encrypted*!
 
-
-Contributing
-------------
-
-Improvements & Troubleshooting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you have any enhancement suggestions or find a bug, please:
-
-#. Open an `issue <https://github.com/pv8/noipy/issues>`_
-#. `Fork <https://github.com/pv8/noipy/fork>`_ the project
-#. Do your magic
-#. Please, `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and test your code
-#. Is everything working? Send a `pull request <https://github.com/pv8/noipy/pulls>`_
-
 Running tests
 ~~~~~~~~~~~~~
 
@@ -162,6 +147,12 @@ Test the code against all supported Python versions and check it against **PEP8*
 
     $ tox
 
+Check **PEP8** only:
+
+.. code-block:: bash
+
+    $ tox -e pep8
+
 
 Copyright & License
 -------------------
@@ -170,4 +161,4 @@ Copyright & License
         :target: LICENSE
         :alt: License
 
-Copyright (c) 2013 Pablo O Vieira (pv8).
+Copyright (c) 2013 Pablo Vieira (pv8).
