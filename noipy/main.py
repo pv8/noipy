@@ -13,7 +13,7 @@ import re
 import sys
 
 from noipy import utils
-
+from noipy import dwr921
 
 from noipy import dnsupdater
 from noipy import authinfo
@@ -108,7 +108,12 @@ def execute_update(args):
     response_code = None
     response_text = None
     if update_ddns:
-        ip_address = args.ip if args.ip else utils.get_ip()
+        if args.ip:
+            ip_address = args.ip 
+        elif args.dwr921ip:
+            dwr921 .get_dwr921_ip(args.dwr921ip, args.dwr921admin, args.dwr921password)
+        else:
+             utils.get_ip()
         if not ip_address:
             process_message = "Unable to get IP address. Check connection."
             exec_result = EXECUTION_RESULT_NOK
@@ -153,6 +158,10 @@ def create_parser():
                         help="noipy config directory (default: %s)" %
                              authinfo.DEFAULT_CONFIG_DIR,
                         default=authinfo.DEFAULT_CONFIG_DIR)
+    parser.add_argument('-r', '--dwr921ip',
+                        help="IP address of the dwr-921 router")                        
+    parser.add_argument('-ru', '--dwr921admin', help="admin username of dwr-921")
+    parser.add_argument('-rp', '--dwr921password', help="password for dwr-921 access")
     parser.add_argument('ip', metavar='IP_ADDRESS', nargs='?',
                         help="New host IP address. If not provided, current "
                              "external IP address will be used.")
