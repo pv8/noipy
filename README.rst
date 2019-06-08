@@ -99,6 +99,13 @@ It is also possible to inform an IP address other than the machine's current:
 
 If ``--provider`` option is not informed, **generic** will be used as provider.
 
+Behind a 4G antenna the IP address obtained may be different from the actual IP address of the router. For the Dlink DWR-921 4G it is possible to obtain the correct address with the following parameters:
+
+.. code-block:: bash
+
+    $ noipy ... -r <your DWR router IP> -ru <admin user> -rp <admin password>
+
+
 
 For details:
 
