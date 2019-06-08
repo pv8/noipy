@@ -110,10 +110,10 @@ def execute_update(args):
     if update_ddns:
         if args.ip:
             ip_address = args.ip 
-        elif args.dwr921ip:
-            dwr921 .get_dwr921_ip(args.dwr921ip, args.dwr921admin, args.dwr921password)
+        if args.dwr921ip:
+            ip_address = dwr921 .get_dwr921_ip(args.dwr921ip, args.dwr921admin, args.dwr921password)
         else:
-             utils.get_ip()
+            ip_address = utils.get_ip()
         if not ip_address:
             process_message = "Unable to get IP address. Check connection."
             exec_result = EXECUTION_RESULT_NOK

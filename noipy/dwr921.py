@@ -10,4 +10,4 @@ def get_dwr921_ip(router_ip, router_user, router_pwd):
     browser["pw"] = router_pwd
     page = browser.submit_selected()
     # Retour
-    return page.soup.find("td", id="ip3g")
+    return page.soup.find("td", id="ip3g").text
