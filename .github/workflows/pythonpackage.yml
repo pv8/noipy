@@ -44,3 +44,5 @@ jobs:
       if: matrix.python-version == '3.7'
       run: |
         ./cc-test-reporter after-build --exit-code $?
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
