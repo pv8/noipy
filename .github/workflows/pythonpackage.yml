@@ -34,7 +34,7 @@ jobs:
         chmod +x ./cc-test-reporter
     - name: Test
       run: |
-        pip install pytest pytest-sugar
+        pip install pytest pytest-cov pytest-sugar
         ./cc-test-reporter before-build
         pytest -v --cov-report term-missing --cov-report xml --cov=.
         ./cc-test-reporter after-build --exit-code $?
