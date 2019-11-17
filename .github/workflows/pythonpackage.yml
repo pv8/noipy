@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -28,7 +28,15 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - name: Setup Code Climate reporter
       run: |
-        pip install pytest
-        pytest
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+    - name: Test
+      run: |
+        pip install pytest pytest-sugar
+        ./cc-test-reporter before-build
+        pytest -v --cov-report term-missing --cov-report xml --cov=.
+        ./cc-test-reporter after-build --exit-code $?
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
