@@ -2,4 +2,4 @@
 
 flake8==3.7.9
 tox==3.14.1
-pytest==4.6.7
+pytest==4.6.8
