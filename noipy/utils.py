@@ -26,8 +26,7 @@ def get_ip():
     """
     try:
         r = requests.get(HTTPBIN_URL)
-        ip, _ = r.json()['origin'].split(',')
-        return ip if r.status_code == 200 else None
+        return r.json()['origin'] if r.status_code == 200 else None
     except requests.exceptions.ConnectionError:
         return None
 
