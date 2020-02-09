@@ -3,6 +3,11 @@
 Changelog
 =========
 
+1.5.2 (2019-04-03)
+------------------
+
+- Handle new response from https://httpbin.org/ip
+
 1.5.1 (2017-12-19)
 ------------------
 
