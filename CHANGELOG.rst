@@ -3,6 +3,11 @@
 Changelog
 =========
 
+1.5.3 (2020-02-09)
+------------------
+
+- Back to the previous response format from https://httpbin.org/ip
+
 1.5.2 (2019-04-03)
 ------------------
 
