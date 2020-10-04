@@ -8,9 +8,13 @@ noipy: DDNS update tool
 .. image:: https://img.shields.io/pypi/pyversions/noipy.svg
         :target: https://pypi.python.org/pypi/noipy
 
-.. image:: https://build.snapcraft.io/badge/pv8/noipy.svg
-        :target: https://build.snapcraft.io/user/pv8/noipy
+.. image:: https://snapcraft.io/noipy/badge.svg
+        :target: https://snapcraft.io/noipy
         :alt: Snap Status
+
+.. image:: https://snapcraft.io/noipy/trending.svg?name=0
+        :target: https://snapcraft.io/noipy
+        :alt: Snap Trending
 
 .. image:: https://api.travis-ci.org/pv8/noipy.svg?branch=master
         :target: https://travis-ci.org/pv8/noipy
