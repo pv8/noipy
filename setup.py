@@ -13,6 +13,7 @@ from noipy import __version__, __author__, __email__, __license__
 
 install_requires = [
     "requests>=2.0",
+    "dnspython",
 ]
 
 if sys.version_info[:2] < (2, 7):

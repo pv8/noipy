@@ -5,9 +5,10 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
+from IPy import IP
+
 import getpass
 import os
-import re
 import shutil
 import unittest
 
@@ -32,12 +33,18 @@ class SanityTest(unittest.TestCase):
             shutil.rmtree(self.test_dir)
 
     def test_get_ip(self):
-        ip = utils.get_ip()
+        ips = utils.get_ip()
 
-        self.assertTrue(re.match(VALID_IP_REGEX, ip), "get_ip() failed.")
+        for ip in ips.split(','):
+            try:
+                IP(ip)
+            except Exception as ex:
+                self.assertIsNone(ex, "get_ip() failed.")
 
         # monkey patch for testing (forcing ConnectionError)
         utils.HTTPBIN_URL = "http://example.nothing"
+        utils.IP4ONLY_URL = "http://example.nothing"
+        utils.IP6ONLY_URL = "http://example.nothing"
 
         ip = utils.get_ip()
         self.assertTrue(ip is None, "get_ip() should return None. IP=%s" % ip)
@@ -56,7 +63,7 @@ class PluginsTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
-        self.test_ip = "10.1.2.3"
+        self.test_ip = "10.1.2.3,2004::1:2:3:4"
 
     def tearDown(self):
         pass
@@ -168,7 +175,7 @@ class AuthInfoTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
-        self.test_ip = "10.1.2.3"
+        self.test_ip = "10.1.2.3,2004::1:2:3:4"
         self.test_dir = os.path.join(os.path.expanduser("~"), "noipy_test")
 
     def tearDown(self):
