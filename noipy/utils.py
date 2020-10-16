@@ -32,37 +32,36 @@ def read_input(message):
     return input(message)
 
 
+def _try_request_get_and_store(url, callback):
+    try:
+        r = requests.get(url)
+        if r.status_code == 200:
+            callback(r)
+    except requests.exceptions.ConnectionError:
+        pass
+
+
 def get_ip():
     """Return machine's origin IP address(es).
     """
+
     lst = []
-    try:
-        r = requests.get(IP4ONLY_URL)
-        if r.status_code == 200:
-            lst.append(r.text.split(',')[1])
-    except requests.exceptions.ConnectionError:
-        pass
-    try:
-        r = requests.get(IP6ONLY_URL)
-        if r.status_code == 200:
-            lst.append(r.text.split(',')[1])
-    except requests.exceptions.ConnectionError:
-        pass
+    for url in (IP4ONLY_URL, IP6ONLY_URL):
+        _try_request_get_and_store(
+            url,
+            lambda r: lst.append(r.text.split(',')[1])
+        )
     if not lst:
-        try:
-            r = requests.get(HTTPBIN_URL)
-            if r.status_code == 200:
-                lst.append(r.json()['origin'])
-        except requests.exceptions.ConnectionError:
-            pass
+        _try_request_get_and_store(
+            HTTPBIN_URL,
+            lambda r: lst.append(r.json()['origin'])
+        )
     if not lst:
         return None
     return ','.join(lst)
 
 
-def get_dns_ip(dnsname):
-    """Return machine's current IP address(es) in DNS.
-    """
+def _safe_resolve(dnsname, dnstype):
     resolver = dns.resolver.Resolver(StringIO("nameserver %s" % COMMON_DNS))
 
     try:
@@ -70,15 +69,17 @@ def get_dns_ip(dnsname):
     except AttributeError:
         resolve = resolver.query
 
-    lst = []
     try:
-        lst += [a.address for a in resolve(dnsname, 'A')]
+        return list(resolve(dnsname, dnstype))
     except dns.exception.DNSException:
-        pass
-    try:
-        lst += [a.address for a in resolve(dnsname, 'AAAA')]
-    except dns.exception.DNSException:
-        pass
+        return []
+
+
+def get_dns_ip(dnsname):
+    """Return machine's current IP address(es) in DNS.
+    """
+
+    lst = [a.address for a in _safe_resolve(dnsname, 'A') + _safe_resolve(dnsname, 'AAAA')]
     if not lst:
         try:
             lst.append(socket.gethostbyname(dnsname))

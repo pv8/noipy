@@ -94,7 +94,6 @@ class SanityTest(unittest.TestCase):
                         % ip)
 
 
-
 class PluginsTest(unittest.TestCase):
 
     def setUp(self):
