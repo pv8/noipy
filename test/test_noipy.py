@@ -41,10 +41,39 @@ class SanityTest(unittest.TestCase):
             except Exception as ex:
                 self.assertIsNone(ex, "get_ip() failed.")
 
+        # monkey patch for testing (forcing HTTP 404)
+        utils.IP6ONLY_URL = "http://ip6only.me/bad"
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing ConnectionError)
+        utils.IP6ONLY_URL = "http://example.nothing"
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing HTTP 404)
+        utils.IP4ONLY_URL = "http://ip4only.me/bad"
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing ConnectionError)
+        utils.IP4ONLY_URL = "http://example.nothing"
+
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing HTTP 404)
+        utils.HTTPBIN_URL = "https://httpbin.org/bad"
+
+        ip = utils.get_ip()
+        self.assertTrue(ip is None, "get_ip() should return None. IP=%s" % ip)
+
         # monkey patch for testing (forcing ConnectionError)
         utils.HTTPBIN_URL = "http://example.nothing"
-        utils.IP4ONLY_URL = "http://example.nothing"
-        utils.IP6ONLY_URL = "http://example.nothing"
 
         ip = utils.get_ip()
         self.assertTrue(ip is None, "get_ip() should return None. IP=%s" % ip)
@@ -54,9 +83,16 @@ class SanityTest(unittest.TestCase):
 
         self.assertEqual(ip, "127.0.0.1", "get_dns_ip() failed.")
 
-        ip = utils.get_dns_ip("http://example.nothing")
+        ip = utils.get_dns_ip("ip4only.me")
+        self.assertIsNotNone(ip, "get_dns_ip() should resolve IPv4")
+
+        ip = utils.get_dns_ip("ip6only.me")
+        self.assertIsNotNone(ip, "get_dns_ip() should resolve IPv6")
+
+        ip = utils.get_dns_ip("example.nothing")
         self.assertTrue(ip is None, "get_dns_ip() should return None. IP=%s"
                         % ip)
+
 
 
 class PluginsTest(unittest.TestCase):
