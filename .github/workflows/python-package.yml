@@ -14,6 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: [2.7, 3.6, 3.7, 3.8]
 
@@ -34,14 +35,24 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Setup  Code Climate test reporter
+    - name: Setup Code Climate test reporter
+      if: ${{ matrix.python-version == '3.8' }}
       run: |
         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         chmod +x ./cc-test-reporter
-    - name: Run tests
+    - name: Initialize Code Climate test reporter
+      if: ${{ matrix.python-version == '3.8' }}
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       run: |
-        ./cc-test-reporter before-build
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/$GITHUB_HEAD_REF:refs/remotes/origin/$GITHUB_HEAD_REF
+        GIT_BRANCH=$GITHUB_HEAD_REF GIT_COMMIT_SHA=$(git rev-parse origin/$GITHUB_HEAD_REF) ./cc-test-reporter before-build
+    - name: Run tests
+      run: |
         pytest -v --cov-report term-missing --cov-report xml --cov=.
-        ./cc-test-reporter after-build --exit-code $?
+    - name: Send test report to Code Climate
+      if: ${{ matrix.python-version == '3.8' }}
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      run: |
+        GIT_BRANCH=$GITHUB_HEAD_REF GIT_COMMIT_SHA=$(git rev-parse origin/$GITHUB_HEAD_REF) ./cc-test-reporter after-build --exit-code $?
