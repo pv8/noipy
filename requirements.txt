@@ -1,2 +1,2 @@
 dnspython
-requests==2.22.0
+requests==2.25.1
