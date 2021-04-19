@@ -1,5 +1,5 @@
 -r requirements.txt
 
-flake8==3.8.4
+flake8==3.9.1
 tox==3.23.0
 pytest==4.6.9
