@@ -10,6 +10,7 @@ description: |
 type: app
 confinement: strict
 grade: stable
+base: core18
 
 apps:
   noipy:
@@ -19,5 +20,6 @@ apps:
 parts:
   noipy:
     plugin: python
+    python-version: python3
     source: .
     source-type: git
