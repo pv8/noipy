@@ -5,9 +5,10 @@
 # Copyright (c) 2013 Pablo O Vieira (povieira)
 # See README.rst and LICENSE for details.
 
+from IPy import IP
+
 import getpass
 import os
-import re
 import shutil
 import unittest
 
@@ -32,9 +33,44 @@ class SanityTest(unittest.TestCase):
             shutil.rmtree(self.test_dir)
 
     def test_get_ip(self):
-        ip = utils.get_ip()
+        ips = utils.get_ip()
 
-        self.assertTrue(re.match(VALID_IP_REGEX, ip), "get_ip() failed.")
+        for ip in ips.split(','):
+            try:
+                IP(ip)
+            except Exception as ex:
+                self.assertIsNone(ex, "get_ip() failed.")
+
+        # monkey patch for testing (forcing HTTP 404)
+        utils.IP6ONLY_URL = "http://ip6only.me/bad"
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing ConnectionError)
+        utils.IP6ONLY_URL = "http://example.nothing"
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing HTTP 404)
+        utils.IP4ONLY_URL = "http://ip4only.me/bad"
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing ConnectionError)
+        utils.IP4ONLY_URL = "http://example.nothing"
+
+        ip = utils.get_ip()
+        self.assertIsNotNone(ip)
+        self.assertNotIn(',', ip)
+
+        # monkey patch for testing (forcing HTTP 404)
+        utils.HTTPBIN_URL = "https://httpbin.org/bad"
+
+        ip = utils.get_ip()
+        self.assertTrue(ip is None, "get_ip() should return None. IP=%s" % ip)
 
         # monkey patch for testing (forcing ConnectionError)
         utils.HTTPBIN_URL = "http://example.nothing"
@@ -47,7 +83,13 @@ class SanityTest(unittest.TestCase):
 
         self.assertEqual(ip, "127.0.0.1", "get_dns_ip() failed.")
 
-        ip = utils.get_dns_ip("http://example.nothing")
+        ip = utils.get_dns_ip("ip4only.me")
+        self.assertIsNotNone(ip, "get_dns_ip() should resolve IPv4")
+
+        ip = utils.get_dns_ip("ip6only.me")
+        self.assertIsNotNone(ip, "get_dns_ip() should resolve IPv6")
+
+        ip = utils.get_dns_ip("example.nothing")
         self.assertTrue(ip is None, "get_dns_ip() should return None. IP=%s"
                         % ip)
 
@@ -56,7 +98,7 @@ class PluginsTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
-        self.test_ip = "10.1.2.3"
+        self.test_ip = "10.1.2.3,2004::1:2:3:4"
 
     def tearDown(self):
         pass
@@ -168,7 +210,7 @@ class AuthInfoTest(unittest.TestCase):
 
     def setUp(self):
         self.parser = main.create_parser()
-        self.test_ip = "10.1.2.3"
+        self.test_ip = "10.1.2.3,2004::1:2:3:4"
         self.test_dir = os.path.join(os.path.expanduser("~"), "noipy_test")
 
     def tearDown(self):
