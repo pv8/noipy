@@ -24,38 +24,36 @@ DEFAULT_PLUGIN = 'generic'
 
 
 response_messages = {
-    'OK': "SUCCESS: DNS hostname successfully updated.",
-    'badauth': "ERROR: Invalid username or password (badauth).",
-    '401': "ERROR: Invalid username or password (401).",
-    '403': "ERROR: Invalid username or password (403).",
-    '!donator': "ERROR: Update request include a feature that is not available to informed user.",
-    'notfqdn': "ERROR: The hostname specified is not a fully-qualified domain name "
-               "(not in the form hostname.dyndns.org or domain.com).",
-    'nohost': "ERROR: Hostname specified does not exist in this user account.",
-    'numhost': "ERROR: Too many hosts (more than 20) specified in an update. "
-               "Also returned if trying to update a round robin (which is not allowed).",
-    'abuse': "ERROR: Username/hostname is blocked due to update abuse.",
-    'badagent': "ERROR: User agent not sent or HTTP method not permitted.",
-    'dnserr': "ERROR: DNS error encountered.",
-    '911': "ERROR: Problem on server side. Retry update in a few minutes.",
-    'KO': "ERROR: Hostname and/or token incorrect.",
+    'OK': 'SUCCESS: DNS hostname successfully updated.',
+    'badauth': 'ERROR: Invalid username or password (badauth).',
+    '401': 'ERROR: Invalid username or password (401).',
+    '403': 'ERROR: Invalid username or password (403).',
+    '!donator': 'ERROR: Update request include a feature that is not available to informed user.',
+    'notfqdn': 'ERROR: The hostname specified is not a fully-qualified domain name '
+    '(not in the form hostname.dyndns.org or domain.com).',
+    'nohost': 'ERROR: Hostname specified does not exist in this user account.',
+    'numhost': 'ERROR: Too many hosts (more than 20) specified in an update. '
+    'Also returned if trying to update a round robin (which is not allowed).',
+    'abuse': 'ERROR: Username/hostname is blocked due to update abuse.',
+    'badagent': 'ERROR: User agent not sent or HTTP method not permitted.',
+    'dnserr': 'ERROR: DNS error encountered.',
+    '911': 'ERROR: Problem on server side. Retry update in a few minutes.',
+    'KO': 'ERROR: Hostname and/or token incorrect.',
 }
 
 
 class DnsUpdaterPlugin(object):
-    """ Base class for any DDNS updater
-    """
+    """Base class for any DDNS updater"""
 
-    auth_type = ""
+    auth_type = ''
 
     def __init__(self, auth, hostname, options=None):
-        """Init plugin with auth information, hostname and IP address.
-        """
+        """Init plugin with auth information, hostname and IP address."""
 
         self._auth = auth
         self._hostname = hostname
         self._options = {} if options is None else options
-        self.last_ddns_response = ""
+        self.last_ddns_response = ''
 
     @property
     def auth(self):
@@ -77,21 +75,18 @@ class DnsUpdaterPlugin(object):
         pass
 
     def update_dns(self, new_ip):
-        """Call No-IP API based on dict login_info and return the status code.
-        """
+        """Call No-IP API based on dict login_info and return the status code."""
 
         headers = None
         if self.auth_type == 'T':
-            api_call_url = self._base_url.format(hostname=self.hostname,
-                                                 token=self.auth.token,
-                                                 ip=new_ip)
+            api_call_url = self._base_url.format(
+                hostname=self.hostname, token=self.auth.token, ip=new_ip
+            )
         else:
-            api_call_url = self._base_url.format(hostname=self.hostname,
-                                                 ip=new_ip)
+            api_call_url = self._base_url.format(hostname=self.hostname, ip=new_ip)
             headers = {
-                'Authorization': "Basic %s" %
-                                 self.auth.base64key.decode('utf-8'),
-                'User-Agent': "%s/%s %s" % (__title__, __version__, __email__)
+                'Authorization': 'Basic %s' % self.auth.base64key.decode('utf-8'),
+                'User-Agent': '%s/%s %s' % (__title__, __version__, __email__),
             }
 
         r = requests.get(api_call_url, headers=headers)
@@ -101,7 +96,7 @@ class DnsUpdaterPlugin(object):
 
     @property
     def status_message(self):
-        """Return friendly response from API based on response code. """
+        """Return friendly response from API based on response code."""
 
         msg = None
         if self.last_ddns_response in response_messages.keys():
@@ -109,13 +104,15 @@ class DnsUpdaterPlugin(object):
 
         if 'good' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
-            msg = "SUCCESS: DNS hostname IP (%s) successfully updated." % ip
+            msg = 'SUCCESS: DNS hostname IP (%s) successfully updated.' % ip
         elif 'nochg' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
-            msg = "SUCCESS: IP address (%s) is up to date, nothing was changed. " \
-                  "Additional 'nochg' updates may be considered abusive." % ip
+            msg = (
+                'SUCCESS: IP address (%s) is up to date, nothing was changed. '
+                "Additional 'nochg' updates may be considered abusive." % ip
+            )
         else:
-            msg = "ERROR: Ooops! Something went wrong !!!"
+            msg = 'ERROR: Ooops! Something went wrong !!!'
 
         return msg
 
@@ -124,31 +121,32 @@ class DnsUpdaterPlugin(object):
 
 
 class NoipDnsUpdater(DnsUpdaterPlugin):
-    """No-IP DDNS provider plugin """
+    """No-IP DDNS provider plugin"""
 
-    auth_type = "P"
+    auth_type = 'P'
 
     @property
     def _base_url(self):
-        return "https://dynupdate.no-ip.com/nic/update?hostname={hostname}" \
-               "&myip={ip}"
+        return 'https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}'
 
 
 class DynDnsUpdater(DnsUpdaterPlugin):
-    """DynDNS DDNS provider plugin """
+    """DynDNS DDNS provider plugin"""
 
-    auth_type = "P"
+    auth_type = 'P'
 
     @property
     def _base_url(self):
-        return "http://members.dyndns.org/nic/update?hostname={hostname}" \
-               "&myip={ip}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG"
+        return (
+            'http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG'
+            '&mx=NOCHG&backmx=NOCHG'
+        )
 
 
 class DuckDnsUpdater(DnsUpdaterPlugin):
-    """DuckDNS DDNS provider plugin """
+    """DuckDNS DDNS provider plugin"""
 
-    auth_type = "T"
+    auth_type = 'T'
 
     @property
     def hostname(self):
@@ -160,18 +158,20 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
 
     @property
     def _base_url(self):
-        return "https://www.duckdns.org/update?domains={hostname}" \
-               "&token={token}&ip={ip}"
+        return 'https://www.duckdns.org/update?domains={hostname}&token={token}&ip={ip}'
 
 
 class GenericDnsUpdater(DnsUpdaterPlugin):
-    """ Generic DDNS provider plugin - accepts a custom specification for the
+    """Generic DDNS provider plugin - accepts a custom specification for the
     DDNS base url
     """
 
-    auth_type = "P"
+    auth_type = 'P'
 
     @property
     def _base_url(self):
-        return "{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG" \
-               "&mx=NOCHG&backmx=NOCHG".format(url=self._options['url'])
+        return (
+            '{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG'.format(
+                url=self._options['url']
+            )
+        )
