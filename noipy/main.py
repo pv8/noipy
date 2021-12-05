@@ -117,8 +117,7 @@ def execute_update(args):
             updater = provider_class(auth, args.hostname, updater_options)
             print(
                 'Updating hostname "%s" with IP address %s '
-                '[provider: "%s"]...'
-                % (args.hostname, ip_address, args.provider)
+                '[provider: "%s"]...' % (args.hostname, ip_address, args.provider)
             )
             response_code, response_text = updater.update_dns(ip_address)
             process_message = updater.status_message
@@ -134,9 +133,7 @@ def execute_update(args):
 
 
 def create_parser():
-    parser = argparse.ArgumentParser(
-        description='Update DDNS IP address on selected provider.'
-    )
+    parser = argparse.ArgumentParser(description='Update DDNS IP address on selected provider.')
     parser.add_argument('-u', '--usertoken', help='provider username or token')
     parser.add_argument('-p', '--password', help='provider password when apply')
     parser.add_argument('-n', '--hostname', help='provider hostname to be updated')
@@ -149,15 +146,13 @@ def create_parser():
     parser.add_argument('--url', help='custom DDNS server address')
     parser.add_argument(
         '--store',
-        help='store DDNS authentication information and '
-        'update the hostname if it is provided',
+        help='store DDNS authentication information and update the hostname if it is provided',
         action='store_true',
     )
     parser.add_argument(
         '-c',
         '--config',
-        help='noipy config directory (default: %s)'
-        % authinfo.DEFAULT_CONFIG_DIR,
+        help='noipy config directory (default: %s)' % authinfo.DEFAULT_CONFIG_DIR,
         default=authinfo.DEFAULT_CONFIG_DIR,
     )
     parser.add_argument(

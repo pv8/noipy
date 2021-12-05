@@ -63,9 +63,7 @@ def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
     auth_file = None
     try:
         # only for custom locations
-        _create_config_dir(
-            config_location, 'Creating custom config directory [%s]... '
-        )
+        _create_config_dir(config_location, 'Creating custom config directory [%s]... ')
 
         config_dir = os.path.join(config_location, NOIPY_CONFIG)
         _create_config_dir(config_dir, 'Creating directory [%s]... ')

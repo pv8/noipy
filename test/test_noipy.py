@@ -17,9 +17,7 @@ from noipy import main
 from noipy import utils
 
 VALID_IP_REGEX = (
-    r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25'
-    r'[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4]'
-    r'[0-9]|25[0-5])$'
+    r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
 )
 
 
@@ -49,9 +47,7 @@ class SanityTest(unittest.TestCase):
         self.assertEqual(ip, '127.0.0.1', 'get_dns_ip() failed.')
 
         ip = utils.get_dns_ip('http://example.nothing')
-        self.assertTrue(
-            ip is None, 'get_dns_ip() should return None. IP=%s' % ip
-        )
+        self.assertTrue(ip is None, 'get_dns_ip() should return None. IP=%s' % ip)
 
 
 class PluginsTest(unittest.TestCase):
@@ -63,9 +59,7 @@ class PluginsTest(unittest.TestCase):
         pass
 
     def test_instance_str(self):
-        plugin = dnsupdater.NoipDnsUpdater(
-            auth=None, hostname='noipy.no-ip.org'
-        )
+        plugin = dnsupdater.NoipDnsUpdater(auth=None, hostname='noipy.no-ip.org')
         self.assertEqual(str(plugin), 'NoipDnsUpdater(host=noipy.no-ip.org)')
 
     def test_noip_plugin(self):
@@ -94,8 +88,7 @@ class PluginsTest(unittest.TestCase):
         # depending on which way the window is blowing
         self.assertTrue(
             result.get('response_code') in (200, 401),
-            'Invalid response code: %s. Should be 200.'
-            % result.get('response_code'),
+            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
         )
 
     def test_dyndns_plugin(self):
@@ -123,8 +116,7 @@ class PluginsTest(unittest.TestCase):
         self.assertEqual(
             result.get('response_code'),
             200,
-            'Invalid response code: %s. Should be 200.'
-            % result.get('response_code'),
+            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
         )
 
     def test_duckdns_plugin(self):
@@ -150,8 +142,7 @@ class PluginsTest(unittest.TestCase):
         self.assertEqual(
             result.get('response_code'),
             200,
-            'Invalid response code: %s. Should be 200.'
-            % result.get('response_code'),
+            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
         )
 
     def test_generic_plugin(self):
@@ -182,8 +173,7 @@ class PluginsTest(unittest.TestCase):
         # depending on which way the window is blowing
         self.assertTrue(
             result.get('response_code') in (200, 401),
-            'Invalid response code: %s. Should be 200.'
-            % result.get('response_code'),
+            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
         )
 
     def test_generic_plugin_malformed_url(self):
@@ -261,23 +251,17 @@ class AuthInfoTest(unittest.TestCase):
         auth1 = authinfo.ApiAuth('username', 'password')
         auth2 = authinfo.ApiAuth.get_instance(b'dXNlcm5hbWU6cGFzc3dvcmQ=')
 
-        self.assertEqual(
-            auth1, auth2, 'ApiAuth.get_instance fail for ' 'password.'
-        )
+        self.assertEqual(auth1, auth2, 'ApiAuth.get_instance fail for password.')
 
     def test_get_token_property_with_password(self):
         auth = authinfo.ApiAuth('username', 'password')
 
         try:
             token = auth.token
-            self.fail(
-                "A 'NotImplementedError' should be raised. Token=%s" % token
-            )
+            self.fail("A 'NotImplementedError' should be raised. Token=%s" % token)
         except Exception as e:
             if not isinstance(e, NotImplementedError):
-                self.fail(
-                    "A 'NotImplementedError' should be raised. Got: %s" % e
-                )
+                self.fail("A 'NotImplementedError' should be raised. Got: %s" % e)
 
     def test_get_instance_token(self):
         token = '1234567890ABCDEFG'
@@ -365,8 +349,7 @@ class AuthInfoTest(unittest.TestCase):
         # depending on which way the window is blowing
         self.assertTrue(
             result.get('response_code') in (200, 401),
-            'Invalid response code: %s. Should be 200.'
-            % result.get('response_code'),
+            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
         )
 
     def test_store_from_stdin_input(self):
@@ -503,9 +486,7 @@ class AuthInfoTest(unittest.TestCase):
 
     def test_ioerror(self):
         try:
-            auth = authinfo.load(
-                provider='noip', config_location=self.test_dir
-            )
+            auth = authinfo.load(provider='noip', config_location=self.test_dir)
             self.fail("An 'IOError' should be raised. auth=%s" + auth)
         except Exception as e:
             if not isinstance(e, IOError):
@@ -532,11 +513,8 @@ class AuthInfoTest(unittest.TestCase):
         )
 
         self.assertTrue(
-            result.get('process_message').startswith(
-                'No stored auth information found for provider:'
-            ),
-            "Status message should be 'No stored auth information found "
-            "for provider: ...'",
+            result.get('process_message').startswith('No stored auth information found for provider:'),
+            "Status message should be 'No stored auth information found " "for provider: ...'",
         )
 
 
@@ -561,11 +539,8 @@ class GeneralTest(unittest.TestCase):
         )
 
         self.assertTrue(
-            result.get('process_message').startswith(
-                'Warning: The hostname to be updated must be provided.'
-            ),
-            "Status message should start with 'Warning: "
-            "The hostname to be updated must be provided.'",
+            result.get('process_message').startswith('Warning: The hostname to be updated must be provided.'),
+            "Status message should start with 'Warning: " "The hostname to be updated must be provided.'",
         )
 
     def test_unchanged_ip(self):
@@ -623,9 +598,7 @@ class GeneralTest(unittest.TestCase):
         )
 
         self.assertTrue(
-            result.get('process_message').startswith(
-                'Unable to get IP address'
-            ),
+            result.get('process_message').startswith('Unable to get IP address'),
             "Status message should be 'Unable to get IP address'.",
         )
 
@@ -635,10 +608,7 @@ class GeneralTest(unittest.TestCase):
         plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
         try:
             plugin.update_dns('10.1.1.1')
-            self.fail(
-                'Not implemented plugin should fail: '
-                "'NoneType' object has no attribute 'format'"
-            )
+            self.fail('Not implemented plugin should fail: ' "'NoneType' object has no attribute 'format'")
         except AttributeError as e:
             self.assertEqual(
                 str(e),
@@ -646,10 +616,7 @@ class GeneralTest(unittest.TestCase):
                 "_get_base_url() should return 'NoneType'",
             )
         except Exception as e:
-            self.fail(
-                "_get_base_url() should return 'AttributeError'. "
-                'Got %s:%s' % (type(e).__name__, e)
-            )
+            self.fail("_get_base_url() should return 'AttributeError'. " 'Got %s:%s' % (type(e).__name__, e))
 
     def test_dns_plugin_status_message(self):
         auth = authinfo.ApiAuth('username', 'password')
@@ -658,10 +625,7 @@ class GeneralTest(unittest.TestCase):
 
         # badauth code
         plugin.last_ddns_response = 'badauth'
-        expected_message = (
-            'ERROR: Invalid username or password (%s).'
-            % plugin.last_ddns_response
-        )
+        expected_message = 'ERROR: Invalid username or password (%s).' % plugin.last_ddns_response
         self.assertEqual(
             plugin.status_message,
             expected_message,
@@ -670,9 +634,7 @@ class GeneralTest(unittest.TestCase):
 
         # good <IP> code
         plugin.last_ddns_response = 'good 1.1.1.1'
-        expected_message = (
-            'SUCCESS: DNS hostname IP (1.1.1.1) successfully ' 'updated.'
-        )
+        expected_message = 'SUCCESS: DNS hostname IP (1.1.1.1) successfully updated.'
         self.assertEqual(
             plugin.status_message,
             expected_message,
@@ -694,10 +656,7 @@ class GeneralTest(unittest.TestCase):
 
         # !donator code
         plugin.last_ddns_response = '!donator'
-        expected_message = (
-            'ERROR: Update request include a feature that is '
-            'not available to informed user.'
-        )
+        expected_message = 'ERROR: Update request include a feature that is not available to informed user.'
         self.assertEqual(
             plugin.status_message,
             expected_message,
@@ -719,9 +678,7 @@ class GeneralTest(unittest.TestCase):
 
         # nohost code
         plugin.last_ddns_response = 'nohost'
-        expected_message = (
-            'ERROR: Hostname specified does not exist in this' ' user account.'
-        )
+        expected_message = 'ERROR: Hostname specified does not exist in this user account.'
         self.assertEqual(
             plugin.status_message,
             expected_message,
@@ -743,9 +700,7 @@ class GeneralTest(unittest.TestCase):
 
         # abuse code
         plugin.last_ddns_response = 'abuse'
-        expected_message = (
-            'ERROR: Username/hostname is blocked due to ' 'update abuse.'
-        )
+        expected_message = 'ERROR: Username/hostname is blocked due to update abuse.'
         self.assertEqual(
             plugin.status_message,
             expected_message,
@@ -754,9 +709,7 @@ class GeneralTest(unittest.TestCase):
 
         # badagent code
         plugin.last_ddns_response = 'badagent'
-        expected_message = (
-            'ERROR: User agent not sent or HTTP method not ' 'permitted.'
-        )
+        expected_message = 'ERROR: User agent not sent or HTTP method not permitted.'
         self.assertEqual(
             plugin.status_message,
             expected_message,
@@ -774,9 +727,7 @@ class GeneralTest(unittest.TestCase):
 
         # 911 code
         plugin.last_ddns_response = '911'
-        expected_message = (
-            'ERROR: Problem on server side. Retry update in a' ' few minutes.'
-        )
+        expected_message = 'ERROR: Problem on server side. Retry update in a few minutes.'
         self.assertEqual(
             plugin.status_message,
             expected_message,

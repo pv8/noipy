@@ -79,9 +79,7 @@ class DnsUpdaterPlugin(object):
 
         headers = None
         if self.auth_type == 'T':
-            api_call_url = self._base_url.format(
-                hostname=self.hostname, token=self.auth.token, ip=new_ip
-            )
+            api_call_url = self._base_url.format(hostname=self.hostname, token=self.auth.token, ip=new_ip)
         else:
             api_call_url = self._base_url.format(hostname=self.hostname, ip=new_ip)
             headers = {
@@ -138,8 +136,7 @@ class DynDnsUpdater(DnsUpdaterPlugin):
     @property
     def _base_url(self):
         return (
-            'http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG'
-            '&mx=NOCHG&backmx=NOCHG'
+            'http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG' '&mx=NOCHG&backmx=NOCHG'
         )
 
 
@@ -170,8 +167,6 @@ class GenericDnsUpdater(DnsUpdaterPlugin):
 
     @property
     def _base_url(self):
-        return (
-            '{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG'.format(
-                url=self._options['url']
-            )
+        return '{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG'.format(
+            url=self._options['url']
         )
