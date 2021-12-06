@@ -83,8 +83,8 @@ class DnsUpdaterPlugin(object):
         else:
             api_call_url = self._base_url.format(hostname=self.hostname, ip=new_ip)
             headers = {
-                'Authorization': 'Basic %s' % self.auth.base64key.decode('utf-8'),
-                'User-Agent': '%s/%s %s' % (__title__, __version__, __email__),
+                'Authorization': 'Basic {}'.format(self.auth.base64key.decode('utf-8')),
+                'User-Agent': '{}/{} {}'.format(__title__, __version__, __email__),
             }
 
         r = requests.get(api_call_url, headers=headers)
@@ -102,12 +102,12 @@ class DnsUpdaterPlugin(object):
 
         if 'good' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
-            msg = 'SUCCESS: DNS hostname IP (%s) successfully updated.' % ip
+            msg = 'SUCCESS: DNS hostname IP ({}) successfully updated.'.format(ip)
         elif 'nochg' in self.last_ddns_response:
             ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
             msg = (
-                'SUCCESS: IP address (%s) is up to date, nothing was changed. '
-                "Additional 'nochg' updates may be considered abusive." % ip
+                'SUCCESS: IP address ({}) is up to date, nothing was changed. '
+                "Additional 'nochg' updates may be considered abusive.".format(ip)
             )
         else:
             msg = 'ERROR: Ooops! Something went wrong !!!'
@@ -115,7 +115,7 @@ class DnsUpdaterPlugin(object):
         return msg
 
     def __str__(self):
-        return '%s(host=%s)' % (type(self).__name__, self.hostname)
+        return '{}(host={})'.format(type(self).__name__, self.hostname)
 
 
 class NoipDnsUpdater(DnsUpdaterPlugin):

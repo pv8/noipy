@@ -39,7 +39,7 @@ class SanityTest(unittest.TestCase):
         utils.HTTPBIN_URL = 'http://example.nothing'
 
         ip = utils.get_ip()
-        self.assertTrue(ip is None, 'get_ip() should return None. IP=%s' % ip)
+        self.assertTrue(ip is None, 'get_ip() should return None. IP={}'.format(ip))
 
     def test_get_dns_ip(self):
         ip = utils.get_dns_ip('localhost')
@@ -47,7 +47,7 @@ class SanityTest(unittest.TestCase):
         self.assertEqual(ip, '127.0.0.1', 'get_dns_ip() failed.')
 
         ip = utils.get_dns_ip('http://example.nothing')
-        self.assertTrue(ip is None, 'get_dns_ip() should return None. IP=%s' % ip)
+        self.assertTrue(ip is None, 'get_dns_ip() should return None. IP={}'.format(ip))
 
 
 class PluginsTest(unittest.TestCase):
@@ -88,7 +88,7 @@ class PluginsTest(unittest.TestCase):
         # depending on which way the window is blowing
         self.assertTrue(
             result.get('response_code') in (200, 401),
-            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
+            'Invalid response code: {}. Should be 200.'.format(result.get('response_code')),
         )
 
     def test_dyndns_plugin(self):
@@ -116,7 +116,7 @@ class PluginsTest(unittest.TestCase):
         self.assertEqual(
             result.get('response_code'),
             200,
-            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
+            'Invalid response code: {}. Should be 200.'.format(result.get('response_code')),
         )
 
     def test_duckdns_plugin(self):
@@ -142,7 +142,7 @@ class PluginsTest(unittest.TestCase):
         self.assertEqual(
             result.get('response_code'),
             200,
-            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
+            'Invalid response code: {}. Should be 200.'.format(result.get('response_code')),
         )
 
     def test_generic_plugin(self):
@@ -173,7 +173,7 @@ class PluginsTest(unittest.TestCase):
         # depending on which way the window is blowing
         self.assertTrue(
             result.get('response_code') in (200, 401),
-            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
+            'Invalid response code: {}. Should be 200.'.format(result.get('response_code')),
         )
 
     def test_generic_plugin_malformed_url(self):
@@ -258,10 +258,10 @@ class AuthInfoTest(unittest.TestCase):
 
         try:
             token = auth.token
-            self.fail("A 'NotImplementedError' should be raised. Token=%s" % token)
+            self.fail("A 'NotImplementedError' should be raised. Token={}".format(token))
         except Exception as e:
             if not isinstance(e, NotImplementedError):
-                self.fail("A 'NotImplementedError' should be raised. Got: %s" % e)
+                self.fail("A 'NotImplementedError' should be raised. Got: {}".format(e))
 
     def test_get_instance_token(self):
         token = '1234567890ABCDEFG'
@@ -349,7 +349,7 @@ class AuthInfoTest(unittest.TestCase):
         # depending on which way the window is blowing
         self.assertTrue(
             result.get('response_code') in (200, 401),
-            'Invalid response code: %s. Should be 200.' % result.get('response_code'),
+            'Invalid response code: {}. Should be 200.'.format(result.get('response_code')),
         )
 
     def test_store_from_stdin_input(self):
@@ -487,10 +487,10 @@ class AuthInfoTest(unittest.TestCase):
     def test_ioerror(self):
         try:
             auth = authinfo.load(provider='noip', config_location=self.test_dir)
-            self.fail("An 'IOError' should be raised. auth=%s" + auth)
+            self.fail("An 'IOError' should be raised. auth={}" + auth)
         except Exception as e:
             if not isinstance(e, IOError):
-                self.fail("An 'IOError' should be raised. Got: %s" % e)
+                self.fail("An 'IOError' should be raised. Got: {}".format(e))
 
     def test_update_without_authinfo(self):
         cmd_args = [
@@ -616,7 +616,7 @@ class GeneralTest(unittest.TestCase):
                 "_get_base_url() should return 'NoneType'",
             )
         except Exception as e:
-            self.fail("_get_base_url() should return 'AttributeError'. " 'Got %s:%s' % (type(e).__name__, e))
+            self.fail("_get_base_url() should return 'AttributeError'. " 'Got {}:{}'.format(type(e).__name__, e))
 
     def test_dns_plugin_status_message(self):
         auth = authinfo.ApiAuth('username', 'password')
@@ -625,7 +625,7 @@ class GeneralTest(unittest.TestCase):
 
         # badauth code
         plugin.last_ddns_response = 'badauth'
-        expected_message = 'ERROR: Invalid username or password (%s).' % plugin.last_ddns_response
+        expected_message = 'ERROR: Invalid username or password ({}).'.format(plugin.last_ddns_response)
         self.assertEqual(
             plugin.status_message,
             expected_message,

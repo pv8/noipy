@@ -80,7 +80,7 @@ def execute_update(args):
         else:
             update_ddns = False
             exec_result = EXECUTION_RESULT_NOK
-            process_message = 'No stored auth information found for provider: "%s"' % args.provider
+            process_message = 'No stored auth information found for provider: "{}"'.format(args.provider)
     else:  # no arguments
         update_ddns = False
         exec_result = EXECUTION_RESULT_NOK
@@ -116,8 +116,8 @@ def execute_update(args):
         else:
             updater = provider_class(auth, args.hostname, updater_options)
             print(
-                'Updating hostname "%s" with IP address %s '
-                '[provider: "%s"]...' % (args.hostname, ip_address, args.provider)
+                'Updating hostname "{}" with IP address {} '
+                '[provider: "{}"]...'.format(args.hostname, ip_address, args.provider)
             )
             response_code, response_text = updater.update_dns(ip_address)
             process_message = updater.status_message
@@ -139,7 +139,7 @@ def create_parser():
     parser.add_argument('-n', '--hostname', help='provider hostname to be updated')
     parser.add_argument(
         '--provider',
-        help='DDNS provider plugin (default: %s)' % dnsupdater.DEFAULT_PLUGIN,
+        help='DDNS provider plugin (default: {})'.format(dnsupdater.DEFAULT_PLUGIN),
         choices=dnsupdater.AVAILABLE_PLUGINS.keys(),
         default=dnsupdater.DEFAULT_PLUGIN,
     )
@@ -152,7 +152,7 @@ def create_parser():
     parser.add_argument(
         '-c',
         '--config',
-        help='noipy config directory (default: %s)' % authinfo.DEFAULT_CONFIG_DIR,
+        help='noipy config directory (default: {})'.format(authinfo.DEFAULT_CONFIG_DIR),
         default=authinfo.DEFAULT_CONFIG_DIR,
     )
     parser.add_argument(
@@ -166,7 +166,7 @@ def create_parser():
 
 
 def main():
-    print('== noipy DDNS updater tool v%s ==' % __version__)
+    print('== noipy DDNS updater tool v{} =='.format(__version__))
     parser = create_parser()
     args = parser.parse_args()
 

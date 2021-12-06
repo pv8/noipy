@@ -1,4 +1,4 @@
-VERSION := $(shell python -c "import noipy; print 'v%s' % noipy.__version__")
+VERSION := $(shell python -c "from __future__ import print_function; import noipy; print('v{}'.format(noipy.__version__))")
 
 .PHONY: all
 all: clean tests dist
