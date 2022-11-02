@@ -9,8 +9,6 @@ import socket
 
 import requests
 
-HTTPBIN_URL = 'https://httpbin.org/ip'
-
 try:
     input = raw_input
 except NameError:
@@ -21,10 +19,10 @@ def read_input(message):
     return input(message)
 
 
-def get_ip():
+def get_ip(httpbin_url):
     """Return machine's origin IP address."""
     try:
-        r = requests.get(HTTPBIN_URL)
+        r = requests.get(httpbin_url)
         return r.json()['origin'] if r.status_code == 200 else None
     except requests.exceptions.ConnectionError:
         return None

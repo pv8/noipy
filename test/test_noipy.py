@@ -31,14 +31,12 @@ class SanityTest(unittest.TestCase):
             shutil.rmtree(self.test_dir)
 
     def test_get_ip(self):
-        ip = utils.get_ip()
+        ip = utils.get_ip('https://httpbin.org/ip')
 
         self.assertTrue(re.match(VALID_IP_REGEX, ip), 'get_ip() failed.')
 
         # monkey patch for testing (forcing ConnectionError)
-        utils.HTTPBIN_URL = 'http://example.nothing'
-
-        ip = utils.get_ip()
+        ip = utils.get_ip('http://example.nothing')
         self.assertTrue(ip is None, 'get_ip() should return None. IP={}'.format(ip))
 
     def test_get_dns_ip(self):
