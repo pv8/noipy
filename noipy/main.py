@@ -107,7 +107,7 @@ def execute_update(args):
     response_code = None
     response_text = None
     if update_ddns:
-        ip_address = args.ip if args.ip else utils.get_ip()
+        ip_address = args.ip if args.ip else utils.get_ip(args.sourceip)
         if not ip_address:
             process_message = 'Unable to get IP address. Check connection.'
             exec_result = EXECUTION_RESULT_NOK
@@ -137,6 +137,7 @@ def create_parser():
     parser.add_argument('-u', '--usertoken', help='provider username or token')
     parser.add_argument('-p', '--password', help='provider password when apply')
     parser.add_argument('-n', '--hostname', help='provider hostname to be updated')
+    parser.add_argument('-s', '--sourceip', help='source ip to use')
     parser.add_argument(
         '--provider',
         help='DDNS provider plugin (default: {})'.format(dnsupdater.DEFAULT_PLUGIN),
