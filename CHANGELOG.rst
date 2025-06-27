@@ -3,6 +3,20 @@
 Changelog
 =========
 
+2.0.0 (2024-12-19)
+------------------
+
+- **BREAKING CHANGE**: Dropped support for Python 2.7 and Python 3.6/3.7
+- **BREAKING CHANGE**: Now requires Python 3.8 or higher
+- Remove Python 2/3 compatibility code (`from __future__ import print_function`, `raw_input`)
+- Update dependencies to modern versions:
+  - pytest: 4.6.9 → 7.4.0 (Python 3.13 compatible)
+  - flake8: 3.8.4 → 6.1.0
+  - tox: 3.25.0 → 4.7.0
+- Add support for Python 3.10, 3.11, 3.12, 3.13
+- Fix tox configuration for modern Python versions
+- Remove `argparse` conditional import (built-in since Python 3.2)
+
 1.5.3 (2020-02-09)
 ------------------
 
