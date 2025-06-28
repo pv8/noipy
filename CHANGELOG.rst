@@ -3,7 +3,7 @@
 Changelog
 =========
 
-2.0.0 (2024-12-19)
+2.0.0 (2025-06-28)
 ------------------
 
 - **BREAKING CHANGE**: Dropped support for Python 2.7 and Python 3.6/3.7
@@ -16,6 +16,8 @@ Changelog
 - Add support for Python 3.10, 3.11, 3.12, 3.13
 - Fix tox configuration for modern Python versions
 - Remove `argparse` conditional import (built-in since Python 3.2)
+- GitHub Actions workflow modernization
+- Release Drafter automation for better release notes
 
 1.5.3 (2020-02-09)
 ------------------
