@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [2.7, 3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v2
@@ -40,6 +40,6 @@ jobs:
         pytest -v --cov-report term-missing --cov-report xml --cov=.
     - name: Send test report to Code Climate
       uses: paambaati/codeclimate-action@v3.0.0
-      if: ${{ matrix.python-version == '3.9' }}
+      if: ${{ matrix.python-version == '3.13' }}
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}

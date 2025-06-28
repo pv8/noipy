@@ -11,13 +11,9 @@ import requests
 
 HTTPBIN_URL = 'https://httpbin.org/ip'
 
-try:
-    input = raw_input
-except NameError:
-    pass
-
 
 def read_input(message):
+    """Read input from user."""
     return input(message)
 
 
