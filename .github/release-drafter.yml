@@ -1,4 +1,4 @@
-name-template: 'v$RESOLVED_VERSION'
+name-template: 'noipy v$RESOLVED_VERSION (date: $CURRENT_DATE)'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
@@ -98,6 +98,8 @@ template: |
   ## 🚀 Release $RESOLVED_VERSION
 
   $CHANGES
+
+  **[Full Changelog](https://github.com/pv8/noipy/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION)**
 
   ### 📦 Installation
   ```bash
