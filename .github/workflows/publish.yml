@@ -29,8 +29,7 @@ jobs:
     - name: Store the distribution packages
       uses: actions/upload-artifact@v4
       with:
-        name: python-package-distributions
-        path: dist/
+        path: ./dist
 
   upload-assets:
     name: Upload release assets
@@ -41,15 +40,14 @@ jobs:
       contents: write
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
     - name: Download all the dists
       uses: actions/download-artifact@v4
       with:
-        name: python-package-distributions
-        path: dist/
+        path: ./dist
     - name: Upload assets to release
-      run: |
-        for file in dist/*; do
-          gh release upload "${{ github.event.release.tag_name }}" "$file" --clobber
+      run: gh release upload --repo "${{ github.repository }}" "${{ github.event.release.tag_name }}" dist/*
         done
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
