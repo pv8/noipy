@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "noipy"
+dynamic = ["version"]
+description = "Command line tool for DDNS IP address updating."
+readme = "README.rst"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Pablo V", email = "noipy@pv8.dev"}
+]
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.0"
+]
+keywords = ["no-ip", "dyndns", "duckdns", "ddns", "api"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: System Administrators",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Internet :: Name Service (DNS)"
+]
+
+[project.urls]
+Repository = "https://github.com/pv8/noipy"
+Changelog = "https://github.com/pv8/noipy/blob/main/CHANGELOG.rst"
+Issues = "https://github.com/pv8/noipy/issues"
+
+[project.scripts]
+noipy = "noipy.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["noipy*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "noipy.__version__"}
+
+[bdist_wheel]
+universal = true
