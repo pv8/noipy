@@ -14,7 +14,7 @@ authors = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "requests>=2.0"
+    "requests>=2.32.4"
 ]
 keywords = ["no-ip", "dyndns", "duckdns", "ddns", "api"]
 classifiers = [
@@ -32,6 +32,16 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Internet :: Name Service (DNS)"
+]
+
+[project.optional-dependencies]
+tests = [
+    "tox>=4.7.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+lint = [
+    "flake8>=6.1.0",
 ]
 
 [project.urls]
