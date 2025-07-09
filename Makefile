@@ -11,7 +11,7 @@ dist: clean
 
 devdeps:
 	@echo "=> Installing dev dependencies"
-	pip install -r requirements_dev.txt
+	pip install -e ".[tests,lint]"
 
 .PHONY: tests
 tests: devdeps

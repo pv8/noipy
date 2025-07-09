@@ -27,8 +27,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest-cov coverage
-        pip install -r requirements-dev.txt
+        pip install coverage
+        pip install -e ".[tests,lint]"
     - name: Run linter
       run: |
         # stop the build if there are Python syntax errors or undefined names
