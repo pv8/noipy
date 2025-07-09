@@ -61,3 +61,13 @@ version = {attr = "noipy.__version__"}
 
 [bdist_wheel]
 universal = true
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
