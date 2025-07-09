@@ -8,6 +8,9 @@ noipy: DDNS update tool
 .. image:: https://img.shields.io/pypi/pyversions/noipy.svg
         :target: https://pypi.python.org/pypi/noipy
 
+.. image:: https://codecov.io/gh/pv8/noipy/branch/main/graph/badge.svg
+        :target: https://codecov.io/gh/pv8/noipy
+
 .. image:: https://snapcraft.io/noipy/badge.svg
         :target: https://snapcraft.io/noipy
         :alt: Snap Status
@@ -15,23 +18,6 @@ noipy: DDNS update tool
 .. image:: https://snapcraft.io/noipy/trending.svg?name=0
         :target: https://snapcraft.io/noipy
         :alt: Snap Trending
-
-.. image:: https://api.travis-ci.org/pv8/noipy.svg?branch=master
-        :target: https://travis-ci.org/pv8/noipy
-
-.. image:: https://codecov.io/gh/pv8/noipy/branch/master/graph/badge.svg
-        :target: https://codecov.io/gh/pv8/noipy
-
-.. image:: https://landscape.io/github/pv8/noipy/master/landscape.svg
-        :target: https://landscape.io/github/pv8/noipy/master
-        :alt: Code Health
-
-.. image:: https://api.codeclimate.com/v1/badges/1f700be0ea796c8a49e9/maintainability
-        :target: https://codeclimate.com/github/pv8/noipy/maintainability
-        :alt: Maintainability
-
-.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.29017.svg?style=flat-square
-        :target: http://dx.doi.org/10.5281/zenodo.29017
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
