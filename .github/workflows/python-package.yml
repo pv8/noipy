@@ -37,7 +37,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run tests
       run: |
-        pytest -v --cov-report term-missing --cov-report xml --cov=.
+        pytest -v --cov=. --cov-report term-missing --cov-report xml --junitxml=junit.xml -o junit_family=legacy
     - name: Upload coverage report to Codecov
       uses: codecov/codecov-action@v5
       with:
@@ -48,3 +48,8 @@ jobs:
         verbose: true
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload Test Analytics to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
