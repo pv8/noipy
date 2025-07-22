@@ -2,22 +2,26 @@ noipy: DDNS update tool
 =======================
 
 
+.. image:: https://github.com/pv8/noipy/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/pv8/noipy/actions/workflows/tests.yml
+    :alt: Tests
+
 .. image:: https://img.shields.io/pypi/v/noipy.svg
-        :target: https://pypi.python.org/pypi/noipy/
+    :target: https://pypi.python.org/pypi/noipy/
 
 .. image:: https://img.shields.io/pypi/pyversions/noipy.svg
-        :target: https://pypi.python.org/pypi/noipy
+    :target: https://pypi.python.org/pypi/noipy
 
 .. image:: https://codecov.io/gh/pv8/noipy/branch/main/graph/badge.svg
-        :target: https://codecov.io/gh/pv8/noipy
+    :target: https://codecov.io/gh/pv8/noipy
 
 .. image:: https://snapcraft.io/noipy/badge.svg
-        :target: https://snapcraft.io/noipy
-        :alt: Snap Status
+    :target: https://snapcraft.io/noipy
+    :alt: Snap Status
 
 .. image:: https://snapcraft.io/noipy/trending.svg?name=0
-        :target: https://snapcraft.io/noipy
-        :alt: Snap Trending
+    :target: https://snapcraft.io/noipy
+    :alt: Snap Trending
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
@@ -147,7 +151,7 @@ Check **PEP8** only:
 Copyright & License
 -------------------
 
-.. image:: https://img.shields.io/github/license/pv8/noipy.svg?style=flat-square
+.. image:: https://img.shields.io/github/license/pv8/noipy.svg
         :target: LICENSE
         :alt: License
 
