@@ -9,7 +9,6 @@
 from unittest.mock import Mock
 
 import pytest
-import requests
 
 from noipy import main
 
@@ -31,16 +30,3 @@ def mock_response():
     response.status_code = 200
     response.text = 'good 10.1.2.3'
     return response
-
-
-@pytest.fixture
-def mock_requests_success(monkeypatch):
-    def mock_get(url, **kwargs):
-        response = Mock()
-        response.status_code = 200
-        response.text = 'good 10.1.2.3'
-        response.json.return_value = {'origin': '192.168.1.1'}
-        return response
-
-    monkeypatch.setattr(requests, 'get', mock_get)
-    return mock_get
