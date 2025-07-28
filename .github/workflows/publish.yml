@@ -1,4 +1,4 @@
-name: Publish to PyPI
+name: Publish Packages
 
 on:
   release:
@@ -29,6 +29,7 @@ jobs:
     - name: Store the distribution packages
       uses: actions/upload-artifact@v4
       with:
+        name: python-package-distributions
         path: ./dist
 
   upload-assets:
@@ -48,7 +49,6 @@ jobs:
         path: ./dist
     - name: Upload assets to release
       run: gh release upload --repo "${{ github.repository }}" "${{ github.event.release.tag_name }}" dist/*
-        done
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -72,3 +72,26 @@ jobs:
         path: dist/
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-to-snapcraft:
+    name: Publish to Snapcraft 🐧
+    if: github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: [amd64, arm64]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build snap for ${{ matrix.architecture }}
+      uses: snapcore/action-build@v1
+      id: build
+      with:
+        build-for: ${{ matrix.architecture }}
+    - name: Publish snap to Snapcraft stable channel
+      if: steps.build.outputs.snap
+      uses: snapcore/action-publish@v1
+      env:
+        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+      with:
+        snap: ${{ steps.build.outputs.snap }}
+        release: stable
