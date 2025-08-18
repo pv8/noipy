@@ -6,18 +6,19 @@
 # See README.rst and LICENSE for details.
 
 import socket
+from typing import Optional
 
 import requests
 
 HTTPBIN_URL = 'https://httpbin.org/ip'
 
 
-def read_input(message):
+def read_input(message: str) -> str:
     """Read input from user."""
     return input(message)
 
 
-def get_ip():
+def get_ip() -> Optional[str]:
     """Return machine's origin IP address."""
     try:
         r = requests.get(HTTPBIN_URL)
@@ -26,7 +27,7 @@ def get_ip():
         return None
 
 
-def get_dns_ip(dnsname):
+def get_dns_ip(dnsname: str) -> Optional[str]:
     """Return machine's current IP address in DNS."""
     try:
         return socket.gethostbyname(dnsname)

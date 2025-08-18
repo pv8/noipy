@@ -15,23 +15,23 @@ DEFAULT_CONFIG_DIR = os.path.expanduser('~')
 class ApiAuth(object):
     """Providers auth information"""
 
-    def __init__(self, usertoken, password=''):
+    def __init__(self, usertoken: str, password: str = ''):
         self._usertoken = usertoken
         self._password = password
 
     @property
-    def token(self):
+    def token(self) -> str:
         if self._password != '':
             raise NotImplementedError
         return self._usertoken
 
     @property
-    def base64key(self):
+    def base64key(self) -> bytes:
         auth_str = '{}:{}'.format(self._usertoken, self._password)
         return base64.b64encode(auth_str.encode('utf-8'))
 
     @classmethod
-    def get_instance(cls, encoded_key):
+    def get_instance(cls, encoded_key: bytes) -> 'ApiAuth':
         """Return an ApiAuth instance from an encoded key"""
 
         login_str = base64.b64decode(encoded_key).decode('utf-8')
@@ -41,21 +41,21 @@ class ApiAuth(object):
 
         return instance
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.base64key.decode('utf-8')
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return str(self) == str(other)
 
 
-def _create_config_dir(dir_path, log_message='Creating directory [{}]...'):
+def _create_config_dir(dir_path: str, log_message: str = 'Creating directory [{}]...') -> None:
     if not os.path.exists(dir_path):
         print(log_message % dir_path, end='')
         os.mkdir(dir_path)
         print('OK.')
 
 
-def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
+def store(auth: ApiAuth, provider: str, config_location: str = DEFAULT_CONFIG_DIR) -> None:
     """Store auth info in file for specified provider"""
 
     auth_file = None
@@ -78,7 +78,7 @@ def store(auth, provider, config_location=DEFAULT_CONFIG_DIR):
         raise e
 
 
-def load(provider, config_location=DEFAULT_CONFIG_DIR):
+def load(provider: str, config_location: str = DEFAULT_CONFIG_DIR) -> ApiAuth:
     """Load provider specific auth info from file"""
 
     auth = None
@@ -98,7 +98,7 @@ def load(provider, config_location=DEFAULT_CONFIG_DIR):
     return auth
 
 
-def exists(provider, config_location=DEFAULT_CONFIG_DIR):
+def exists(provider: str, config_location: str = DEFAULT_CONFIG_DIR) -> bool:
     """Check whether provider info is already stored"""
 
     config_dir = os.path.join(config_location, NOIPY_CONFIG)

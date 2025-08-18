@@ -9,6 +9,7 @@ import argparse
 import getpass
 import re
 import sys
+from typing import Any, Dict
 
 from noipy import utils
 
@@ -18,8 +19,8 @@ from noipy import authinfo
 from noipy import __version__
 
 
-EXECUTION_RESULT_OK = 0
-EXECUTION_RESULT_NOK = 1
+EXECUTION_RESULT_OK: int = 0
+EXECUTION_RESULT_NOK: int = 1
 
 URL_RE = re.compile(
     r'^https?://'  # http:// or https://
@@ -34,7 +35,7 @@ URL_RE = re.compile(
 )
 
 
-def execute_update(args):
+def execute_update(args: argparse.Namespace) -> Dict[str, Any]:
     """Execute the update based on command line args and returns a dictionary
     with 'execution result, ''response code', 'response info' and
     'process friendly message'.
@@ -130,7 +131,7 @@ def execute_update(args):
     return proc_result
 
 
-def create_parser():
+def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='Update DDNS IP address on selected provider.')
     parser.add_argument('-u', '--usertoken', help='provider username or token')
     parser.add_argument('-p', '--password', help='provider password when apply')
@@ -163,7 +164,7 @@ def create_parser():
     return parser
 
 
-def main():
+def main() -> None:
     print('== noipy DDNS updater tool v{} =='.format(__version__))
     parser = create_parser()
     args = parser.parse_args()

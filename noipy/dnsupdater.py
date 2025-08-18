@@ -6,22 +6,24 @@
 # See README.rst and LICENSE for details.
 
 import re
+from typing import Dict, Optional, Tuple
 
 import requests
 
 from . import __title__, __version__, __email__
+from .authinfo import ApiAuth
 
-AVAILABLE_PLUGINS = {
+AVAILABLE_PLUGINS: Dict[str, str] = {
     'noip': 'NoipDnsUpdater',
     'dyn': 'DynDnsUpdater',
     'duck': 'DuckDnsUpdater',
     'generic': 'GenericDnsUpdater',
 }
 
-DEFAULT_PLUGIN = 'generic'
+DEFAULT_PLUGIN: str = 'generic'
 
 
-response_messages = {
+response_messages: Dict[str, str] = {
     'OK': 'SUCCESS: DNS hostname successfully updated.',
     'badauth': 'ERROR: Invalid username or password (badauth).',
     '401': 'ERROR: Invalid username or password (401).',
@@ -43,9 +45,9 @@ response_messages = {
 class DnsUpdaterPlugin(object):
     """Base class for any DDNS updater"""
 
-    auth_type = ''
+    auth_type: str = ''
 
-    def __init__(self, auth, hostname, options=None):
+    def __init__(self, auth: ApiAuth, hostname: str, options: Optional[Dict[str, str]] = None):
         """Init plugin with auth information, hostname and IP address."""
 
         self._auth = auth
@@ -54,15 +56,15 @@ class DnsUpdaterPlugin(object):
         self.last_ddns_response = ''
 
     @property
-    def auth(self):
+    def auth(self) -> ApiAuth:
         return self._auth
 
     @property
-    def hostname(self):
+    def hostname(self) -> str:
         return self._hostname
 
     @property
-    def _base_url(self):
+    def _base_url(self) -> str:
         """Get the base URL for DDNS Update API. URL must contain 'hostname'
         and 'ip'. If authentication is via token string 'token' argument must
         be provided as well. Example:
@@ -72,7 +74,7 @@ class DnsUpdaterPlugin(object):
         """
         pass
 
-    def update_dns(self, new_ip):
+    def update_dns(self, new_ip: str) -> Tuple[int, str]:
         """Call No-IP API based on dict login_info and return the status code."""
 
         headers = None
@@ -91,7 +93,7 @@ class DnsUpdaterPlugin(object):
         return r.status_code, r.text
 
     @property
-    def status_message(self):
+    def status_message(self) -> str | None:
         """Return friendly response from API based on response code."""
 
         msg = None
@@ -112,27 +114,27 @@ class DnsUpdaterPlugin(object):
 
         return msg
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '{}(host={})'.format(type(self).__name__, self.hostname)
 
 
 class NoipDnsUpdater(DnsUpdaterPlugin):
     """No-IP DDNS provider plugin"""
 
-    auth_type = 'P'
+    auth_type: str = 'P'
 
     @property
-    def _base_url(self):
+    def _base_url(self) -> str:
         return 'https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}'
 
 
 class DynDnsUpdater(DnsUpdaterPlugin):
     """DynDNS DDNS provider plugin"""
 
-    auth_type = 'P'
+    auth_type: str = 'P'
 
     @property
-    def _base_url(self):
+    def _base_url(self) -> str:
         return (
             'http://members.dyndns.org/nic/update?hostname={hostname}&myip={ip}&wildcard=NOCHG' '&mx=NOCHG&backmx=NOCHG'
         )
@@ -141,10 +143,10 @@ class DynDnsUpdater(DnsUpdaterPlugin):
 class DuckDnsUpdater(DnsUpdaterPlugin):
     """DuckDNS DDNS provider plugin"""
 
-    auth_type = 'T'
+    auth_type: str = 'T'
 
     @property
-    def hostname(self):
+    def hostname(self) -> str:
         hostname = self._hostname
         found = re.search(r'(.*?)\.duckdns\.org', self._hostname)
         if found:
@@ -152,7 +154,7 @@ class DuckDnsUpdater(DnsUpdaterPlugin):
         return hostname
 
     @property
-    def _base_url(self):
+    def _base_url(self) -> str:
         return 'https://www.duckdns.org/update?domains={hostname}&token={token}&ip={ip}'
 
 
@@ -161,10 +163,10 @@ class GenericDnsUpdater(DnsUpdaterPlugin):
     DDNS base url
     """
 
-    auth_type = 'P'
+    auth_type: str = 'P'
 
     @property
-    def _base_url(self):
+    def _base_url(self) -> str:
         return '{url}?hostname={{hostname}}&myip={{ip}}&wildcard=NOCHG&mx=NOCHG&backmx=NOCHG'.format(
             url=self._options['url']
         )
