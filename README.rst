@@ -124,8 +124,8 @@ And type username and password when required.
 `Base64 <https://en.wikipedia.org/wiki/Base64>`_ method and is not actually
 *encrypted*!
 
-Running tests
-~~~~~~~~~~~~~
+Running tests & linting
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Install tests dependencies (`tox <http://tox.readthedocs.org/en/latest/>`_
 and `flake8 <https://flake8.readthedocs.org/>`_):
@@ -146,6 +146,24 @@ Check **PEP8** only:
 .. code-block:: bash
 
     $ tox -e pep8
+
+Type checking
+~~~~~~~~~~~~~
+
+**noipy** uses type hints to improve code quality and maintainability.
+
+Install type checking dependencies `mypy <https://mypy.readthedocs.io/>`_):
+
+.. code-block:: bash
+
+    $ pip install -e ".[typing]"
+
+
+Run type checking with mypy:
+
+.. code-block:: bash
+
+    $ mypy noipy/
 
 
 Copyright & License

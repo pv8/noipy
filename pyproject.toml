@@ -43,6 +43,10 @@ tests = [
 lint = [
     "flake8>=6.1.0",
 ]
+typing = [
+    "mypy>=1.0.0",
+    "types-requests>=2.25.0",
+]
 
 [project.urls]
 Repository = "https://github.com/pv8/noipy"
@@ -71,3 +75,6 @@ exclude_lines = [
     "if 0:",
     "if __name__ == .__main__.:",
 ]
+
+[tool.mypy]
+files = ["noipy/", "tests/"]

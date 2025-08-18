@@ -56,13 +56,13 @@ def test_not_implemented_plugin():
     plugin = dnsupdater.DnsUpdaterPlugin(auth, hostname)
 
     # then
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(NotImplementedError) as exc_info:
         # when
         plugin.update_dns('10.1.1.1')
 
     # then
-    assert str(exc_info.value) == "'NoneType' object has no attribute 'format'", \
-        "_get_base_url() should return 'NoneType'"
+    assert str(exc_info.value) == "Subclasses must implement _base_url property", \
+        "_base_url property should raise NotImplementedError"
 
 
 @pytest.mark.parametrize("response,expected_message", [
