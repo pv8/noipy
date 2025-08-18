@@ -72,7 +72,7 @@ class DnsUpdaterPlugin(object):
 
         This method must be implemented by plugin subclasses
         """
-        pass
+        raise NotImplementedError("Subclasses must implement _base_url property")
 
     def update_dns(self, new_ip: str) -> Tuple[int, str]:
         """Call No-IP API based on dict login_info and return the status code."""
@@ -101,10 +101,12 @@ class DnsUpdaterPlugin(object):
             return response_messages.get(self.last_ddns_response)
 
         if 'good' in self.last_ddns_response:
-            ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
+            match = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response)
+            ip = match.group() if match else 'unknown'
             msg = 'SUCCESS: DNS hostname IP ({}) successfully updated.'.format(ip)
         elif 'nochg' in self.last_ddns_response:
-            ip = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response).group()
+            match = re.search(r'(\d{1,3}\.?){4}', self.last_ddns_response)
+            ip = match.group() if match else 'unknown'
             msg = (
                 'SUCCESS: IP address ({}) is up to date, nothing was changed. '
                 "Additional 'nochg' updates may be considered abusive.".format(ip)

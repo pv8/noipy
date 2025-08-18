@@ -41,7 +41,10 @@ def execute_update(args: argparse.Namespace) -> Dict[str, Any]:
     'process friendly message'.
     """
 
-    provider_class = getattr(dnsupdater, dnsupdater.AVAILABLE_PLUGINS.get(args.provider))
+    plugin_name = dnsupdater.AVAILABLE_PLUGINS.get(args.provider)
+    if not plugin_name:
+        raise ValueError(f"Unsupported provider: {args.provider}")
+    provider_class = getattr(dnsupdater, plugin_name)
     updater_options = {}
     process_message = None
     auth = None
