@@ -42,6 +42,7 @@ tests = [
 ]
 lint = [
     "flake8>=6.1.0",
+    "mypy==1.17.1",
 ]
 
 [project.urls]
