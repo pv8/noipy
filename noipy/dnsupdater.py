@@ -93,7 +93,7 @@ class DnsUpdaterPlugin(object):
         return r.status_code, r.text
 
     @property
-    def status_message(self) -> str | None:
+    def status_message(self) -> Optional[str]:
         """Return friendly response from API based on response code."""
 
         msg = None
