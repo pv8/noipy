@@ -42,9 +42,7 @@ def execute_update(args: argparse.Namespace) -> Dict[str, Any]:
     """
 
     plugin_name = dnsupdater.AVAILABLE_PLUGINS.get(args.provider)
-    if not plugin_name:
-        raise ValueError(f"Unsupported provider: {args.provider}")
-    provider_class = getattr(dnsupdater, plugin_name)
+    provider_class = getattr(dnsupdater, plugin_name)  # type: ignore
     updater_options = {}
     process_message = None
     auth = None

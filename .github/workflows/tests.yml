@@ -29,7 +29,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install coverage
-        pip install -e ".[tests,lint]"
+        pip install -e ".[tests,lint,typing]"
     - name: Run linter
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -38,7 +38,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run type checking
       run: |
-        mypy noipy/
+        mypy
     - name: Run tests
       run: |
         pytest -v --cov=. --cov-report term-missing --cov-report xml --junitxml=junit.xml -o junit_family=legacy
