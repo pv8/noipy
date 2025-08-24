@@ -2,9 +2,9 @@ noipy: DDNS update tool
 =======================
 
 
-.. image:: https://github.com/pv8/noipy/actions/workflows/tests.yml/badge.svg
-    :target: https://github.com/pv8/noipy/actions/workflows/tests.yml
-    :alt: Tests
+.. image:: https://github.com/pv8/noipy/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/pv8/noipy/actions/workflows/ci.yml
+    :alt: CI
 
 .. image:: https://img.shields.io/pypi/v/noipy.svg
     :target: https://pypi.python.org/pypi/noipy/
