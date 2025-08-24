@@ -44,7 +44,7 @@ jobs:
     - name: Install type checking dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e ".[typing]"
+        pip install -e ".[tests,typing]"
     - name: Run type checking
       run: |
         mypy
