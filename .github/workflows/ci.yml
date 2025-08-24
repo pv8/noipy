@@ -75,15 +75,15 @@ jobs:
     - name: Run linter
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        uv run flake8 noipy tests --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        uv run flake8 noipy tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run type checking
       run: |
-        mypy
+        uv run mypy
     - name: Run tests
       run: |
-        pytest -v --cov=. --cov-report term-missing --cov-report xml --junitxml=junit.xml -o junit_family=legacy
+        uv run pytest -v --cov=. --cov-report term-missing --cov-report xml --junitxml=junit.xml -o junit_family=legacy
     - name: Upload coverage report to Codecov
       uses: codecov/codecov-action@v5
       with:
