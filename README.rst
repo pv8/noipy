@@ -124,45 +124,82 @@ And type username and password when required.
 `Base64 <https://en.wikipedia.org/wiki/Base64>`_ method and is not actually
 *encrypted*!
 
-Running tests & linting
-~~~~~~~~~~~~~~~~~~~~~~~
+Running tests
+~~~~~~~~~~~~~
 
-Install tests dependencies (`tox <http://tox.readthedocs.org/en/latest/>`_
-and `flake8 <https://flake8.readthedocs.org/>`_):
-
-.. code-block:: bash
-
-    $ pip install -e ".[tests,lint]"
-
-
-Test the code against all supported Python versions and check it against **PEP8** with ``tox``:
+Using uv (recommended)
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
+    # Install uv (if not already installed)
+    $ pipx install uv
+    # Or see https://docs.astral.sh/uv/getting-started/installation/
+
+    # Sync test dependencies
+    $ uv sync --extra tests
+
+    # Run tests with tox
+    $ uv run tox
+
+Using pip
+^^^^^^^^^
+
+Install test dependencies and run tests:
+
+.. code-block:: bash
+
+    $ pip install -e ".[tests]"
     $ tox
 
-Check **PEP8** only:
+Linting
+~~~~~~~
+
+Using uv (recommended)
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-    $ tox -e pep8
+    # Sync linting dependencies
+    $ uv sync --extra lint
+
+    # Run linting with tox
+    $ uv run tox -e lint
+
+Using pip
+^^^^^^^^^
+
+Install linting dependencies and check code style:
+
+.. code-block:: bash
+
+    $ pip install -e ".[lint]"
+    $ tox -e lint
 
 Type checking
 ~~~~~~~~~~~~~
 
 **noipy** uses type hints to improve code quality and maintainability.
 
-Install type checking dependencies `mypy <https://mypy.readthedocs.io/>`_):
+Using uv (recommended)
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    # Sync type checking dependencies
+    $ uv sync --extra typing
+
+    # Run type checking with mypy
+    $ uv run mypy noipy/
+
+Using pip
+^^^^^^^^^
+
+Install type checking dependencies and run mypy:
 
 .. code-block:: bash
 
     $ pip install -e ".[typing]"
-
-
-Run type checking with mypy:
-
-.. code-block:: bash
-
     $ mypy noipy/
 
 
