@@ -1,4 +1,6 @@
 name: noipy
+title: noipy
+license: Apache-2.0
 base: core24
 adopt-info: noipy
 summary: Command line tool to update DDNS host IP - No-IP, DuckDNS, and DynDNS
@@ -17,16 +19,13 @@ grade: stable
 confinement: strict
 
 platforms:
-  - amd64
-  - arm64
-  - i386
-  - armhf
-  - ppc64el
-  - s390x
+  all:
+    build-on: [amd64]
+    build-for: [all]
 
 apps:
   noipy:
-    command: noipy
+    command: bin/noipy
     plugs:
       - home
       - network
