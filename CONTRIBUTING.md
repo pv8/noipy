@@ -21,6 +21,6 @@ Please, follow this simple guide if you have any improvement proposal or find a 
   > - Follow [Karma project commit message conventions](https://karma-runner.github.io/2.0/dev/git-commit-msg.html) on your commit messages.
 
 
-4. Please, [PEP8](https://www.python.org/dev/peps/pep-0008/) and [test](README.rst#running-tests) your code
+4. Please, [PEP8](https://www.python.org/dev/peps/pep-0008/) and [test](README.md#running-tests) your code
 
 5. All good? Make a [pull request](https://github.com/pv8/noipy/pulls)
