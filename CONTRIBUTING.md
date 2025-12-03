@@ -1,3 +1,8 @@
+<!-- 
+SPDX-FileCopyrightText: 2017 Pablo V <noipy@pv8.dev>
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 # Contributing
 
 First of all, thanks for contributing! :tada:
