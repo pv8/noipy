@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# tests
-# Copyright (c) 2013 Pablo O Vieira (povieira)
-# See README.rst and LICENSE for details.
+# SPDX-FileCopyrightText: 2013 Pablo V <noipy@pv8.dev>
+#
+# SPDX-License-Identifier: Apache-2.0
