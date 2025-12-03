@@ -11,8 +11,8 @@ name = "noipy"
 dynamic = ["version"]
 description = "Command line tool for DDNS IP address updating."
 readme = "README.rst"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
+license = "Apache-2.0 AND CC-BY-SA-4.0 AND CC0-1.0"
+license-files = ["LICENSES/*"]
 authors = [
     {name = "Pablo V", email = "noipy@pv8.dev"}
 ]
