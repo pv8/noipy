@@ -1,5 +1,9 @@
 .. :changelog:
 
+..
+  SPDX-FileCopyrightText: 2013 Pablo V <noipy@pv8.dev>
+  SPDX-License-Identifier: CC-BY-SA-4.0
+
 Changelog
 =========
 

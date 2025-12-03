@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2013 Pablo V <noipy@pv8.dev>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+version = 1
+
+# Workflow files from templates with little to none customization
+[[annotations]]
+path = ".github/**"
+SPDX-FileCopyrightText = "2020 Pablo V <noipy@pv8.dev>"
+SPDX-License-Identifier = "CC0-1.0"
+
+# Automatically generated file
+[[annotations]]       
+path = "uv.lock"
+precedence = "override"
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "CC0-1.0"

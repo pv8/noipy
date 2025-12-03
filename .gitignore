@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2013 Pablo V <noipy@pv8.dev>
+#
+# SPDX-License-Identifier: CC0-1.0
+
 *.py[co]
 
 # packages

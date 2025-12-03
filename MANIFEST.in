@@ -1,2 +1,6 @@
+# SPDX-FileCopyrightText: 2013 Pablo V <noipy@pv8.dev>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 include README.rst CHANGELOG.rst LICENSE
 exclude .DS_Store
