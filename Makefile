@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2015 Pablo V <noipy@pv8.dev>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 VERSION := $(shell python -c "from __future__ import print_function; import noipy; print('v{}'.format(noipy.__version__))")
 
 .PHONY: all
