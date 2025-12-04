@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 name = "noipy"
 dynamic = ["version"]
 description = "Command line tool for DDNS IP address updating."
-readme = "README.rst"
+readme = "README.md"
 license = "Apache-2.0 AND CC-BY-SA-4.0 AND CC0-1.0"
 license-files = ["LICENSES/*"]
 authors = [
@@ -54,7 +54,7 @@ typing = [
 
 [project.urls]
 Repository = "https://github.com/pv8/noipy"
-Changelog = "https://github.com/pv8/noipy/blob/main/CHANGELOG.rst"
+Changelog = "https://github.com/pv8/noipy/blob/main/CHANGELOG.md"
 Issues = "https://github.com/pv8/noipy/issues"
 
 [project.scripts]
