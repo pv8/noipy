@@ -54,7 +54,7 @@ typing = [
 
 [project.urls]
 Repository = "https://github.com/pv8/noipy"
-Changelog = "https://github.com/pv8/noipy/blob/main/CHANGELOG.rst"
+Changelog = "https://github.com/pv8/noipy/blob/main/CHANGELOG.md"
 Issues = "https://github.com/pv8/noipy/issues"
 
 [project.scripts]
