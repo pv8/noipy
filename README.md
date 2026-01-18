@@ -11,6 +11,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 [![codecov](https://codecov.io/gh/pv8/noipy/branch/main/graph/badge.svg)](https://codecov.io/gh/pv8/noipy)
 [![Snap Status](https://snapcraft.io/noipy/badge.svg)](https://snapcraft.io/noipy)
 [![Snap Trending](https://snapcraft.io/noipy/trending.svg?name=0)](https://snapcraft.io/noipy)
+[![REUSE status](https://api.reuse.software/badge/github.com/pv8/noipy)](https://api.reuse.software/info/github.com/pv8/noipy)
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
