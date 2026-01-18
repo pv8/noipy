@@ -11,6 +11,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 [![codecov](https://codecov.io/gh/pv8/noipy/branch/main/graph/badge.svg)](https://codecov.io/gh/pv8/noipy)
 [![Snap Status](https://snapcraft.io/noipy/badge.svg)](https://snapcraft.io/noipy)
 [![Snap Trending](https://snapcraft.io/noipy/trending.svg?name=0)](https://snapcraft.io/noipy)
+[![REUSE status](https://api.reuse.software/badge/github.com/pv8/noipy)](https://api.reuse.software/info/github.com/pv8/noipy)
 
 Command line tool to update DDNS hosts IP address via update API. Initially
 the tool was designed to update IP address only on No-IP DDNS provider. But
@@ -170,6 +171,29 @@ $ pip install -e ".[typing]"
 $ mypy noipy/
 ```
 
-## License
+## Licensing
 
-[![License](https://img.shields.io/github/license/pv8/noipy.svg)](LICENSE)
+Summary:
+
+- All original source code is licensed under [Apache-2.0](LICENSES/Apache-2.0.txt)
+- All documentation is licensed under [CC-BY-SA-4.0](LICENSES/CC-BY-SA-4.0.txt)
+- Automatically generated files, some configuration and data files are licensed under [CC0-1.0](LICENSES/CC0-1.0.txt)
+
+This repository is [REUSE](https://reuse.software/) compliant. The copyright and licensing information for each file can be found in:
+
+- The file header
+- The [REUSE.toml](REUSE.toml) file
+- The [LICENSES](LICENSES/) directory
+
+The licensing and [REUSE](https://reuse.software/) compliance of each file can be verified with:
+
+```bash
+$ uvx reuse lint
+```
+
+or
+
+
+```bash
+$ uvx reuse spdx
+```
