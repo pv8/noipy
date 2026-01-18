@@ -171,6 +171,29 @@ $ pip install -e ".[typing]"
 $ mypy noipy/
 ```
 
-## License
+## Licensing
 
-[![License](https://img.shields.io/github/license/pv8/noipy.svg)](LICENSE)
+Summary:
+
+- All original source code is licensed under [Apache-2.0](LICENSES/Apache-2.0.txt)
+- All documentation is licensed under [CC-BY-SA-4.0](LICENSES/CC-BY-SA-4.0.txt)
+- Automatically generated files, some configuration and data files are licensed under [CC0-1.0](LICENSES/CC0-1.0.txt)
+
+This repository is [REUSE](https://reuse.software/) compliant. The copyright and licensing information for each file can be found in:
+
+- The file header
+- The [REUSE.toml](REUSE.toml) file
+- The [LICENSES](LICENSES/) directory
+
+The licensing and [REUSE](https://reuse.software/) compliance of each file can be verified with:
+
+```bash
+$ uvx reuse lint
+```
+
+or
+
+
+```bash
+$ uvx reuse spdx
+```
